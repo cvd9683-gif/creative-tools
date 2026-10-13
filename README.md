@@ -4,7 +4,7 @@ Midterm presentation · Cathy Doss · ITP
 
 **Zero to One:** getting started is the hardest part of making anything, and most creative
 tools only help after it. My project is sketch to prototype: draw app screens on paper, take one
-photo, and click through your own drawing as a prototype.
+photo, click through it, then export your own lines as SVG to Figma or Illustrator.
 
 ## Presenting
 

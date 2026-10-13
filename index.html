@@ -99,9 +99,7 @@ g.globalAlpha=1;requestAnimationFrame(f);}requestAnimationFrame(f);
     </div>
     <div style="display:flex; flex-direction:column; gap:10px; padding:24px 0 0; border-top:2px solid #1b1a17">
       <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#6e685d">WHAT SUCCESS LOOKS LIKE</p>
-      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f"><span style="color:#3b2cff">Clickable in minutes,</span> not an afternoon</p>
-      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f"><span style="color:#3b2cff">Still your hand:</span> nothing gets redrawn</p>
-      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f"><span style="color:#3b2cff">A first version</span> you want to keep working on</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#1b1a17"><span style="color:#3b2cff">Zero to one:</span> someone gets to a first version they want to keep working on, sooner than they would today.</p>
     </div>
   </div>
   <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:380px; left:856px; width:1000px; height:560px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
@@ -132,7 +130,7 @@ g.font=&#x27;500 24px ui-monospace, Menlo, monospace&#x27;;g.textAlign=&#x27;cen
 if(T&gt;8400){g.fillStyle=&#x27;#F6F3EC&#x27;;g.globalAlpha=cl((T-8400)/600);g.fillRect(0,0,W,H);g.globalAlpha=1;}
 requestAnimationFrame(f);}requestAnimationFrame(f);
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
-  <aside class="notes">Here's the problem. Paper is still the fastest way to think through an app: you can draw five screens in the time it takes to set up one Figma file. But the moment you want to test even one tap, you have to redraw everything digitally. By the time it's clickable, the idea has been polished before anyone has tested it, and it doesn't look like your hand anymore. People use paper prototypes, Balsamiq or go straight to Figma, but nothing carries the paper itself forward. So here's what success looks like. Your sketch is clickable in minutes, not an afternoon. It still looks like your hand, because nothing gets redrawn. And you end up with a first version you actually want to keep working on, and can get feedback on while it's still rough.</aside>
+  <aside class="notes">Here's the problem. Paper is still the fastest way to think through an app: you can draw five screens in the time it takes to set up one Figma file. But the moment you want to test even one tap, you have to redraw everything digitally. By the time it's clickable, the idea has been polished before anyone has tested it, and it doesn't look like your hand anymore. People use paper prototypes, Balsamiq or go straight to Figma, but nothing carries the paper itself forward. So what does success look like? Zero to one: someone gets to a first version they actually want to keep working on, sooner than they would today, and it still looks like their own hand.</aside>
 </section>
 
 <section id="who" data-transition="push" style="background:#EEE9DE;color:#1B1A17;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
@@ -232,7 +230,7 @@ requestAnimationFrame(f);}requestAnimationFrame(f);
 
 <section id="flow" data-transition="push" style="background:#F6F3EC;color:#1B1A17;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#3B2CFF">User flow</p>
-<h2 style="font-size:72px;font-weight:600;line-height:1.15;letter-spacing:-1px">From notebook to shareable link</h2>
+<h2 style="font-size:72px;font-weight:600;line-height:1.15;letter-spacing:-1px">From notebook to Figma</h2>
 <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute;left:128px;top:340px;width:1664px;height:430px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
 const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=1664,H=430;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
 const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,PA=&#x27;#FBFAF6&#x27;,LN=&#x27;#D9D3C5&#x27;,GR=&#x27;#9C958A&#x27;;let sd=13;const rn=()=&gt;(sd=sd*16807%2147483647)/2147483647-.5;
@@ -271,10 +269,12 @@ dashed(bx+ox,by+oy,bw,bh,1);if(a&amp;&amp;t&lt;.85)cursor(bx+ox+bw-6,by+oy+bh-4)
 const lk=a?cl((t-.7)/.25):1;if(lk&gt;0){g.strokeStyle=AC;g.lineWidth=2.5;g.beginPath();const sx=bx+bw+2,sy=by+bh/2,ex=IX(2)+IW-8,ey=sy-90*lk;g.moveTo(sx,sy);g.quadraticCurveTo(ex,sy,ex,ey);g.stroke();}}
 else if(i===3){g.fillStyle=PA;g.fillRect(IX(3),IY,IW,IH);const sl=a?io(cl((t-.5)/.25)):0;g.save();g.translate(-sl*IW,0);st(play1,INK,1.8);g.translate(IW,0);st(play2,INK,1.8);g.restore();
 if(a&amp;&amp;t&gt;.25&amp;&amp;t&lt;.5){const [bx,by,bw,bh]=btnR(pxo,pyo,PS),r=(t-.25)/.25;g.strokeStyle=AC;g.lineWidth=2.5;g.globalAlpha=1-r;g.beginPath();g.arc(bx+bw/2,by+bh/2,8+r*30,0,7);g.stroke();g.globalAlpha=1;}}
-else{g.fillStyle=PA;g.fillRect(IX(4),IY,IW,IH);const cx=IX(4)+16,cw=IW-32;g.fillStyle=&#x27;#fff&#x27;;g.strokeStyle=LN;g.lineWidth=1.5;rr(cx,IY+40,cw,150,12);g.fill();g.stroke();
-g.save();rr(cx,IY+40,cw,96,12);g.clip();st(wire(cx+cw/2-32,IY+48,.4,1),INK,1.2);g.restore();g.fillStyle=LN;g.fillRect(cx+14,IY+148,cw-60,8);g.fillRect(cx+14,IY+166,cw-90,8);
-const done=a?t&gt;.45:true;g.fillStyle=AC;rr(cx,IY+214,cw,48,24);g.fill();g.strokeStyle=&#x27;#fff&#x27;;g.lineWidth=3;g.beginPath();if(done){g.moveTo(cx+cw/2-12,IY+238);g.lineTo(cx+cw/2-3,IY+247);g.lineTo(cx+cw/2+14,IY+228);}else{g.arc(cx+cw/2-8,IY+238,8,.6,5.7);g.moveTo(cx+cw/2+2,IY+238);g.arc(cx+cw/2+8,IY+238,8,3.8,8.9);}g.stroke();
-const av=a?Math.floor(cl((t-.5)/.4)*3.99):3;[&#x27;#C9C4FF&#x27;,&#x27;#E6C7A8&#x27;,&#x27;#BFD8C7&#x27;].forEach((col,j)=&gt;{if(j&gt;=av)return;g.fillStyle=col;g.beginPath();g.arc(cx+cw/2-30+j*30,IY+296,13,0,7);g.fill();g.strokeStyle=&#x27;#FFFEFA&#x27;;g.lineWidth=2;g.stroke();});}
+else{g.fillStyle=PA;g.fillRect(IX(4),IY,IW,IH);const cx=IX(4)+20,cw=IW-40,fy=IY+40;
+g.fillStyle=&#x27;#fff&#x27;;g.strokeStyle=INK;g.lineWidth=1.5;g.beginPath();g.moveTo(cx,fy);g.lineTo(cx+cw-30,fy);g.lineTo(cx+cw,fy+30);g.lineTo(cx+cw,fy+150);g.lineTo(cx,fy+150);g.closePath();g.fill();g.stroke();g.beginPath();g.moveTo(cx+cw-30,fy);g.lineTo(cx+cw-30,fy+30);g.lineTo(cx+cw,fy+30);g.stroke();
+st(wire(cx+cw/2-24,fy+20,.3,1),AC,1.4);g.fillStyle=INK;g.font=&#x27;600 20px ui-monospace, Menlo, monospace&#x27;;g.textAlign=&#x27;center&#x27;;g.fillText(&#x27;.SVG&#x27;,cx+cw/2,fy+138);
+const done=a?t&gt;.45:true,k2=a?io(cl((t-.1)/.35)):1;g.fillStyle=AC;rr(cx-4,IY+202,cw+8,40,20);g.fill();g.strokeStyle=&#x27;#fff&#x27;;g.lineWidth=3;g.beginPath();
+if(done){g.moveTo(cx+cw/2-12,IY+222);g.lineTo(cx+cw/2-3,IY+231);g.lineTo(cx+cw/2+14,IY+212);}else{const yy=IY+210+k2*8;g.moveTo(cx+cw/2,yy-4);g.lineTo(cx+cw/2,yy+12);g.moveTo(cx+cw/2-7,yy+6);g.lineTo(cx+cw/2,yy+13);g.lineTo(cx+cw/2+7,yy+6);}g.stroke();
+const ap=a?cl((t-.55)/.3):1;g.globalAlpha=ap;g.font=&#x27;500 18px system-ui, sans-serif&#x27;;[&#x27;Figma&#x27;,&#x27;Illustrator&#x27;].forEach((n,j)=&gt;{const y=IY+254+j*38;g.fillStyle=&#x27;#fff&#x27;;g.strokeStyle=LN;g.lineWidth=1.5;rr(cx-4,y,cw+8,30,15);g.fill();g.stroke();g.fillStyle=INK;g.fillText(n,cx+cw/2,y+21);});g.globalAlpha=1;g.textAlign=&#x27;left&#x27;;}
 g.restore();}
 requestAnimationFrame(f);}requestAnimationFrame(f);
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
@@ -283,9 +283,9 @@ requestAnimationFrame(f);}requestAnimationFrame(f);
 <div style="display:flex;flex-direction:column;gap:8px;align-items:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF;text-align:center">2 · READ</p><p style="font-size:24px;line-height:1.4;text-align:center;width:280px">It finds screens, boxes and arrows</p></div>
 <div style="display:flex;flex-direction:column;gap:8px;align-items:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF;text-align:center">3 · FIX</p><p style="font-size:24px;line-height:1.4;text-align:center;width:280px">Drag a box or redraw a link it missed</p></div>
 <div style="display:flex;flex-direction:column;gap:8px;align-items:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF;text-align:center">4 · PLAY</p><p style="font-size:24px;line-height:1.4;text-align:center;width:280px">Tap through your own drawing</p></div>
-<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF;text-align:center">5 · SHARE</p><p style="font-size:24px;line-height:1.4;text-align:center;width:280px">Send a link to get feedback</p></div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF;text-align:center">5 · EXPORT</p><p style="font-size:24px;line-height:1.4;text-align:center;width:280px">Export as SVG to Figma or Illustrator</p></div>
 </div>
-<aside class="notes">Here's the user flow. One: you open the web app on your phone and photograph your notebook page. Two: it reads the page, finds the screens, the boxes and the arrows, and shows you what it found. Three: you fix anything it got wrong, dragging a box into place or redrawing a link it missed. This is the step that keeps you the author. Four: you tap through your own drawing as a working prototype. Five: you send a link so someone else can tap through it and give you feedback while the idea is still rough.</aside>
+<aside class="notes">Here's the user flow. One: you open the web app on your phone and photograph your notebook page. Two: it reads the page, finds the screens, the boxes and the arrows, and shows you what it found. Three: you fix anything it got wrong, dragging a box into place or redrawing a link it missed. This is the step that keeps you the author. Four: you tap through your own drawing as a working prototype. Five, the end goal: you export it as SVG, your own traced lines, and keep working in Figma or Illustrator instead of redrawing from scratch.</aside>
 </section>
 
 <section id="build" data-transition="push" style="background:#F6F3EC;color:#1B1A17;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
@@ -297,40 +297,40 @@ requestAnimationFrame(f);}requestAnimationFrame(f);
 <td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">CAPTURE</td>
 <td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Snap the page with your phone</td>
 <td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">HTML, CSS, JavaScript; phone camera through getUserMedia</td>
-<td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#3B2CFF">● Comfortable</span></td>
+<td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;"><div style="display:flex"><p style="font-size:24px;font-weight:600;line-height:1.3;color:#1E6B3C;background:#DDEFE3;padding:4px 16px;border-radius:20px">Comfortable</p></div></td>
 </tr>
 <tr>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">READ</td>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Find screens, boxes and arrows, and name them</td>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">OpenCV.js finds the shapes; a vision API (e.g. Claude) labels them as JSON. It only reads.</td>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#6E685D">● Learning</span></td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;"><div style="display:flex"><p style="font-size:24px;font-weight:600;line-height:1.3;color:#8A4A0C;background:#FBE8CF;padding:4px 16px;border-radius:20px">Learning</p></div></td>
 </tr>
 <tr>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">CHECK</td>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">You fix anything it misread</td>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">Web editor on an HTML canvas: drag boxes, redraw arrows</td>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#3B2CFF">● Comfortable</span></td>
-</tr>
-<tr>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">SAVE</td>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Keep projects, share a link</td>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">Firebase: Firestore for screens and links, Storage for photos</td>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#6E685D">● Learning</span></td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;"><div style="display:flex"><p style="font-size:24px;font-weight:600;line-height:1.3;color:#1E6B3C;background:#DDEFE3;padding:4px 16px;border-radius:20px">Comfortable</p></div></td>
 </tr>
 <tr>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">PLAY</td>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Click through your own drawing</td>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">HTML/CSS player: photo crops with clickable hotspots</td>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#3B2CFF">● Comfortable</span></td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;"><div style="display:flex"><p style="font-size:24px;font-weight:600;line-height:1.3;color:#1E6B3C;background:#DDEFE3;padding:4px 16px;border-radius:20px">Comfortable</p></div></td>
 </tr>
 <tr>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#B3501B">LATER: AR</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF">EXPORT</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Send it to Figma or Illustrator as SVG</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">Your lines traced into SVG paths (Potrace), one frame per screen; paste into Figma or open in Illustrator</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;"><div style="display:flex"><p style="font-size:24px;font-weight:600;line-height:1.3;color:#8A4A0C;background:#FBE8CF;padding:4px 16px;border-radius:20px">Learning</p></div></td>
+</tr>
+<tr>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">LATER: AR</td>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Touch the paper to open the next screen</td>
 <td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">MindAR.js or Unity AR Foundation to track the page; MediaPipe Hands for your fingertip</td>
-<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#B3501B">● Unknown</span></td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;"><div style="display:flex"><p style="font-size:24px;font-weight:600;line-height:1.3;color:#A3261B;background:#F7DAD6;padding:4px 16px;border-radius:20px">Unknown</p></div></td>
 </tr>
 </table>
-<aside class="notes">Here's the tech, layer by layer. Capture: it's a web app in HTML, CSS and JavaScript, and it uses your phone camera through the browser's getUserMedia, so there's nothing to install. Read: OpenCV.js runs in the browser and finds the rectangles and lines on the page. Then a vision API, for example Claude, labels each box as a button, an image or text, and sends that back as JSON. It only reads; it never draws. Check: an editor on an HTML canvas sits on your photo, and you drag boxes or redraw arrows to fix anything it got wrong, so you stay the author. Save: Firebase. Firestore holds each project's screens and links, and Storage holds the photos, so you can share a link. Play: the prototype is just HTML and CSS: crops of your photo with clickable hotspots on top. Later, AR: MindAR.js in the browser, or Unity with AR Foundation, to track the page under a camera, and MediaPipe Hands to see when your fingertip touches a box. The data model is simple: a project has screens, and each screen has hotspots, which are a box plus the screen it links to. I'm comfortable with HTML, CSS and the player; I'm learning OpenCV, the vision API and Firebase; and the AR touch detection is the real unknown. My first build is two screens and one arrow, working end to end.</aside>
+<aside class="notes">Here's the tech, layer by layer, and the colors show where I am with each: green is comfortable, orange is learning, red is unknown. Capture: it's a web app in HTML, CSS and JavaScript, and it uses your phone camera through the browser's getUserMedia, so there's nothing to install. Read: OpenCV.js runs in the browser and finds the rectangles and lines on the page, then a vision API, for example Claude, labels each box as a button, an image or text and sends that back as JSON. It only reads; it never draws. Check: an editor on an HTML canvas sits on your photo, and you drag boxes or redraw arrows to fix anything it got wrong, so you stay the author. Play: crops of your photo with clickable hotspots, so you can try the flow. Export, the end goal: your own lines get traced into SVG paths with Potrace, one frame per screen, so you can paste them into Figma or open them in Illustrator and keep working from your real sketch instead of redrawing it. Later, AR: MindAR.js or Unity with AR Foundation to track the page, and MediaPipe Hands to see when your fingertip touches a box. My first build is two screens and one arrow, working end to end, then exported as SVG.</aside>
 </section>
 
 <section id="questions" data-transition="fade" style="background:#1F1C8C;color:#F6F3EC;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:24px">
