@@ -23,7 +23,7 @@ Google Fonts; without an internet connection the slides fall back to standard fo
 ## Slides
 
 1. 0 → 1
-2. The problem, and what I'm designing for
+2. The problem, and what success looks like
 3. Who it's for
 4. What it does
 5. User flow
