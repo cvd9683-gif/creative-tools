@@ -3,9 +3,9 @@
 Midterm presentation · Cathy Doss · ITP
 
 **Zero to One:** getting started is the hardest part of making anything, and most creative
-tools only help after it. This presentation sets out what I'm designing for and four ways
-in, each with a rough animated prototype, then asks the questions that will help me decide
-what to build.
+tools only help after it. This presentation sets out what I'm designing for and three ways
+in, each answering who, why, what and how with a rough animated prototype, then asks for
+help deciding which one to build.
 
 ## Presenting
 
@@ -25,9 +25,12 @@ Google Fonts; without an internet connection the slides fall back to standard fo
 
 1. 0 → 1
 2. What I'm designing for
-3. Four ways in
-4. Idea 1 · Sketch to prototype (leaning here)
-5. Idea 2 · Sample start
-6. Idea 3 · Motion Takes
-7. Idea 4 · Chaos start
-8. What would actually help me
+3. Three ways in
+4. Idea 1 · Sketch to prototype: what it does (leaning here)
+5. Idea 1 · who, why, how
+6. Idea 2 · Sample start: what it does
+7. Idea 2 · who, why, how
+8. Idea 3 · Motion Takes: what it does (built)
+9. Idea 3 · who, why, how
+10. Side by side
+11. Help me decide
