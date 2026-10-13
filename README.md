@@ -23,10 +23,10 @@ Google Fonts; without an internet connection the slides fall back to standard fo
 ## Slides
 
 1. 0 → 1
-2. What I'm designing for
-3. The problem: the sketch dies at the screen
+2. The problem, and what I'm designing for
+3. Who it's for
 4. What it does
-5. Who, why, how
-6. How I'd build it
+5. User flow
+6. How I'd build it: the tech, layer by layer
 7. What would actually help me
 8. Other paths I explored (optional)
