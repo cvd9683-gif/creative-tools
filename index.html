@@ -271,47 +271,47 @@ requestAnimationFrame(f);}requestAnimationFrame(f);
 
 <section id="build" data-transition="push" style="background:#F6F3EC;color:#1B1A17;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#3B2CFF">How I'd build it</p>
-<h2 style="font-size:72px;font-weight:600;line-height:1.15;letter-spacing:-1px">From photo to prototype</h2>
-<div style="display:flex;gap:16px;align-items:stretch">
-<div style="width:362px;display:flex;flex-direction:column;gap:12px;background:#FFFEFA;border:2px solid #1B1A17;border-radius:16px;padding:28px">
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF">1 · PHOTO</p>
-<h3 style="font-size:32px;font-weight:600;line-height:1.25">Snap the page</h3>
-<p style="font-size:24px;line-height:1.4;color:#6E685D">Phone camera in the browser</p>
-</div>
-<p style="font-size:44px;color:#6E685D;align-self:center">→</p>
-<div style="width:362px;display:flex;flex-direction:column;gap:12px;background:#FFFEFA;border:2px solid #1B1A17;border-radius:16px;padding:28px">
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF">2 · FIND</p>
-<h3 style="font-size:32px;font-weight:600;line-height:1.25">Screens, boxes, arrows</h3>
-<p style="font-size:24px;line-height:1.4;color:#6E685D">OpenCV.js shape detection</p>
-</div>
-<p style="font-size:44px;color:#6E685D;align-self:center">→</p>
-<div style="width:362px;display:flex;flex-direction:column;gap:12px;background:#FFFEFA;border:2px solid #3B2CFF;border-radius:16px;padding:28px">
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF">3 · CHECK</p>
-<h3 style="font-size:32px;font-weight:600;line-height:1.25">You fix what it misread</h3>
-<p style="font-size:24px;line-height:1.4;color:#6E685D">You stay the author</p>
-</div>
-<p style="font-size:44px;color:#6E685D;align-self:center">→</p>
-<div style="width:362px;display:flex;flex-direction:column;gap:12px;background:#FFFEFA;border:2px solid #1B1A17;border-radius:16px;padding:28px">
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF">4 · TAP</p>
-<h3 style="font-size:32px;font-weight:600;line-height:1.25">Click through your drawing</h3>
-<p style="font-size:24px;line-height:1.4;color:#6E685D">Crops of your photo, in HTML</p>
-</div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:56px">
-<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #3B2CFF;padding:24px 0 0 0">
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF">FIRST BUILD</p>
-<p style="font-size:28px;line-height:1.45">Two screens and one arrow, working end to end.</p>
-</div>
-<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #1B1A17;padding:24px 0 0 0">
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#6E685D">STILL UNKNOWN</p>
-<p style="font-size:28px;line-height:1.45">Arrows that cross, and how much fixing people will put up with.</p>
-</div>
-<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #1B1A17;padding:24px 0 0 0">
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#6E685D">FEELS IMPOSSIBLE (FOR NOW)</p>
-<p style="font-size:28px;line-height:1.45">AR: touch a box on the real paper to open the next screen.</p>
-</div>
-</div>
-<aside class="notes">Here's how I'd build it, in four steps. One: you snap the page with your phone camera, right in the browser. Two: OpenCV.js finds the screens, the boxes and the arrows. Three, and this matters to me: you check it and fix anything it misread, so you stay the author; the computer only reads. Four: you click through your own drawing, because the screens are crops of your photo, not redrawn versions. My first build is small: two screens and one arrow, working end to end. What I don't know yet is how to handle arrows that cross, and how much fixing people will put up with before it stops feeling fast. And what feels impossible for now is the AR version, where you touch a box on the actual paper and the next screen opens.</aside>
+<h2 style="font-size:72px;font-weight:600;line-height:1.15;letter-spacing:-1px">The tech, layer by layer</h2>
+<table style="width:1664px;border-collapse:collapse">
+<tr><th style="width:220px;padding:0 24px 14px 0;text-align:left;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#6E685D;font-weight:500">LAYER</th><th style="width:460px;padding:0 24px 14px 0;text-align:left;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#6E685D;font-weight:500">WHAT HAPPENS</th><th style="width:760px;padding:0 24px 14px 0;text-align:left;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#6E685D;font-weight:500">TECH</th><th style="width:224px;padding:0 24px 14px 0;text-align:left;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#6E685D;font-weight:500">WHERE I AM</th></tr>
+<tr>
+<td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">CAPTURE</td>
+<td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Snap the page with your phone</td>
+<td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">HTML, CSS, JavaScript; phone camera through getUserMedia</td>
+<td style="padding:16px 24px 16px 0;border-top:2px solid #1B1A17;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#3B2CFF">● Comfortable</span></td>
+</tr>
+<tr>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">READ</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Find screens, boxes and arrows, and name them</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">OpenCV.js finds the shapes; a vision API (e.g. Claude) labels them as JSON. It only reads.</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#6E685D">● Learning</span></td>
+</tr>
+<tr>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">CHECK</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">You fix anything it misread</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">p5.js overlay: drag boxes, redraw arrows</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#3B2CFF">● Comfortable</span></td>
+</tr>
+<tr>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">SAVE</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Keep projects, share a link</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">Firebase: Firestore for screens and links, Storage for photos</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#6E685D">● Learning</span></td>
+</tr>
+<tr>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#1B1A17">PLAY</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Click through your own drawing</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">HTML/CSS player: photo crops with clickable hotspots</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#3B2CFF">● Comfortable</span></td>
+</tr>
+<tr>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#B3501B">LATER: AR</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;color:#4A463F">Touch the paper to open the next screen</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:500">MindAR.js or Unity AR Foundation to track the page; MediaPipe Hands for your fingertip</td>
+<td style="padding:16px 24px 16px 0;border-top:1px solid #C9C2B3;vertical-align:top;font-size:24px;line-height:1.4;font-weight:600"><span style="color:#B3501B">● Unknown</span></td>
+</tr>
+</table>
+<aside class="notes">Here's the tech, layer by layer. Capture: it's a web app in HTML, CSS and JavaScript, and it uses your phone camera through the browser's getUserMedia, so there's nothing to install. Read: OpenCV.js runs in the browser and finds the rectangles and lines on the page. Then a vision API, for example Claude, labels each box as a button, an image or text, and sends that back as JSON. It only reads; it never draws. Check: a p5.js overlay sits on your photo, and you drag boxes or redraw arrows to fix anything it got wrong, so you stay the author. Save: Firebase. Firestore holds each project's screens and links, and Storage holds the photos, so you can share a link. Play: the prototype is just HTML and CSS: crops of your photo with clickable hotspots on top. Later, AR: MindAR.js in the browser, or Unity with AR Foundation, to track the page under a camera, and MediaPipe Hands to see when your fingertip touches a box. The data model is simple: a project has screens, and each screen has hotspots, which are a box plus the screen it links to. I'm comfortable with the web, p5 and the player; I'm learning OpenCV, the vision API and Firebase; and the AR touch detection is the real unknown. My first build is two screens and one arrow, working end to end.</aside>
 </section>
 
 <section id="questions" data-transition="fade" style="background:#1F1C8C;color:#F6F3EC;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:24px">
