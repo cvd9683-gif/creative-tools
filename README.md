@@ -27,6 +27,16 @@ Google Fonts; without an internet connection the slides fall back to standard fo
 3. Who it's for
 4. What it does
 5. User flow
-6. Can I build it? How the tool is built
+6. Can I build it? What I'll build, piece by piece
 7. What would actually help me
 8. Other paths I explored (optional)
+
+## References
+
+- Interface: [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web) (HTML, CSS, JavaScript)
+- Capture: [MDN · getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)
+- Clean up, shapes, arrows: [OpenCV.js tutorials](https://docs.opencv.org/4.x/d5/d10/tutorial_js_root.html)
+- Labels: [Claude docs · Vision](https://docs.anthropic.com/en/docs/build-with-claude/vision)
+- SVG tracing: [Potrace](https://potrace.sourceforge.net/), [ImageTracer.js](https://github.com/jankovicsandras/imagetracerjs)
+- Export: [MDN · SVG](https://developer.mozilla.org/en-US/docs/Web/SVG)
+- Precedent: [Microsoft Sketch2Code](https://github.com/microsoft/ailab/tree/master/Sketch2Code), [Uizard](https://uizard.io/)

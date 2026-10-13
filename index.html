@@ -38,6 +38,7 @@
   section th { font-size: 24px; letter-spacing: 1px; }
   section tr + tr td { border-top: 1px solid #D9D3C5; }
   section tr:nth-child(2) td { border-top: 2px solid #1B1A17; }
+  section a { color: inherit; text-underline-offset: 4px; }
   aside.notes { display: none; }
   #notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; padding: 18px 24px 22px;
            background: rgba(20,19,15,.94); color: #f6f3ec; font: 18px/1.5 'IBM Plex Sans', Arial, sans-serif; display: none; }
@@ -295,21 +296,60 @@ requestAnimationFrame(f);}requestAnimationFrame(f);
 <aside class="notes">Here's the user flow. One: you open the web app on your phone and photograph your notebook page. Two: it reads the page, finds the screens, the boxes and the arrows, and shows you what it found. Three: you fix anything it got wrong, dragging a box into place or redrawing a link it missed. This is the step that keeps you the author. Four: you tap through your own drawing as a working prototype. Five, the end goal: you export it as SVG, your own traced lines, and keep working in Figma or Illustrator instead of redrawing from scratch.</aside>
 </section>
 
-<section id="build" data-transition="push" style="display:flex; flex-direction:column; gap:40px; padding:128px; background:#f6f3ec">
-  <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#3b2cff">Can I build it?</p>
-  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.15; letter-spacing:-1px; color:#1b1a17">How the tool is built</h2>
-  <table style="width:1664px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#1b1a17">
-    <tr><th style="padding:10px 24px; font-weight:500; width:13%; color:#6e685d">PART</th><th style="padding:10px 24px; font-weight:500; width:28%; color:#6e685d">WHAT IT DOES</th><th style="padding:10px 24px; font-weight:500; width:46%; color:#6e685d">BUILT WITH</th><th style="padding:10px 24px; font-weight:500; width:13%; color:#6e685d">WHERE I AM</th></tr>
-    <tr><td style="padding:10px 24px; color:#1b1a17">CLEAN UP</td><td style="padding:10px 24px; color:#4a463f">Flattens and cleans the photo</td><td style="padding:10px 24px">OpenCV.js: perspective warp, adaptive threshold</td><td style="padding:10px 24px; color:#a8500f">● Learning</td></tr>
-    <tr><td style="padding:10px 24px; color:#1b1a17">SHAPES</td><td style="padding:10px 24px; color:#4a463f">Finds screens and boxes</td><td style="padding:10px 24px">OpenCV.js: findContours + approxPolyDP</td><td style="padding:10px 24px; color:#a8500f">● Learning</td></tr>
-    <tr><td style="padding:10px 24px; color:#1b1a17">ARROWS</td><td style="padding:10px 24px; color:#4a463f">Finds arrows and where they point</td><td style="padding:10px 24px">OpenCV.js: HoughLinesP, then match ends to boxes</td><td style="padding:10px 24px; color:#a3261b">● Unknown</td></tr>
-    <tr><td style="padding:10px 24px; color:#1b1a17">LABELS</td><td style="padding:10px 24px; color:#4a463f">Names boxes: button, image, text</td><td style="padding:10px 24px">Vision API (e.g. Claude) returns JSON. Reads only.</td><td style="padding:10px 24px; color:#a8500f">● Learning</td></tr>
-    <tr><td style="padding:10px 24px; color:#3b2cff">SVG</td><td style="padding:10px 24px; color:#4a463f">Turns your pen lines into vectors</td><td style="padding:10px 24px">Potrace (JS/WASM port) or ImageTracer.js</td><td style="padding:10px 24px; color:#a8500f">● Learning</td></tr>
-    <tr><td style="padding:10px 24px; color:#1b1a17">FILE</td><td style="padding:10px 24px; color:#4a463f">Packs it into one SVG for Figma or Illustrator</td><td style="padding:10px 24px">Plain JavaScript writing SVG: a group per screen</td><td style="padding:10px 24px; color:#1e6b3c">● Comfortable</td></tr>
-    <tr><td style="padding:10px 24px; color:#1b1a17">LATER</td><td style="padding:10px 24px; color:#4a463f">Send links into Figma; tap the paper (AR)</td><td style="padding:10px 24px">Figma Plugin API; MindAR.js + MediaPipe Hands</td><td style="padding:10px 24px; color:#a3261b">● Unknown</td></tr>
-  </table>
-  <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#1b1a17; width:1664px"><span style="color:#3b2cff">Proof it's possible:</span> Microsoft's Sketch2Code and Uizard already read hand-drawn wireframes, but they redraw them as generic UI. Mine keeps your lines.</p>
-  <aside class="notes">The question I asked myself was: can I actually build this? So here's what's under the hood. First, clean up: OpenCV.js, which runs in the browser, flattens the photo with a perspective warp and cleans it with adaptive thresholding so the pen lines stand out. Shapes: OpenCV's findContours and approxPolyDP are the standard way to find rectangles, so that's how it finds the screens and boxes. Arrows are the hardest part: I'd use the Hough line transform to find lines, then match each arrow's ends to the nearest boxes, and that's still an unknown. Labels: a vision API, for example Claude, looks at each box and returns JSON saying button, image or text. It only reads; it never draws. Then the part that makes the SVG: Potrace, which has JavaScript and WebAssembly ports, or ImageTracer.js, turns your actual pen lines into vector paths. A small piece of plain JavaScript packs that into one SVG file with a group per screen, which opens in Illustrator or imports into Figma with layers. Later, a Figma plugin could send the links in as real prototype connections, and AR is the stretch goal. And it's possible: Microsoft's Sketch2Code and Uizard have already shown that software can read hand-drawn wireframes. The difference is that they redraw your sketch as generic UI, and mine keeps your lines. The colors show where I am: green comfortable, orange learning, red unknown.</aside>
+<section id="build" data-transition="push" style="display:flex; flex-direction:column; gap:32px; padding:128px; background:#f6f3ec">
+  <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; letter-spacing:3px; color:#3b2cff">CAN I BUILD IT? <span style="color:#6e685d">·</span> <span style="color:#1e6b3c">● COMFORTABLE</span> <span style="color:#a8500f">● LEARNING</span> <span style="color:#a3261b">● UNKNOWN</span></p>
+  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.15; letter-spacing:-1px; color:#1b1a17">What I'll build, piece by piece</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:24px">
+    <div style="display:flex; flex-direction:column; gap:10px; background:#fffefa; border:1px solid #d9d3c5; border-top:5px solid #1e6b3c; border-radius:12px; padding:24px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#1e6b3c">1 · INTERFACE</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; line-height:1.25; color:#1b1a17">HTML, CSS, JavaScript</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a463f">The web app you use on your phone</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#3b2cff"><a href="https://developer.mozilla.org/en-US/docs/Web">MDN Web Docs</a></p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; background:#fffefa; border:1px solid #d9d3c5; border-top:5px solid #1e6b3c; border-radius:12px; padding:24px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#1e6b3c">2 · CAPTURE</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; line-height:1.25; color:#1b1a17">Webcam / phone camera</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a463f">getUserMedia takes the photo in the browser</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#3b2cff"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia">MDN · getUserMedia</a></p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; background:#fffefa; border:1px solid #d9d3c5; border-top:5px solid #a8500f; border-radius:12px; padding:24px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#a8500f">3 · CLEAN UP</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; line-height:1.25; color:#1b1a17">OpenCV.js</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a463f">Flattens the page and sharpens the pen lines</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#3b2cff"><a href="https://docs.opencv.org/4.x/d5/d10/tutorial_js_root.html">OpenCV.js tutorials</a></p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; background:#fffefa; border:1px solid #d9d3c5; border-top:5px solid #a3261b; border-radius:12px; padding:24px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#a3261b">4 · SHAPES</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; line-height:1.25; color:#1b1a17">OpenCV.js contours + lines</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a463f">Finds screens, boxes and where arrows point</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#3b2cff"><a href="https://docs.opencv.org/4.x/d5/d10/tutorial_js_root.html">OpenCV.js tutorials</a></p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; background:#fffefa; border:1px solid #d9d3c5; border-top:5px solid #a8500f; border-radius:12px; padding:24px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#a8500f">5 · LABELS</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; line-height:1.25; color:#1b1a17">Claude vision API</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a463f">Names each box as JSON. Reads, never draws.</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#3b2cff"><a href="https://docs.anthropic.com/en/docs/build-with-claude/vision">Claude docs · Vision</a></p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; background:#fffefa; border:1px solid #d9d3c5; border-top:5px solid #a8500f; border-radius:12px; padding:24px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#a8500f">6 · SVG</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; line-height:1.25; color:#1b1a17">Potrace / ImageTracer.js</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a463f">Turns your pen lines into vector paths</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#3b2cff"><a href="https://potrace.sourceforge.net/">Potrace</a> · <a href="https://github.com/jankovicsandras/imagetracerjs">ImageTracer.js</a></p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; background:#fffefa; border:1px solid #d9d3c5; border-top:5px solid #1e6b3c; border-radius:12px; padding:24px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#1e6b3c">7 · EXPORT</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; line-height:1.25; color:#1b1a17">SVG file</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a463f">One group per screen, for Illustrator or Figma</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#3b2cff"><a href="https://developer.mozilla.org/en-US/docs/Web/SVG">MDN · SVG</a></p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px; background:#fffefa; border:1px solid #d9d3c5; border-top:5px solid #3b2cff; border-radius:12px; padding:24px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#3b2cff">PRECEDENT</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; line-height:1.25; color:#1b1a17">Sketch2Code, Uizard</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a463f">Read sketches, but redraw them as generic UI</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#3b2cff"><a href="https://github.com/microsoft/ailab/tree/master/Sketch2Code">Sketch2Code</a> · <a href="https://uizard.io/">Uizard</a></p>
+    </div>
+  </div>
+  <aside class="notes">Here's everything I'd actually have to build, and the reference I'd use for each. The color on top of each card shows where I am: green comfortable, orange learning, red unknown. One, the interface: a web app in HTML, CSS and JavaScript that you open on your phone. Two, capture: the browser's getUserMedia gives me the webcam or phone camera, so there's nothing to install. Three, clean up: OpenCV.js flattens the photo of the page with a perspective warp and sharpens the pen lines with adaptive thresholding. Four, shapes: OpenCV's contour functions find the screens and boxes, and Hough line detection finds the arrows. Matching each arrow to the boxes it connects is my biggest unknown. Five, labels: Claude's vision API looks at each box and returns JSON saying button, image or text. It only reads; it never draws. Six, the part that makes the SVG: Potrace, or ImageTracer.js in JavaScript, turns your actual pen lines into vector paths. Seven, export: one SVG file with a group per screen, which opens in Illustrator or imports into Figma. And the precedent: Microsoft's Sketch2Code and Uizard have already shown that software can read hand-drawn wireframes, but they redraw your sketch as generic UI. Mine keeps your lines. Later, a Figma plugin could add real prototype links, and AR is the stretch goal.</aside>
 </section>
 
 <section id="questions" data-transition="fade" style="background:#1F1C8C;color:#F6F3EC;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:24px">
@@ -443,7 +483,9 @@ addEventListener('keydown', e => {
   else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
   else if (e.key === 'n' || e.key === 'N') { document.getElementById('notes').classList.toggle('on'); document.body.classList.toggle('notes-on'); }
 });
-addEventListener('click', e => { if (!e.target.closest('#notes')) (e.clientX < innerWidth * 0.25 ? back() : next()); });
+// reference links open in a new tab and don't move the slides
+document.querySelectorAll('section a[href]').forEach(l => { l.target = '_blank'; l.rel = 'noopener'; });
+addEventListener('click', e => { if (e.target.closest('a') || e.target.closest('#notes')) return; (e.clientX < innerWidth * 0.25 ? back() : next()); });
 addEventListener('resize', fit);
 let idle; addEventListener('mousemove', () => { document.body.classList.remove('idle'); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add('idle'), 2500); });
 idle = setTimeout(() => document.body.classList.add('idle'), 4000);
