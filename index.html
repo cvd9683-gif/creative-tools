@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zero to One · Cathy Doss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&family=Caveat:wght@500;600&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #14130f; overflow: hidden; }
+  body { font-family: 'IBM Plex Sans', Arial, sans-serif; color: #1b1a17; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; }
+  section { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; visibility: hidden; }
+  section.on { visibility: visible; }
+  /* a pinned backdrop listed first paints behind the slide's text, as in the slide format */
+  section { isolation: isolate; }
+  section > :first-child[style*="position:absolute"] { z-index: -1; }
+  section.in-push { animation: push .55s cubic-bezier(.2,.7,.2,1) both; }
+  section.in-push-back { animation: pushback .55s cubic-bezier(.2,.7,.2,1) both; }
+  section.in-fade { animation: fade .5s ease both; }
+  @keyframes push { from { transform: translateX(14%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes pushback { from { transform: translateX(-14%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  section h1 { font-size: 96px; font-weight: 600; line-height: 1.1; }
+  section h2 { font-size: 64px; font-weight: 600; line-height: 1.15; }
+  section h3 { font-size: 44px; font-weight: 600; line-height: 1.2; }
+  section p { font-size: 32px; line-height: 1.4; }
+  /* a div with no display of its own is a column, as in the slide format; a flex div defaults to a row */
+  section div:not([style*="display"]) { display: flex; flex-direction: column; }
+  [data-build-in] { transition: opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1); }
+  [data-build-in].hidden { opacity: 0; transform: translateY(28px); }
+  aside.notes { display: none; }
+  #notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 38vh; overflow: auto; padding: 18px 24px 22px;
+           background: rgba(20,19,15,.94); color: #f6f3ec; font: 18px/1.5 'IBM Plex Sans', Arial, sans-serif; display: none; }
+  #notes.on { display: block; }
+  #notes b { font: 500 12px 'IBM Plex Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: #c9c4ff; display: block; margin-bottom: 6px; }
+  #hud { position: fixed; right: 16px; bottom: 12px; font: 500 12px 'IBM Plex Mono', monospace; color: rgba(246,243,236,.55);
+         letter-spacing: .06em; transition: opacity .4s; pointer-events: none; }
+  #help { position: fixed; left: 16px; bottom: 12px; font: 12px 'IBM Plex Sans', Arial, sans-serif; color: rgba(246,243,236,.55); transition: opacity .4s; pointer-events: none; }
+  body.idle #hud, body.idle #help { opacity: 0; }
+  body.notes-on #help { display: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+<section id="cover" data-transition="push" style="background:#F6F3EC;color:#1B1A17;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<svg aria-label="Dot grid paper" viewBox="0 0 1920 1080" width="1920" height="1080" style="position:absolute;left:0;top:0;width:1920px;height:1080px"><defs><pattern id="dots" width="48" height="48" patternUnits="userSpaceOnUse"><circle cx="24" cy="24" r="2" fill="#DCD5C6"/></pattern></defs><rect width="1920" height="1080" fill="url(#dots)"/></svg>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#3B2CFF">Creative tools · midterm · Cathy Doss</p>
+<div style="display:flex;flex-direction:column;gap:36px;width:900px">
+<h1 style="font-size:260px;font-weight:600;letter-spacing:-10px;line-height:0.95">0 → 1</h1>
+<p style="font-size:44px;line-height:1.3;color:#4A463F">Getting started is the hardest part of making anything. Most creative tools only help after it.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;width:1000px">
+<p style="font-size:24px;color:#6E685D">I kept starting in different places</p>
+<div style="display:flex;gap:40px">
+<p style="font-size:32px;font-weight:500">Motion</p>
+<p style="font-size:32px;font-weight:500">Music</p>
+<p style="font-size:32px;font-weight:500">Scribbles</p>
+<p style="font-size:32px;font-weight:500">Sketches</p>
+</div>
+</div>
+<iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute;left:1060px;top:190px;width:732px;height:600px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=732,H=600;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;;let sd=11;const rn=()=&gt;(sd=sd*16807%2147483647)/2147483647-.5;
+const ease=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,cl=v=&gt;Math.max(0,Math.min(1,v));
+const N=26;
+function line(a,b){const p=[];for(let i=0;i&lt;N;i++){const k=i/(N-1);p.push([a[0]+(b[0]-a[0])*k+rn()*2,a[1]+(b[1]-a[1])*k+rn()*2]);}return p;}
+function box(x,y,w,h){const p=[],per=2*(w+h);for(let i=0;i&lt;N*3;i++){let d=i/(N*3-1)*per,X,Y;if(d&lt;w){X=x+d;Y=y}else if(d&lt;w+h){X=x+w;Y=y+d-w}else if(d&lt;2*w+h){X=x+w-(d-w-h);Y=y+h}else{X=x;Y=y+h-(d-2*w-h)}p.push([X+rn()*2,Y+rn()*2]);}return p;}
+const fx=W/2-150,fy=40,fw=300,fh=H-90;
+const target=[box(fx,fy,fw,fh),line([fx+24,fy+40],[fx+fw-24,fy+40]),box(fx+24,fy+70,fw-48,150),line([fx+24,fy+70],[fx+fw-24,fy+220]),line([fx+fw-24,fy+70],[fx+24,fy+220]),line([fx+24,fy+260],[fx+fw-60,fy+260]),line([fx+24,fy+292],[fx+fw-110,fy+292]),line([fx+24,fy+324],[fx+fw-80,fy+324]),box(fx+40,fy+fh-90,fw-80,52)];
+const mess=target.map(t=&gt;{let x=W/2+rn()*260,y=H/2+rn()*260,a=rn()*6;return t.map(()=&gt;{a+=rn()*1.6;x+=Math.cos(a)*14;y+=Math.sin(a)*14;x=Math.max(20,Math.min(W-20,x));y=Math.max(20,Math.min(H-20,y));return[x,y];});});
+function draw(k,frac,col){g.strokeStyle=col;g.lineWidth=3;g.lineCap=g.lineJoin=&#x27;round&#x27;;target.forEach((t,j)=&gt;{const m=mess[j],n=Math.max(2,Math.round(t.length*frac));g.beginPath();for(let i=0;i&lt;n;i++){const x=m[i][0]+(t[i][0]-m[i][0])*k,y=m[i][1]+(t[i][1]-m[i][1])*k;i?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();});}
+function f(now){fit();const T=now%7600;g.clearRect(0,0,W,H);const k=ease(cl((T-1700)/1700));const fade=1-cl((T-6800)/700);g.globalAlpha=fade;draw(k,cl(T/1500),INK);
+if(k&gt;.98){const a=cl((T-3500)/400);g.globalAlpha=a*fade;g.setLineDash([8,7]);g.strokeStyle=AC;g.lineWidth=3;g.beginPath();g.roundRect(fx+30,fy+fh-100,fw-60,72,10);g.stroke();g.setLineDash([]);}
+g.globalAlpha=1;requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<p style="position:absolute;left:1180px;top:820px;width:600px;font-family:'Caveat', 'Brush Script MT', cursive;font-size:56px;color:#3B2CFF;transform:rotate(-3deg)">a mess becomes a first version</p>
+<aside class="notes">Hi, I'm Cathy. This project is about the moment before anything exists: going from nothing to a first rough version. That's zero to one. Getting from one to a hundred, refining something that already exists, is where tools like Figma, After Effects, Ableton and Procreate are excellent. I kept starting in different places: performing motion, digging for music samples, scribbling, sketching wireframes. Each time, the hard part was the same: getting started. And each time, the first version came from doing something with my hands, not from planning it.</aside>
+</section>
+
+<section id="focus" data-transition="push" style="background:#EEE9DE;color:#1B1A17;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#3B2CFF">My focus</p>
+<h2 style="font-size:72px;font-weight:600;line-height:1.15;letter-spacing:-1px">What I'm designing for</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:56px">
+<div style="display:flex;flex-direction:column;gap:18px;border-top:3px solid #3B2CFF;padding:32px 0 0 0">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#3B2CFF">ZERO TO ONE</p>
+<h3 style="font-size:44px;font-weight:600;line-height:1.15">The first rough version, not the polish</h3>
+<p style="font-size:28px;line-height:1.45;color:#4A463F">Figma, After Effects, Ableton and Procreate already cover one to a hundred.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:18px;border-top:3px solid #1B1A17;padding:32px 0 0 0">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#6E685D">START BY DOING</p>
+<h3 style="font-size:44px;font-weight:600;line-height:1.15">Hands, voice and movement before planning</h3>
+<p style="font-size:28px;line-height:1.45;color:#4A463F">Each idea begins with a gesture: a scribble, a sketch, a performed movement, a found sound.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:18px;border-top:3px solid #1B1A17;padding:32px 0 0 0">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;color:#6E685D">THE PERSON MAKES IT</p>
+<h3 style="font-size:44px;font-weight:600;line-height:1.15">AI can read or notice. It never makes the work.</h3>
+<p style="font-size:28px;line-height:1.45;color:#4A463F">Recognizing a sketch or a hand is fine. Generating the design is not.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;top:820px;width:1500px;font-size:32px;line-height:1.4"><span style="color:#3B2CFF">Success looks like:</span> someone gets to a first version they want to keep working on, sooner than they would today.</p>
+<aside class="notes">Three things guide every idea in this project. First, zero to one: I'm designing for the first rough version, not the polishing, because tools like Figma, After Effects, Ableton and Procreate already do that well. Second, start by doing: each idea begins with a gesture, like a scribble, a sketch, a performed movement or a found sound, instead of a blank document and a plan. Third, the person makes it: AI can recognize what you drew or notice patterns, but it never makes the work for you. Success means someone gets to a first version they actually want to keep developing, sooner than they would today.</aside>
+</section>
+
+<section id="options" data-transition="push" style="display:flex; flex-direction:column; gap:48px; padding:128px; background:#eee9de">
+  <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#3b2cff">Options</p>
+  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.15; letter-spacing:-1px; color:#1b1a17">Four ways in</h2>
+  <div style="display:grid; gap:32px; grid-template-columns:1fr 1fr 1fr 1fr">
+    <div style="display:flex; flex-direction:column; gap:14px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#3b2cff">UX · LEANING HERE</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; line-height:1.1; color:#1b1a17">Sketch to prototype</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f">Photograph paper wireframes and tap through them.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#6e685d">MUSIC</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; line-height:1.1; color:#1b1a17">Sample start</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f">Chop one found sound and build a beat from it.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#6e685d">MOTION · BUILT</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; line-height:1.1; color:#1b1a17">Motion Takes</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f">Perform how something moves, then compare takes.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px">
+      <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#6e685d">ILLUSTRATION</p>
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; line-height:1.1; color:#1b1a17">Chaos start</h3>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f">Scribble freely, then find what's worth keeping.</p>
+    </div>
+  </div>
+  <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:625.34px; left:128px; width:392px; height:260px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=392,H=260;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,PA=&#x27;#FBFAF6&#x27;,LN=&#x27;#D9D3C5&#x27;;let sd=7;const rn=()=&gt;(sd=sd*16807%2147483647)/2147483647-.5;
+const ease=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,cl=v=&gt;Math.max(0,Math.min(1,v));
+const seg=(a,b)=&gt;{const p=[],n=Math.max(2,Math.round(Math.hypot(b[0]-a[0],b[1]-a[1])/9));for(let i=0;i&lt;=n;i++){const k=i/n;p.push([a[0]+(b[0]-a[0])*k+rn()*1.4,a[1]+(b[1]-a[1])*k+rn()*1.4]);}return p;};
+const box=(x,y,w,h)=&gt;[seg([x,y],[x+w,y]),seg([x+w,y],[x+w,y+h]),seg([x+w,y+h],[x,y+h]),seg([x,y+h],[x,y])];
+const circ=(cx,cy,r)=&gt;{const p=[];for(let i=0;i&lt;=20;i++){const a=i/20*6.3;p.push([cx+Math.cos(a)*r+rn(),cy+Math.sin(a)*r+rn()]);}return p;};
+function st(L,fr,col,w){g.strokeStyle=col;g.lineWidth=w;g.lineCap=g.lineJoin=&#x27;round&#x27;;const tot=L.reduce((a,p)=&gt;a+p.length-1,0);let left=fr*tot;for(const p of L){if(left&lt;=0)break;const n=Math.min(p.length-1,left),fl=Math.floor(n);g.beginPath();g.moveTo(p[0][0],p[0][1]);for(let i=1;i&lt;=fl;i++)g.lineTo(p[i][0],p[i][1]);if(fl&lt;p.length-1&amp;&amp;n&gt;fl){const a=p[fl],b=p[fl+1],f=n-fl;g.lineTo(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f);}g.stroke();left-=p.length-1;}}
+const pw=124,ph=222,px=W/2-pw/2,py=19;
+const frame=box(px,py,pw,ph);
+const s1=[seg([px+12,py+20],[px+pw-12,py+20]),...box(px+12,py+34,pw-24,68),seg([px+12,py+34],[px+pw-12,py+102]),seg([px+pw-12,py+34],[px+12,py+102]),seg([px+12,py+120],[px+pw-30,py+120]),seg([px+12,py+134],[px+pw-52,py+134]),...box(px+20,py+168,pw-40,30)];
+const s2=[seg([px+12,py+20],[px+pw-12,py+20])];for(let i=0;i&lt;4;i++){const y=py+44+i*42;s2.push(circ(px+24,y+6,9),seg([px+40,y],[px+pw-14,y]),seg([px+40,y+12],[px+pw-44,y+12]));}
+const bx=px+pw/2,by=py+183;
+function f(now){fit();const T=now%6400;g.clearRect(0,0,W,H);g.fillStyle=PA;g.strokeStyle=AC;g.lineWidth=2;g.beginPath();g.roundRect(1,1,W-2,H-2,18);g.fill();g.stroke();
+st(frame,cl(T/500),INK,2);const sl=ease(cl((T-3300)/450));
+g.save();g.beginPath();g.rect(px+2,py+2,pw-4,ph-4);g.clip();g.translate(-sl*pw,0);st(s1,cl((T-250)/1100),INK,1.8);if(sl&gt;0){g.translate(pw,0);st(s2,1,INK,1.8);}g.restore();
+const a=cl((T-1500)/350)*(1-sl);if(a&gt;0){g.globalAlpha=a;g.fillStyle=&#x27;rgba(59,44,255,.12)&#x27;;g.strokeStyle=AC;g.setLineDash([5,4]);g.lineWidth=2;g.beginPath();g.roundRect(px+15,py+163,pw-30,40,6);g.fill();g.stroke();g.setLineDash([]);g.globalAlpha=1;}
+if(T&gt;2100&amp;&amp;T&lt;3400){const k=ease(cl((T-2100)/700)),cx=W-34+(bx+8-(W-34))*k,cy=H-24+(by+6-(H-24))*k;g.fillStyle=INK;g.strokeStyle=&#x27;#fff&#x27;;g.lineWidth=1.5;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+12,cy+7);g.lineTo(cx+5,cy+9);g.lineTo(cx+2,cy+16);g.closePath();g.fill();g.stroke();}
+if(T&gt;2850&amp;&amp;T&lt;3300){const k=(T-2850)/450;g.strokeStyle=AC;g.globalAlpha=1-k;g.lineWidth=2;g.beginPath();g.arc(bx,by,6+k*22,0,7);g.stroke();g.globalAlpha=1;}
+if(T&gt;5800){g.fillStyle=PA;g.globalAlpha=cl((T-5800)/600);g.fillRect(px-4,py-4,pw+8,ph+8);g.globalAlpha=1;}
+requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+  <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:625.35px; left:541.08px; width:392px; height:260px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=392,H=260;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,PA=&#x27;#FBFAF6&#x27;,LN=&#x27;#D9D3C5&#x27;,GR=&#x27;#9C958A&#x27;;
+const ease=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,cl=v=&gt;Math.max(0,Math.min(1,v));
+const NB=120,amp=[];for(let i=0;i&lt;NB;i++)amp.push(Math.abs(Math.sin(i*.19)*Math.sin(i*.051+1))*.85+Math.abs(Math.sin(i*1.7))*.12);
+const wx=24,ww=W-48,wy=62,bw=ww/NB,s0=64,s1=84;
+const rows=[[1,0,0,0,1,0,0,0],[0,0,1,0,0,0,1,0],[1,0,1,1,0,1,0,1],[0,1,0,0,0,0,1,0]];
+const cw=36,chh=22,gx=W/2-(8*cw+7*6)/2,gy=128;
+function f(now){fit();const T=now%7600;g.clearRect(0,0,W,H);g.fillStyle=PA;g.strokeStyle=LN;g.lineWidth=1.5;g.beginPath();g.roundRect(1,1,W-2,H-2,18);g.fill();g.stroke();
+const lo=Math.round(8+(s0-8)*ease(cl(T/1500))),a0=lo,a1=lo+(s1-s0);
+for(let i=0;i&lt;NB;i++){const h=amp[i]*36,inSel=i&gt;=a0&amp;&amp;i&lt;=a1;g.fillStyle=inSel?AC:GR;g.fillRect(wx+i*bw,wy-h,Math.max(1,bw-1),h*2);}
+g.strokeStyle=AC;g.lineWidth=2;g.fillStyle=&#x27;rgba(59,44,255,.1)&#x27;;g.beginPath();g.roundRect(wx+a0*bw-3,wy-42,(a1-a0+1)*bw+6,84,6);g.fill();g.stroke();
+const filled=Math.floor(cl((T-1700)/1400)*32),step=T&gt;3200?Math.floor((T-3200)/230)%8:-1;
+for(let r=0;r&lt;4;r++)for(let s=0;s&lt;8;s++){const x=gx+s*(cw+6),y=gy+r*(chh+6),show=rows[r][s]&amp;&amp;r*8+s&lt;filled;
+g.beginPath();g.roundRect(x,y,cw,chh,5);if(show){g.fillStyle=s===step?AC:INK;g.fill();}else{g.strokeStyle=s===step?AC:LN;g.lineWidth=1.5;g.stroke();}}
+if(step&gt;=0){const x=gx+step*(cw+6)+cw/2;g.strokeStyle=AC;g.lineWidth=2;g.beginPath();g.moveTo(x,gy-8);g.lineTo(x,gy+4*(chh+6)+2);g.stroke();}
+if(T&gt;7000){g.fillStyle=PA;g.globalAlpha=cl((T-7000)/600);g.fillRect(4,4,W-8,H-8);g.globalAlpha=1;}
+requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+  <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:625.34px; left:964.85px; width:392px; height:260px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=392,H=260;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,PA=&#x27;#FBFAF6&#x27;,LN=&#x27;#D9D3C5&#x27;,GR=&#x27;#9C958A&#x27;;
+const cl=v=&gt;Math.max(0,Math.min(1,v)),io=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,out=k=&gt;1-Math.pow(1-k,3);
+const P=[[34,160],[120,30],[250,200],[358,72]];
+const pt=u=&gt;{const m=1-u;return[m*m*m*P[0][0]+3*m*m*u*P[1][0]+3*m*u*u*P[2][0]+u*u*u*P[3][0],m*m*m*P[0][1]+3*m*m*u*P[1][1]+3*m*u*u*P[2][1]+u*u*u*P[3][1]];};
+const take=k=&gt;k&lt;.25?out(k/.25)*.45:k&lt;.5?.45:k&lt;.8?.45+out((k-.5)/.3)*.55:1;
+const ghost=k=&gt;io(cl(k/.9));
+const D=3800;
+function f(now){fit();const T=now%(D+900),k=cl(T/D);g.clearRect(0,0,W,H);g.fillStyle=PA;g.strokeStyle=LN;g.lineWidth=1.5;g.beginPath();g.roundRect(1,1,W-2,H-2,18);g.fill();g.stroke();
+g.setLineDash([4,5]);g.strokeStyle=GR;g.lineWidth=1.5;g.beginPath();for(let i=0;i&lt;=60;i++){const p=pt(i/60);i?g.lineTo(p[0],p[1]+14):g.moveTo(p[0],p[1]+14);}g.stroke();g.setLineDash([]);
+g.strokeStyle=&#x27;rgba(59,44,255,.25)&#x27;;g.lineWidth=2;g.beginPath();for(let i=0;i&lt;=60;i++){const p=pt(i/60);i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);}g.stroke();
+for(let j=0;j&lt;=40;j++){const kk=j/40,p=pt(take(kk));g.fillStyle=kk&lt;=k?AC:&#x27;rgba(59,44,255,.3)&#x27;;g.beginPath();g.arc(p[0],p[1],2.2,0,7);g.fill();}
+const gp=pt(ghost(k));g.strokeStyle=INK;g.globalAlpha=.5;g.lineWidth=1.5;g.beginPath();g.arc(gp[0],gp[1]+14,10,0,7);g.stroke();g.globalAlpha=1;
+const p=pt(take(k));g.fillStyle=AC;g.beginPath();g.arc(p[0],p[1],11,0,7);g.fill();
+const ly=226,lx=24,lw=W-48;g.strokeStyle=LN;g.beginPath();g.moveTo(lx,ly+14);g.lineTo(lx+lw,ly+14);g.stroke();
+g.strokeStyle=AC;g.lineWidth=1.5;g.beginPath();for(let i=0;i&lt;=80;i++){const a=i/80,v=Math.abs(take(Math.min(1,a+.01))-take(a))*60;i?g.lineTo(lx+a*lw,ly+14-Math.min(26,v*18)):g.moveTo(lx,ly+14);}g.stroke();
+g.strokeStyle=AC;g.lineWidth=2;g.beginPath();g.moveTo(lx+k*lw,ly-14);g.lineTo(lx+k*lw,ly+18);g.stroke();
+requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+  <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:625.34px; right:128px; width:392px; height:260px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=392,H=260;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,PA=&#x27;#FBFAF6&#x27;,LN=&#x27;#D9D3C5&#x27;,GR=&#x27;#8E877B&#x27;;let sd=19;const rn=()=&gt;(sd=sd*16807%2147483647)/2147483647-.5;
+const io=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,cl=v=&gt;Math.max(0,Math.min(1,v));
+const L=[];for(let s=0;s&lt;11;s++){let x=40+(s*31)%320,y=40+((s*53)%170),a=rn()*6;const p=[[x,y]];for(let i=0;i&lt;34;i++){a+=rn()*1.4;x+=Math.cos(a)*9;y+=Math.sin(a)*9;x=Math.max(16,Math.min(W-16,x));y=Math.max(16,Math.min(H-16,y));p.push([x,y]);}L.push(p);}
+const cx=262,cy=128,find=[];{const p=[];for(let i=0;i&lt;=24;i++){const a=Math.PI*(1.05+i/24*0.9);p.push([cx-26+Math.cos(a)*28+rn(),cy+Math.sin(a)*22+rn()]);}find.push(p);const q=[];for(let i=0;i&lt;=24;i++){const a=Math.PI*(1.05+i/24*0.9);q.push([cx+26+Math.cos(a)*28+rn(),cy+Math.sin(a)*22+rn()]);}find.push(q);find.push([[cx-56,cy+30],[cx+56,cy+30]].map(v=&gt;[v[0]+rn()*2,v[1]+rn()*2]));}
+const all=L.concat(find);
+function st(Ls,fr,col,w){g.strokeStyle=col;g.lineWidth=w;g.lineCap=g.lineJoin=&#x27;round&#x27;;const tot=Ls.reduce((a,p)=&gt;a+p.length-1,0);let left=fr*tot;for(const p of Ls){if(left&lt;=0)break;const n=Math.min(p.length-1,left),fl=Math.floor(n);g.beginPath();g.moveTo(p[0][0],p[0][1]);for(let i=1;i&lt;=fl;i++)g.lineTo(p[i][0],p[i][1]);g.stroke();left-=p.length-1;}}
+const stops=[[80,70],[150,170],[cx,cy]];
+function f(now){fit();const T=now%7000;g.clearRect(0,0,W,H);g.fillStyle=PA;g.strokeStyle=LN;g.lineWidth=1.5;g.beginPath();g.roundRect(1,1,W-2,H-2,18);g.fill();g.stroke();
+const found=cl((T-3400)/500);g.globalAlpha=1-found*.75;st(all,cl(T/1500),GR,1.6);g.globalAlpha=1;
+let fxp=stops[0];if(T&gt;1600){const seg=Math.min(2,Math.floor((T-1600)/600)),k=io(cl(((T-1600)-seg*600)/600));const a=stops[Math.max(0,seg-1)],b=stops[seg];fxp=seg===0?[stops[0][0],stops[0][1]]:[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k];if(T&gt;3400)fxp=stops[2];}
+if(T&gt;1500){g.strokeStyle=AC;g.lineWidth=2;g.setLineDash(found&gt;0?[]:[6,5]);g.beginPath();g.roundRect(fxp[0]-74,fxp[1]-56,148,112,8);g.stroke();g.setLineDash([]);}
+if(found&gt;0)st(find,found,AC,3.2);
+if(T&gt;6400){g.fillStyle=PA;g.globalAlpha=cl((T-6400)/600);g.fillRect(4,4,W-8,H-8);g.globalAlpha=1;}
+requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+  <aside class="notes">Four directions, one for each place I started. Sketch to prototype is for UX and product designers: you photograph paper wireframes and tap through them. Paper prototyping is already standard practice, and existing sketch-to-design tools polish your sketch into generic UI; this keeps it yours. Sample start is for producers: chop one found sound and build from it, since the empty session is a well-known block, though music tools are crowded. Motion Takes is built: you perform how something moves and compare takes. Chaos start is the most purely zero-to-one: scribble freely, then frame what's worth keeping. It's closer to play and learning. I'm leaning toward sketch to prototype because it has the clearest real-world use.</aside>
+</section>
+
+<section id="lead" data-transition="push" style="display:flex; flex-direction:column; gap:48px; padding:128px; background:#f6f3ec">
+  <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#3b2cff">Idea 1 · UX · leaning here</p>
+  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.15; letter-spacing:-1px; color:#1b1a17">Your sketch becomes the prototype</h2>
+  <div style="display:flex; flex-direction:row; gap:56px">
+    <div style="display:flex; flex-direction:column; gap:28px; flex:1">
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.45; color:#4a463f">Paper is the fastest way to sketch an app, but the sketch goes flat on screen. One photo makes it clickable, still hand-drawn.</p>
+      <div style="display:flex; flex-direction:column; gap:14px">
+        <div style="display:flex; flex-direction:row; gap:16px; align-items:baseline">
+          <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; font-weight:600; color:#3b2cff">1</p>
+          <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#1b1a17">Sketch screens, with arrows between them</p>
+        </div>
+        <div style="display:flex; flex-direction:row; gap:16px; align-items:baseline">
+          <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; font-weight:600; color:#3b2cff">2</p>
+          <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#1b1a17">Take a photo</p>
+        </div>
+        <div style="display:flex; flex-direction:row; gap:16px; align-items:baseline">
+          <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; font-weight:600; color:#3b2cff">3</p>
+          <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.35; color:#1b1a17">Boxes become buttons, arrows become links</p>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; padding:20px 0 0; border-top:2px solid #1b1a17">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#6e685d">LATER: AR</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f">Touch a box on the paper itself to open the next screen.</p>
+      </div>
+    </div>
+  </div>
+  <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:414.15px; left:856.38px; width:1000px; height:560px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=1000,H=560;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,PA=&#x27;#FBFAF6&#x27;,LN=&#x27;#D9D3C5&#x27;,GR=&#x27;#6E685D&#x27;;let sd=5;const rn=()=&gt;(sd=sd*16807%2147483647)/2147483647-.5;
+const io=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,cl=v=&gt;Math.max(0,Math.min(1,v));
+const seg=(a,b,j=1.6)=&gt;{const p=[],n=Math.max(2,Math.round(Math.hypot(b[0]-a[0],b[1]-a[1])/10));for(let i=0;i&lt;=n;i++){const k=i/n;p.push([a[0]+(b[0]-a[0])*k+rn()*j,a[1]+(b[1]-a[1])*k+rn()*j]);}return p;};
+const box=(x,y,w,h)=&gt;[seg([x,y],[x+w,y]),seg([x+w,y],[x+w,y+h]),seg([x+w,y+h],[x,y+h]),seg([x,y+h],[x,y])];
+const circ=(cx,cy,r)=&gt;{const p=[];for(let i=0;i&lt;=22;i++){const a=i/22*6.3;p.push([cx+Math.cos(a)*r+rn(),cy+Math.sin(a)*r+rn()]);}return p;};
+function scr(kind,x,y,s){const S=(a,b)=&gt;seg([x+a[0]*s,y+a[1]*s],[x+b[0]*s,y+b[1]*s]),B=(a,b,w,h)=&gt;box(x+a*s,y+b*s,w*s,h*s),L=[...B(0,0,160,290),S([14,24],[146,24])];
+if(kind===1){L.push(...B(14,42,132,90),S([14,42],[146,132]),S([146,42],[14,132]),S([14,154],[120,154]),S([14,172],[96,172]),...B(22,226,116,36));}
+else{for(let i=0;i&lt;4;i++){const yy=48+i*56;L.push(circ(x+30*s,y+(yy+8)*s,12*s),S([52,yy],[146,yy]),S([52,yy+16],[116,yy+16]));}}return L;}
+function st(Ls,fr,col,w){g.strokeStyle=col;g.lineWidth=w;g.lineCap=g.lineJoin=&#x27;round&#x27;;const tot=Ls.reduce((a,p)=&gt;a+p.length-1,0);let left=fr*tot;for(const p of Ls){if(left&lt;=0)break;const n=Math.min(p.length-1,left),fl=Math.floor(n);g.beginPath();g.moveTo(p[0][0],p[0][1]);for(let i=1;i&lt;=fl;i++)g.lineTo(p[i][0],p[i][1]);if(fl&lt;p.length-1&amp;&amp;n&gt;fl){const a=p[fl],b=p[fl+1],f=n-fl;g.lineTo(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f);}g.stroke();left-=p.length-1;}}
+const PX=46,PY=40,a1=scr(1,PX+40,PY+60,1),a2=scr(2,PX+250,PY+60,1);
+const arrow=[seg([PX+170,PY+60+244],[PX+214,PY+60+244]),seg([PX+214,PY+60+244],[PX+214,PY+60+140]),seg([PX+214,PY+60+140],[PX+246,PY+60+140]),seg([PX+236,PY+60+130],[PX+248,PY+60+140]),seg([PX+236,PY+60+150],[PX+248,PY+60+140])];
+const FX=690,FY=10,FW=250,FH=470,sc=1.28,ox=FX+(FW-160*sc)/2,oy=FY+46;
+const p1=scr(1,ox,oy,sc),p2=scr(2,ox,oy,sc),btn={x:ox+22*sc,y:oy+226*sc,w:116*sc,h:36*sc};
+function label(t,x,y,on){g.font=&#x27;500 24px ui-monospace, Menlo, monospace&#x27;;g.textAlign=&#x27;center&#x27;;g.fillStyle=on?AC:GR;g.fillText(t,x,y);g.textAlign=&#x27;left&#x27;;}
+function f(now){fit();const T=now%9600;g.clearRect(0,0,W,H);
+g.save();g.translate(PX+230,PY+220);g.rotate(-.035);g.translate(-(PX+230),-(PY+220));g.shadowColor=&#x27;rgba(27,26,23,.14)&#x27;;g.shadowBlur=24;g.shadowOffsetY=8;g.fillStyle=&#x27;#FFFEFA&#x27;;g.fillRect(PX,PY,460,440);g.shadowColor=&#x27;transparent&#x27;;
+st(a1,cl(T/1400),INK,2.2);st(a2,cl((T-500)/1100),INK,2.2);const link=cl((T-2300)/400);st(arrow,cl((T-1100)/400),link&gt;0?AC:INK,link&gt;0?3:2.2);
+if(T&gt;4000&amp;&amp;T&lt;5200){g.strokeStyle=AC;g.lineWidth=3;g.globalAlpha=Math.sin(cl((T-4000)/1200)*Math.PI);g.strokeRect(PX+246,PY+56,168,298);g.globalAlpha=1;}g.restore();
+if(T&gt;1500&amp;&amp;T&lt;1900){g.fillStyle=&#x27;#fff&#x27;;g.globalAlpha=1-Math.abs(T-1650)/250;g.fillRect(PX-20,PY-20,500,480);g.globalAlpha=1;}
+const ph=cl((T-1700)/400);g.globalAlpha=ph;g.fillStyle=PA;g.strokeStyle=INK;g.lineWidth=3;g.beginPath();g.roundRect(FX,FY,FW,FH,34);g.fill();g.stroke();g.fillStyle=INK;g.beginPath();g.roundRect(FX+FW/2-34,FY+14,68,10,5);g.fill();
+const sl=io(cl((T-3800)/450));g.save();g.beginPath();g.roundRect(FX+8,FY+36,FW-16,FH-48,24);g.clip();g.translate(-sl*FW,0);st(p1,1,INK,2.4);g.translate(FW,0);if(sl&gt;0)st(p2,1,INK,2.4);g.restore();
+const hl=cl((T-2300)/350)*(1-sl);if(hl&gt;0){g.globalAlpha=hl*ph;g.fillStyle=&#x27;rgba(59,44,255,.12)&#x27;;g.strokeStyle=AC;g.lineWidth=2.5;g.setLineDash([7,6]);g.beginPath();g.roundRect(btn.x-6,btn.y-6,btn.w+12,btn.h+12,8);g.fill();g.stroke();g.setLineDash([]);}
+g.globalAlpha=1;
+if(T&gt;2700&amp;&amp;T&lt;3900){const k=io(cl((T-2700)/800)),sx=W-40,sy=H-80,ex=btn.x+btn.w/2+10,ey=btn.y+btn.h/2+8,cx=sx+(ex-sx)*k,cy=sy+(ey-sy)*k;g.fillStyle=INK;g.strokeStyle=&#x27;#fff&#x27;;g.lineWidth=2;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+20,cy+12);g.lineTo(cx+8,cy+15);g.lineTo(cx+3,cy+27);g.closePath();g.fill();g.stroke();}
+if(T&gt;3500&amp;&amp;T&lt;4000){const k=(T-3500)/500;g.strokeStyle=AC;g.lineWidth=3;g.globalAlpha=1-k;g.beginPath();g.arc(btn.x+btn.w/2,btn.y+btn.h/2,10+k*40,0,7);g.stroke();g.globalAlpha=1;}
+label(&#x27;your paper&#x27;,PX+230,H-14,T&lt;1700);label(&#x27;your prototype&#x27;,FX+FW/2,H-14,T&gt;=1700);
+if(T&gt;9000){g.fillStyle=&#x27;#F6F3EC&#x27;;g.globalAlpha=cl((T-9000)/600);g.fillRect(0,0,W,H);g.globalAlpha=1;}
+requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+  <aside class="notes">Here's the one I'm leaning toward. Paper is still the fastest way to sketch an app, but once the sketch reaches a screen it becomes a flat picture and you start over in Figma. Here you sketch a few screens on paper, with arrows showing where things go, and take one photo. The tool turns your boxes into buttons and your arrows into links, so you can tap through your idea in minutes, and it still looks like your sketch. It's for UX and product designers; today people use paper prototypes, Balsamiq or go straight to Figma. Later, the AR version: a camera over your desk, and touching a box you drew opens the next screen. The AI's only job is reading what's on the page. It never draws or designs for you.</aside>
+</section>
+
+<section id="sample" data-transition="push" style="display:flex; flex-direction:column; gap:48px; padding:128px; background:#f6f3ec">
+  <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#3b2cff">Idea 2 · Music</p>
+  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.15; letter-spacing:-1px; color:#1b1a17">Start a beat from one found sound</h2>
+  <div style="display:flex; flex-direction:row; gap:56px">
+    <div style="display:flex; flex-direction:column; gap:28px; flex:1">
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">1</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">Drop in any sound: a voice memo, a record, the street</p>
+      </div>
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">2</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">Sweep to the slice you like</p>
+      </div>
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">3</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">It splits into pads. Tap a beat from them.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; padding:24px 0 0; border-top:2px solid #1b1a17">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#6e685d">TODAY</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f">Ableton Live, MPC samplers and Splice. The gap: the empty session.</p>
+      </div>
+    </div>
+  </div>
+  <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:425.3px; left:1020.06px; width:803.44px; height:449.93px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=1000,H=560;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,PA=&#x27;#FBFAF6&#x27;,LN=&#x27;#D9D3C5&#x27;,GR=&#x27;#A39C90&#x27;;
+const io=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,cl=v=&gt;Math.max(0,Math.min(1,v));
+const NB=200,amp=[];for(let i=0;i&lt;NB;i++)amp.push(Math.abs(Math.sin(i*.13)*Math.sin(i*.037+1.3))*.8+Math.abs(Math.sin(i*2.3))*.18);
+const wx=50,ww=900,wy=120,bw=ww/NB,S0=66,S1=98;
+const pads=[[50,300],[200,300],[50,420],[200,420]],PW=130,PH=100;
+const pat=[&#x27;1000100010001000&#x27;,&#x27;0000100000001000&#x27;,&#x27;1010101010101010&#x27;,&#x27;0010000100100100&#x27;].map(r=&gt;r.split(&#x27;&#x27;).map(Number));
+const sx=400,sy=300,cw=(550-15*4)/16,chh=(220-3*8)/4;
+function bars(x,y,w,i0,i1,h,col){const n=i1-i0,b=w/n;g.fillStyle=col;for(let i=0;i&lt;n;i++){const a=amp[i0+i]*h;g.fillRect(x+i*b,y-a,Math.max(1,b-1.5),a*2);}}
+function f(now){fit();const T=now%10400;g.clearRect(0,0,W,H);
+g.fillStyle=PA;g.strokeStyle=LN;g.lineWidth=1.5;g.beginPath();g.roundRect(20,30,960,180,18);g.fill();g.stroke();
+const lo=Math.round(14+(S0-14)*io(cl(T/1800))),hi=lo+(S1-S0);
+for(let i=0;i&lt;NB;i++){const a=amp[i]*58;g.fillStyle=i&gt;=lo&amp;&amp;i&lt;=hi?AC:GR;g.fillRect(wx+i*bw,wy-a,Math.max(1,bw-1),a*2);}
+g.strokeStyle=AC;g.lineWidth=2.5;g.fillStyle=&#x27;rgba(59,44,255,.08)&#x27;;g.beginPath();g.roundRect(wx+lo*bw-4,wy-70,(hi-lo+1)*bw+8,140,8);g.fill();g.stroke();
+const drop=io(cl((T-1900)/700));
+if(T&gt;1900&amp;&amp;drop&lt;1){const x0=wx+lo*bw,y0=wy-70,w0=(hi-lo+1)*bw,x1=50,y1=300,w1=280;g.strokeStyle=AC;g.setLineDash([6,5]);g.lineWidth=2;g.strokeRect(x0+(x1-x0)*drop,y0+(y1-y0)*drop,w0+(w1-w0)*drop,140+(220-140)*drop);g.setLineDash([]);}
+const pa=cl((T-2500)/400),step=T&gt;4400?Math.floor((T-4400)/170)%16:-1;
+pads.forEach((p,j)=&gt;{if(pa&lt;=0)return;const hit=step&gt;=0&amp;&amp;pat[j][step];g.globalAlpha=pa;g.fillStyle=hit?AC:PA;g.strokeStyle=hit?AC:LN;g.lineWidth=1.5;g.beginPath();g.roundRect(p[0],p[1],PW,PH,12);g.fill();g.stroke();bars(p[0]+14,p[1]+PH/2,PW-28,S0+j*8,S0+j*8+8,34,hit?&#x27;#fff&#x27;:AC);g.globalAlpha=1;});
+const filled=Math.floor(cl((T-2900)/1500)*64);
+for(let s=0;s&lt;16;s++)for(let r=0;r&lt;4;r++){const x=sx+s*(cw+4)+(Math.floor(s/4))*0,y=sy+r*(chh+8),on=pat[r][s]&amp;&amp;s*4+r&lt;filled;g.beginPath();g.roundRect(x,y,cw,chh,6);if(on){g.fillStyle=s===step?AC:INK;g.fill();}else{g.strokeStyle=s%4===0?&#x27;#C7C0B2&#x27;:LN;g.lineWidth=1.5;g.stroke();}}
+if(step&gt;=0){const x=sx+step*(cw+4)+cw/2;g.strokeStyle=AC;g.lineWidth=2.5;g.beginPath();g.moveTo(x,sy-12);g.lineTo(x,sy+4*(chh+8));g.stroke();}
+if(T&gt;9800){g.fillStyle=&#x27;#F6F3EC&#x27;;g.globalAlpha=cl((T-9800)/600);g.fillRect(0,0,W,H);g.globalAlpha=1;}
+requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+  <aside class="notes">The second idea is for producers. A common block is the empty session: a blank project with no sound in it. Many producers start by digging for one sample. Here you drop in any sound, like a voice memo, a record or street noise, sweep to a slice you like, and it splits into pads you can tap a beat from. Ableton Live, MPC samplers and Splice already cover sampling and libraries, so this would need a sharp angle: starting from your own found sounds rather than a library.</aside>
+</section>
+
+<section id="motion" data-transition="push" style="background:#eee9de">
+  <p id="pa4defb0f86f0r0-91cb1b95" style="position:absolute; top:128px; left:128px; width:1664px; font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#3b2cff">Idea 3 · Motion · built</p>
+  <h2 id="pa4defb0f86f0r1-91cb1b95" style="position:absolute; top:210px; left:128px; width:1664px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.15; letter-spacing:-1px; color:#1b1a17">Perform it, then compare takes</h2>
+  <div id="pa4defb0f86f0r2-91cb1b95" style="position:absolute; top:340px; left:128px; width:1664px; height:560px; display:flex; flex-direction:row; gap:56px">
+    <div style="display:flex; flex-direction:column; gap:28px; flex:1">
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">1</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">Pick an object in the scene</p>
+      </div>
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">2</p>
+        <p style="width:659px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">Press R and perform the movement with your mouse or hand</p>
+      </div>
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">3</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">Compare takes, or say “longer pause”</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; padding:24px 0 0; border-top:2px solid #1b1a17">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#6e685d">TODAY</p>
+        <p style="width:669px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f">After Effects, Rive, Jitter. The gap: feeling it out before keyframes.</p>
+      </div>
+    </div>
+  </div>
+  <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:340.01px; right:50.1px; width:1000px; height:560px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=1000,H=560;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,REC=&#x27;#EC3B2A&#x27;,PA=&#x27;#FDFCF9&#x27;,BD=&#x27;#EBE8E1&#x27;,LN=&#x27;#DEDAD1&#x27;,GR=&#x27;#7A7871&#x27;;
+const cl=v=&gt;Math.max(0,Math.min(1,v)),io=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,out=k=&gt;1-Math.pow(1-k,3),back=k=&gt;{const s=1.4;return 1+(s+1)*Math.pow(k-1,3)+s*Math.pow(k-1,2);};
+const MONO=&#x27;500 24px ui-monospace, Menlo, Consolas, monospace&#x27;,SANS=&#x27;600 24px system-ui, -apple-system, Segoe UI, sans-serif&#x27;;
+const AB={x:230,y:24,w:540,h:304};const P=(x,y)=&gt;[AB.x+x*AB.w,AB.y+y*AB.h];
+// motion of each object, in ms from the start of the scene
+const toastNew=u=&gt;u&lt;150?-.14:u&lt;1150?-.14+.30*io(cl((u-150)/1000)):u&lt;1650?.16:u&lt;2050?.16+.06*out(cl((u-1650)/400)):.22;
+const toastOld=u=&gt;u&lt;200?-.14:u&lt;600?-.14+.36*back(cl((u-200)/400)):.22;
+const listY=u=&gt;.5+.12*io(cl((u-150)/450));
+const badgeY=u=&gt;u&lt;1900?-.06:.1-.16*(1-back(cl((u-1900)/280)));
+function rr(x,y,w,h,r){g.beginPath();g.roundRect(x,y,w,h,r);}
+function scene(u,toastFn,showGhost){
+g.save();rr(AB.x,AB.y,AB.w,AB.h,4);g.clip();g.fillStyle=PA;g.fillRect(AB.x,AB.y,AB.w,AB.h);
+const wx=AB.x+.31*AB.w,wy=AB.y+.06*AB.h,ww=.38*AB.w,wh=.9*AB.h;g.fillStyle=&#x27;#fff&#x27;;g.strokeStyle=LN;rr(wx,wy,ww,wh,12);g.fill();g.stroke();g.fillStyle=&#x27;#F3F1EC&#x27;;g.fillRect(wx+1,wy+1,ww-2,26);
+const ly=listY(u);for(let i=0;i&lt;4;i++){const [x,y]=P(.33,ly-.2+i*.11);g.fillStyle=&#x27;#fff&#x27;;g.strokeStyle=LN;rr(x,y,.34*AB.w,.09*AB.h,6);g.fill();g.stroke();g.fillStyle=&#x27;#DCD7CE&#x27;;g.beginPath();g.arc(x+16,y+14,7,0,7);g.fill();g.fillRect(x+32,y+8,90,6);g.fillRect(x+32,y+18,60,5);}
+const card=(y,ghost)=&gt;{const [x,yy]=P(.33,y-.06);if(ghost){g.setLineDash([5,4]);g.strokeStyle=GR;g.lineWidth=1.5;rr(x,yy,.34*AB.w,.12*AB.h,8);g.stroke();g.setLineDash([]);return;}g.shadowColor=&#x27;rgba(0,0,0,.12)&#x27;;g.shadowBlur=12;g.shadowOffsetY=3;g.fillStyle=&#x27;#fff&#x27;;rr(x,yy,.34*AB.w,.12*AB.h,8);g.fill();g.shadowColor=&#x27;transparent&#x27;;g.strokeStyle=LN;g.stroke();g.fillStyle=AC;g.beginPath();g.arc(x+20,yy+18,9,0,7);g.fill();g.fillStyle=&#x27;#C9C4BA&#x27;;g.fillRect(x+38,yy+11,100,6);g.fillRect(x+38,yy+22,50,5);};
+if(showGhost)card(toastOld(u),true);card(toastFn(u),false);
+const [bx,by]=P(.655,badgeY(u));g.fillStyle=AC;g.beginPath();g.arc(bx,by,10,0,7);g.fill();
+g.restore();}
+function beads(fn,upto,col,ghost){for(let u=0;u&lt;=2400;u+=60){const [x,y]=P(ghost?.70:.30,fn(u));g.fillStyle=col;g.globalAlpha=u&lt;=upto?(ghost?.5:.95):.25;g.beginPath();g.arc(x,y,ghost?2:3,0,7);g.fill();}g.globalAlpha=1;}
+const TL={x:180,y:372,w:790};const S=2600,tx=u=&gt;TL.x+cl(u/S)*TL.w;
+function lane(y,fn,upto,col,dash){g.strokeStyle=col;g.lineWidth=2;if(dash)g.setLineDash([4,4]);g.beginPath();for(let u=0;u&lt;=Math.min(upto,S);u+=30){const v=Math.min(30,Math.abs(fn(u+30)-fn(u))*900);const x=tx(u),yy=y+30-v;u?g.lineTo(x,yy):g.moveTo(x,yy);}g.stroke();g.setLineDash([]);}
+function chip(text,red){g.font=MONO;const w=g.measureText(text).width+36;g.fillStyle=red?REC:&#x27;#fff&#x27;;rr(16,14,w,40,20);g.fill();if(!red){g.strokeStyle=LN;g.stroke();}g.fillStyle=red?&#x27;#fff&#x27;:INK;g.fillText(text,34,43);}
+function f(now){fit();const T=now%12200;g.clearRect(0,0,W,H);
+g.fillStyle=BD;rr(0,0,W,350,18);g.fill();
+const recU=T-2600,repU=T-5800;const recording=T&gt;=2600&amp;&amp;T&lt;5400,replay=T&gt;=5800;
+let u=recording?recU:replay?Math.min(repU%3400,2600):0;
+scene(u,toastNew,replay);
+if(replay){beads(toastNew,u,AC,false);beads(toastOld,u,GR,true);}
+if(recording)beads(toastNew,recU,REC,false);
+if(T&gt;=800&amp;&amp;T&lt;5400){g.strokeStyle=REC;g.lineWidth=recording?3:1.5;if(!recording)g.setLineDash([8,6]);g.strokeRect(AB.x-2,AB.y-2,AB.w+4,AB.h+4);g.setLineDash([]);if(recording){g.fillStyle=REC;g.fillRect(AB.x,AB.y+AB.h+8,AB.w*cl(recU/2800),4);}}
+if(T&gt;=800&amp;&amp;T&lt;2600){const n=3-Math.floor((T-800)/600);g.font=&#x27;700 140px system-ui, sans-serif&#x27;;g.textAlign=&#x27;center&#x27;;g.fillStyle=REC;g.globalAlpha=.85-((T-800)%600)/900;g.fillText(String(n),AB.x+AB.w/2,AB.y+AB.h/2+50);g.globalAlpha=1;g.textAlign=&#x27;left&#x27;;}
+if(T&lt;800)chip(&#x27;LIVE&#x27;,false);else if(T&lt;2600)chip(&#x27;GET READY&#x27;,false);else if(recording)chip(&#x27;● REC &#x27;+(recU/1000).toFixed(2)+&#x27;s&#x27;,true);else if(replay)chip(&#x27;REPLAY · TAKE 2&#x27;,false);
+// the performer&#x27;s cursor: moves the toast by moving the mouse, no clicking
+if(T&gt;300&amp;&amp;T&lt;5500){const base=[860,120];let dy=0;if(recording)dy=(toastNew(recU)+.14)*AB.h;const k=io(cl((T-300)/600));const x=1000+(base[0]-1000)*k,y=200+(base[1]-200)*k+dy;g.fillStyle=INK;g.strokeStyle=&#x27;#fff&#x27;;g.lineWidth=2;g.beginPath();g.moveTo(x,y);g.lineTo(x+20,y+12);g.lineTo(x+8,y+15);g.lineTo(x+3,y+27);g.closePath();g.fill();g.stroke();}
+// timeline
+g.fillStyle=&#x27;#fff&#x27;;g.strokeStyle=LN;rr(0,358,W,202,18);g.fill();g.stroke();
+g.font=SANS;g.fillStyle=INK;[[&#x27;List&#x27;,412],[&#x27;Toast&#x27;,462],[&#x27;Badge&#x27;,512]].forEach(([n,y])=&gt;{g.fillStyle=n===&#x27;Toast&#x27;?AC:INK;g.fillText(n,28,y+8);g.strokeStyle=LN;g.lineWidth=1;g.beginPath();g.moveTo(TL.x,y+18);g.lineTo(TL.x+TL.w,y+18);g.stroke();});
+const shown=recording||replay?u:0;
+lane(400,listY,replay?S:shown,INK);lane(500,badgeY,replay?S:shown,INK);
+if(recording)lane(450,toastNew,recU,REC);else if(replay){lane(450,toastOld,S,GR,true);lane(450,toastNew,S,AC);}
+if(recording||replay){const x=tx(u);g.strokeStyle=recording?REC:AC;g.lineWidth=2.5;g.beginPath();g.moveTo(x,372);g.lineTo(x,540);g.stroke();}
+if(T&gt;11600){g.fillStyle=&#x27;#EEE9DE&#x27;;g.globalAlpha=cl((T-11600)/600);g.fillRect(0,0,W,H);g.globalAlpha=1;}
+requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+  <aside class="notes">The third idea already exists as a working prototype, Motion Takes. You pick an object in a small UX scene, press R, and perform its movement with your mouse, or your hand on your own computer. The tool keeps your pauses and speed changes exactly, so you can record several takes and compare them as ghosts, then retime one by saying things like "longer pause". Motion designers usually work in After Effects, Rive or Jitter, and Adobe Character Animator already does performance-based character animation. The gap is trying out how something should feel before committing to keyframes. If there's time, I can show it live.</aside>
+</section>
+
+<section id="chaos" data-transition="push" style="display:flex; flex-direction:column; gap:48px; padding:128px; background:#f6f3ec">
+  <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#3b2cff">Idea 4 · Illustration</p>
+  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:600; line-height:1.15; letter-spacing:-1px; color:#1b1a17">Find the idea inside the mess</h2>
+  <div style="display:flex; flex-direction:row; gap:56px">
+    <div style="display:flex; flex-direction:column; gap:28px; flex:1">
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">1</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">Scribble for 60 seconds, with no undo</p>
+      </div>
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">2</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">Move a frame across the mess</p>
+      </div>
+      <div style="display:flex; flex-direction:row; gap:20px; align-items:baseline">
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:44px; font-weight:600; color:#3b2cff">3</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.35; color:#1b1a17">Keep what you find as your first sketch</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; padding:24px 0 0; border-top:2px solid #1b1a17">
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:#6e685d">TODAY</p>
+        <p style="width:820px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.4; color:#4a463f">Drawing prompts, Inktober, automatic drawing. The gap: tools reward clean marks.</p>
+      </div>
+    </div>
+  </div>
+  <iframe class="embed" sandbox="allow-scripts" scrolling="no" style="position:absolute; top:322.66px; left:978.08px; width:860.57px; height:481.92px;border:0;background:transparent" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;body style=&quot;margin:0;background:transparent;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; style=&quot;width:100vw;height:100vh;display:block&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const c=document.getElementById(&#x27;c&#x27;),g=c.getContext(&#x27;2d&#x27;),W=1000,H=560;function fit(){const w=innerWidth||W,h=innerHeight||H,d=devicePixelRatio||1;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);}g.setTransform(c.width/W,0,0,c.height/H,0,0);}
+const INK=&#x27;#1B1A17&#x27;,AC=&#x27;#3B2CFF&#x27;,PA=&#x27;#FBFAF6&#x27;,LN=&#x27;#D9D3C5&#x27;,GR=&#x27;#8E877B&#x27;;let sd=29;const rn=()=&gt;(sd=sd*16807%2147483647)/2147483647-.5;
+const io=k=&gt;k&lt;.5?2*k*k:1-Math.pow(-2*k+2,2)/2,cl=v=&gt;Math.max(0,Math.min(1,v));
+const A={x:20,y:20,w:600,h:520},B={x:660,y:70,w:320,h:420};
+const L=[];for(let s=0;s&lt;22;s++){let x=A.x+40+(s*97)%(A.w-80),y=A.y+40+(s*61)%(A.h-80),a=rn()*6;const p=[[x,y]];for(let i=0;i&lt;40;i++){a+=rn()*1.5;x+=Math.cos(a)*11;y+=Math.sin(a)*11;x=Math.max(A.x+14,Math.min(A.x+A.w-14,x));y=Math.max(A.y+14,Math.min(A.y+A.h-14,y));p.push([x,y]);}L.push(p);}
+const fc=[420,230],find=[];const arc=(ox)=&gt;{const p=[];for(let i=0;i&lt;=26;i++){const a=Math.PI*(1.08+i/26*.84);p.push([fc[0]+ox+Math.cos(a)*36+rn()*1.5,fc[1]+Math.sin(a)*28+rn()*1.5]);}return p;};
+find.push(arc(-34),arc(34));const hz=[];for(let i=0;i&lt;=14;i++)hz.push([fc[0]-90+i*13,fc[1]+52+rn()*2]);find.push(hz);
+function st(Ls,fr,col,w,tf){g.strokeStyle=col;g.lineWidth=w;g.lineCap=g.lineJoin=&#x27;round&#x27;;const tot=Ls.reduce((a,p)=&gt;a+p.length-1,0);let left=fr*tot;for(const p of Ls){if(left&lt;=0)break;const n=Math.min(p.length-1,left),fl=Math.floor(n);g.beginPath();for(let i=0;i&lt;=fl;i++){const q=tf?tf(p[i]):p[i];i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);}g.stroke();left-=p.length-1;}}
+const stops=[[160,140],[300,400],fc];
+function f(now){fit();const T=now%9800;g.clearRect(0,0,W,H);
+g.fillStyle=PA;g.strokeStyle=LN;g.lineWidth=1.5;g.beginPath();g.roundRect(A.x,A.y,A.w,A.h,18);g.fill();g.stroke();
+const found=cl((T-4400)/500);g.globalAlpha=1-found*.7;st(L.concat(find),cl(T/2200),GR,2);g.globalAlpha=1;
+let fp=stops[0];if(T&gt;2300){const t=T-2300,seg=Math.min(2,Math.floor(t/700)),k=io(cl((t-seg*700)/700));const a=stops[Math.max(0,seg-1)],b=stops[seg];fp=seg===0?stops[0]:[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k];if(T&gt;4400)fp=fc;}
+if(T&gt;2200){g.strokeStyle=AC;g.lineWidth=2.5;g.setLineDash(found&gt;0?[]:[8,6]);g.beginPath();g.roundRect(fp[0]-120,fp[1]-90,240,180,10);g.stroke();g.setLineDash([]);}
+if(found&gt;0)st(find,found,AC,4);
+const kept=cl((T-5200)/700);if(kept&gt;0){g.globalAlpha=kept;g.save();g.shadowColor=&#x27;rgba(27,26,23,.12)&#x27;;g.shadowBlur=20;g.shadowOffsetY=6;g.fillStyle=&#x27;#FFFEFA&#x27;;g.fillRect(B.x,B.y,B.w,B.h);g.restore();
+const m=io(kept),sc=1+.25*m,cx=fc[0]+(B.x+B.w/2-fc[0])*m,cy=fc[1]+(B.y+B.h/2-20-fc[1])*m;st(find,1,m&gt;.9?INK:AC,4,p=&gt;[cx+(p[0]-fc[0])*sc,cy+(p[1]-fc[1])*sc]);g.globalAlpha=1;}
+if(T&gt;9200){g.fillStyle=&#x27;#F6F3EC&#x27;;g.globalAlpha=cl((T-9200)/600);g.fillRect(0,0,W,H);g.globalAlpha=1;}
+requestAnimationFrame(f);}requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+  <aside class="notes">The fourth idea is the most purely zero to one. Many tools reward clean marks: undo, erase, snap to grid. Here you scribble for a minute with no undo, then move a frame across the mess until something catches your eye, and you keep that as your first sketch. It's related to drawing prompts like Inktober and to the Surrealists' automatic drawing. It's closer to play and learning than industry, so it may fit better as a warm-up inside another tool.</aside>
+</section>
+
+<section id="questions" data-transition="fade" style="background:#1F1C8C;color:#F6F3EC;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#C9C4FF">What would actually help me</p>
+<p style="font-size:32px;line-height:1.4;color:#C9C4FF;width:1300px">I'm after stories about how you really work, not votes. Each answer tells me what to build first.</p>
+<p data-build-in="rise 1" style="position:absolute;left:128px;top:330px;width:1560px;font-size:52px;font-weight:500;line-height:1.2;letter-spacing:-0.5px">Think of the last thing you started. What did you do first, and where did you stall?</p>
+<p data-build-in="rise 2" style="position:absolute;left:128px;top:480px;width:1560px;font-size:52px;font-weight:500;line-height:1.2;letter-spacing:-0.5px">What do you use today to get started, and what's annoying about it?</p>
+<p data-build-in="rise 3" style="position:absolute;left:128px;top:630px;width:1560px;font-size:52px;font-weight:500;line-height:1.2;letter-spacing:-0.5px">Which idea would you try on real work this week? What would make you stop?</p>
+<p data-build-in="rise 4" style="position:absolute;left:128px;top:780px;width:1560px;font-size:52px;font-weight:500;line-height:1.2;letter-spacing:-0.5px">If I can build only one in the next few weeks, which should it be, and why?</p>
+<aside class="notes">These questions are meant to get real stories, not opinions, because people are better at describing what they actually did than predicting what they'd like. Question one tells me where the real stuck moment is. Question two tells me what I'm competing with and what's broken about it. Question three separates "that's cool" from "I'd actually use it", and the "what would make you stop" part shows me the deal-breakers. Question four forces a choice, and the "why" is what I'll design from. I'll write down the specific moments people describe, especially the tools they name and the exact point where they stall.</aside>
+</section>
+
+</div>
+<div id="notes"><b>Speaker notes</b><span id="notes-text"></span></div>
+<div id="hud"></div>
+<div id="help">→ or click: next · ← back · F full screen · N speaker notes</div>
+<script>
+const stage = document.getElementById('stage');
+const slides = [...stage.querySelectorAll(':scope > section')];
+let cur = 0, step = 0;
+
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  stage.style.transform = `scale(${s}) translate(-50%, -50%)`;
+}
+// a builds list for each slide, in the order they appear
+const builds = slides.map(sl => [...sl.querySelectorAll('[data-build-in]')]
+  .sort((a, b) => (parseInt((a.dataset.buildIn.match(/\d+/) || [0])[0]) - parseInt((b.dataset.buildIn.match(/\d+/) || [0])[0]))));
+
+function restartEmbeds(sl) {
+  // replay each animation from its first frame when its slide comes up
+  sl.querySelectorAll('iframe.embed').forEach(f => { const d = f.srcdoc; f.srcdoc = ''; f.srcdoc = d; });
+}
+
+function show(i, dir = 1, atEnd = false) {
+  const prev = slides[cur];
+  cur = Math.max(0, Math.min(slides.length - 1, i));
+  const sl = slides[cur];
+  slides.forEach(s => s.classList.remove('on', 'in-push', 'in-push-back', 'in-fade'));
+  sl.classList.add('on');
+  if (prev !== sl) {
+    const t = (dir > 0 ? prev : sl).dataset.transition || 'fade';
+    void sl.offsetWidth;
+    sl.classList.add(t === 'push' ? (dir > 0 ? 'in-push' : 'in-push-back') : 'in-fade');
+    restartEmbeds(sl);
+  }
+  step = atEnd ? builds[cur].length : 0;
+  builds[cur].forEach((el, k) => el.classList.toggle('hidden', k >= step));
+  document.getElementById('hud').textContent = `${cur + 1} / ${slides.length}`;
+  const n = sl.querySelector('aside.notes');
+  document.getElementById('notes-text').textContent = n ? n.textContent : '';
+  history.replaceState(null, '', '#' + (cur + 1));
+}
+
+function next() {
+  if (step < builds[cur].length) { builds[cur][step].classList.remove('hidden'); step++; return; }
+  if (cur < slides.length - 1) show(cur + 1, 1);
+}
+function back() {
+  if (step > 0) { step--; builds[cur][step].classList.add('hidden'); return; }
+  if (cur > 0) show(cur - 1, -1, true);
+}
+
+addEventListener('keydown', e => {
+  if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); back(); }
+  else if (e.key === 'Home') show(0, -1);
+  else if (e.key === 'End') show(slides.length - 1, 1);
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
+  else if (e.key === 'n' || e.key === 'N') { document.getElementById('notes').classList.toggle('on'); document.body.classList.toggle('notes-on'); }
+});
+addEventListener('click', e => { if (!e.target.closest('#notes')) (e.clientX < innerWidth * 0.25 ? back() : next()); });
+addEventListener('resize', fit);
+let idle; addEventListener('mousemove', () => { document.body.classList.remove('idle'); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add('idle'), 2500); });
+idle = setTimeout(() => document.body.classList.add('idle'), 4000);
+
+fit();
+show(Math.max(0, (parseInt(location.hash.slice(1)) || 1) - 1));
+</script>
+</body>
+</html>
