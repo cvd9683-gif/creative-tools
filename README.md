@@ -27,6 +27,6 @@ Google Fonts; without an internet connection the slides fall back to standard fo
 3. Who it's for
 4. What it does
 5. User flow
-6. How I'd build it: the tech, layer by layer
+6. Can I build it? How the tool is built
 7. What would actually help me
 8. Other paths I explored (optional)
