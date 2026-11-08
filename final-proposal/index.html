@@ -94,75 +94,40 @@
 
 <!-- ============================================================ 1 -->
 <section id="showup-now" data-transition="push">
-  <p class="kicker su">Idea 1 · Show Up · what exists</p>
-  <h2>Show Up: a practice coach,<br>not a canvas</h2>
-  <p class="lede" style="width:860px">Pick a challenge, get a brief, sprint in <i>your</i> design tool, paste it up. Every piece lands on a wall of NYC wheatpaste.</p>
+  <h2 style="margin-top:0">Show Up: a practice coach,<br>not a canvas</h2>
+  <p class="lede" style="width:900px">Pick a challenge, sprint in your own design tool, then paste your piece on the Wall.</p>
 
-  <div class="shot" style="left:112px;top:470px;width:880px;transform:rotate(-1.2deg)"><img src="img/showup-sprint.jpg" alt="Show Up sprint screen: a large 19:58 timer, the current stage 'Who is this for?', and a list of eight sprint stages"></div>
-  <div class="tape" style="left:480px;top:452px;transform:rotate(-4deg)"></div>
-  <div class="shot" style="left:640px;top:715px;width:500px;transform:rotate(2deg)"><img src="img/showup-wall.jpg" alt="The Wall: posters wheatpasted on a 3D brick wall"></div>
-  <div class="tape" style="left:840px;top:700px;transform:rotate(3deg);background:rgba(255,62,154,.6)"></div>
-  <p class="cap" style="left:112px;top:1028px">Live app, Nov 8 · sprint + the Wall (example posters)</p>
+  <div class="shot" style="left:112px;top:400px;width:960px;transform:rotate(-1deg)"><img src="img/showup-wall.jpg" alt="The Wall: posters wheatpasted on a 3D brick wall"></div>
+  <div class="tape" style="left:540px;top:384px;transform:rotate(-3deg)"></div>
 
-  <div class="abs" style="left:1200px;top:96px;width:610px">
-    <p class="colhead">What in-class testing showed</p>
-    <div style="display:grid;gap:22px">
-      <div class="finding"><b>1</b><p>People tried to design <i>inside</i> the app</p></div>
-      <div class="finding"><b>2</b><p>The floating timer and the mission flow were unclear</p></div>
-      <div class="finding"><b>3</b><p>Wall navigation, friend mode, and AI feedback broke or confused</p></div>
+  <div class="abs" style="left:1180px;top:400px;width:630px">
+    <h3 style="font-size:40px">Testing showed</h3>
+    <div style="display:grid;gap:22px;margin-top:28px">
+      <div class="finding"><b>1</b><p>People tried to design inside it</p></div>
+      <div class="finding"><b>2</b><p>The timer was confusing</p></div>
+      <div class="finding"><b>3</b><p>The Wall, friend mode and AI feedback were buggy</p></div>
     </div>
+    <p style="font-size:26px;margin-top:44px"><b style="color:var(--ok)">Fixed:</b> clearer intro, Wall navigation, friend mode</p>
+    <p style="font-size:26px;margin-top:12px"><b style="color:var(--red)">Still open:</b> too many sprint steps, accounts mixing</p>
   </div>
 
-  <div class="abs" style="left:1200px;top:540px;width:610px;display:grid;grid-template-columns:1fr 1fr;gap:34px">
-    <div>
-      <p class="colhead" style="color:var(--ok);border-color:var(--ok)">Fixed since testing</p>
-      <ul class="ticks done">
-        <li>“Coach, not a canvas” intro</li>
-        <li>“New” → “+ Mission”</li>
-        <li>Wall pans + zooms every way</li>
-        <li>Friend mode times out clearly</li>
-        <li>Critic retries when busy</li>
-      </ul>
-    </div>
-    <div>
-      <p class="colhead" style="color:var(--red);border-color:var(--red)">Still open</p>
-      <ul class="ticks open">
-        <li>8 sprint stages for a 20-min sprint</li>
-        <li>Timer only floats in Chrome</li>
-        <li>Two accounts share one wall</li>
-        <li>Wall help covers its controls</li>
-      </ul>
-    </div>
-  </div>
-  <p class="hand abs" style="left:1210px;top:900px;font-size:46px;width:600px;transform:rotate(-2deg)">it looked too much like the place you make things</p>
+  <aside class="notes">SAY: Show Up is the practice coach I built for the midterm. You pick a challenge, get a brief, and run a timed sprint — but you design in Figma, Illustrator, or on paper. When time's up you paste your piece onto a wall inspired by NYC wheatpasted posters. AI critique is optional.
 
-  <aside class="notes">SAY: Show Up is the practice coach I built for the midterm. You pick a challenge, get a brief, and run a timed sprint — but the designing happens in Figma, Illustrator, or on paper. When time's up you paste your export onto a wall inspired by wheatpasted posters in NYC, and you can ask for an AI critique if you want one.
+In testing, the big surprise was that people tried to design inside the app. The timer was confusing, and the Wall, friend mode and AI feedback had bugs. I've fixed the intro, Wall navigation and friend mode. Still open: the sprint has too many steps, and two accounts can end up sharing the same work.
 
-In class testing, the big surprise: people treated it like a canvas. They tried to design inside the timer. The floating timer and the "New" mission button were unclear. The Wall was hard to move around, friend mode hung when the camera prompt was ignored, and the AI feedback sometimes failed on the first click.
-
-Some of that is fixed. Some isn't — that's what the final would be about.
-
-EVIDENCE — where each claim comes from
-• Findings: my midterm case study (show-up-midterm.vercel.app) + handwritten notes from rounds 1, 3, 4 + the Oct 27 screen recording.
-• "Fixed" items were checked against the live site on Nov 8 (screenshots on this slide) and its deployed JavaScript:
-  – Today shows "Show Up is a coach, not a canvas" with 3 steps. Nav reads "+ Mission". Sprint screen says "Design in your own tool. This page only keeps time." with Open Figma / Pinterest / Are.na links.
-  – Wall has drag, scroll, shift-scroll, pinch/ctrl-zoom, arrow keys, Fit.
-  – Friend mode: camera request gives up after 12 s; connection has a timeout and shows "Could not reach your friend."
-  – Critique: retries up to 3 times on 429/5xx with backoff. NEEDS TESTING: whether the first-click failure is actually gone — I haven't reproduced it since.
-• "Still open" items:
-  – Live sprint still lists 8 stages including "Commit", which the case study says I planned to drop. (Verified on live site.)
-  – The timer floats over other apps only via Document Picture-in-Picture (the code notes Chrome 116+). Elsewhere it falls back to an in-page widget that can't sit on top of Figma. NEEDS TESTING on Safari/Firefox.
-  – Accounts bleeding: the case study lists it as in progress. In the deployed code, local data isn't scoped per account and gets pushed to whichever account signs in — likely cause, NEEDS TESTING to confirm.
-  – Wall help text overlaps the arrow controls at a 1440×900 window (seen in screenshot).
-  – Paste-up step pre-selects "Quick" AI feedback rather than "Skip" — worth deciding on purpose.
-• I couldn't open the GitHub repo or PR #1 from this session; everything here comes from the live site and the case study.</aside>
+EVIDENCE
+• Findings: midterm case study (show-up-midterm.vercel.app), handwritten notes from rounds 1, 3, 4, and the Oct 27 screen recording.
+• Fixed — checked on the live site and its code on Nov 8: "Show Up is a coach, not a canvas" intro with 3 steps; "New" renamed "+ Mission"; sprint screen says "Design in your own tool. This page only keeps time."; Wall drags, scrolls, zooms, arrow keys, Fit; friend mode gives up on the camera after 12 s and shows "Could not reach your friend" instead of hanging; AI critique retries up to 3 times when busy (whether the first-click failure is fully gone NEEDS TESTING).
+• Still open: the live sprint lists 8 stages including "Commit"; the timer floats over other apps only in Chrome (Document Picture-in-Picture), elsewhere it's an in-page widget (NEEDS TESTING on Safari/Firefox); accounts mixing is listed as in progress in the case study, and the code doesn't keep local data separate per account — likely cause, NEEDS TESTING; Wall help text covers its arrow controls at 1440×900; paste-up pre-selects "Quick" AI feedback instead of "Skip".
+• Screenshot: live app, Nov 8, with the built-in example posters.
+• I couldn't open the GitHub repo or PR #1 from this session; all of this comes from the live site and the case study.</aside>
 </section>
 
 <!-- ============================================================ 2 -->
 <section id="showup-final" data-transition="push">
   <h2 style="margin-top:0">Show Up: what I’d change</h2>
 
-  <div class="abs" style="left:112px;top:210px;display:flex;gap:14px;align-items:center">
+  <div class="abs" style="left:112px;top:200px;display:flex;gap:14px;align-items:center">
     <div style="background:var(--yellow);padding:14px 22px;transform:rotate(-1.5deg)"><h3>Challenge</h3></div>
     <span style="font-size:36px">→</span>
     <div style="background:var(--red);color:#fff;padding:14px 22px;transform:rotate(1deg)"><h3>Sprint</h3></div>
@@ -173,6 +138,7 @@ EVIDENCE — where each claim comes from
   </div>
 
   <!-- before -->
+  <p class="small abs" style="left:112px;top:300px;width:1250px;color:var(--ink)">Same four steps. Each one does one thing, so it’s clear you design somewhere else.</p>
   <h3 class="abs" style="left:112px;top:360px;color:var(--red)">Before: 8 steps</h3>
   <div class="shot" style="left:112px;top:420px;width:680px;overflow:hidden;height:402px"><img src="img/showup-sprint.jpg" alt="Today's sprint screen with eight stages" style="width:680px"></div>
 
@@ -216,7 +182,9 @@ EVIDENCE — where each claim comes from
     <text x="22" y="64" font-family="IBM Plex Sans" font-weight="700" font-size="20" fill="#1B1A17">movie night</text>
     <text x="116" y="113" font-family="IBM Plex Mono" font-size="13" fill="#1B1A17">+4 joined</text>
   </svg>
-  <p class="small abs" style="left:1460px;top:790px;width:360px;color:var(--ink)">Friends join one challenge. Everyone’s posters go up at once.</p>
+  <p class="small abs" style="left:112px;top:850px;width:680px;color:var(--ink)">Too many steps and buttons. It looked like a place to design, so people tried to.</p>
+  <p class="small abs" style="left:850px;top:850px;width:540px;color:var(--ink)">One step at a time. When you finish, it shows where your piece goes on the Wall.</p>
+  <p class="small abs" style="left:1460px;top:790px;width:360px;color:var(--ink)">Someone posts a challenge and friends join with a link. Everyone’s posters go up at the same time.</p>
 
   <aside class="notes">SAY: For the final I'd keep the same loop — challenge, sprint, upload, reflect — and make it impossible to misread.
 
@@ -343,18 +311,22 @@ HONEST DETAILS ABOUT THE HORSE
   </div>
 
   <div class="card" style="left:690px;top:270px;width:540px;height:620px;padding:34px">
-    <h3>A pattern</h3>
-    <div style="display:flex;gap:8px;align-items:flex-end;height:110px;margin-top:26px">
-      <div style="width:56px;height:40%;background:var(--rule)"></div>
-      <div style="width:56px;height:55%;background:var(--blue)"></div><div style="width:56px;height:55%;background:var(--blue)"></div>
-      <div style="width:56px;height:55%;background:var(--blue)"></div><div style="width:56px;height:55%;background:var(--blue)"></div>
-      <div style="width:56px;height:55%;background:var(--blue)"></div>
-      <div style="width:56px;height:30%;background:var(--rule)"></div>
+    <h3>Suggestions</h3>
+    <div style="display:flex;gap:6px;align-items:flex-end;height:60px;margin-top:22px">
+      <div style="width:40px;height:40%;background:var(--rule)"></div>
+      <div style="width:40px;height:70%;background:var(--blue)"></div><div style="width:40px;height:70%;background:var(--blue)"></div>
+      <div style="width:40px;height:70%;background:var(--blue)"></div><div style="width:40px;height:70%;background:var(--blue)"></div>
+      <div style="width:40px;height:70%;background:var(--blue)"></div>
+      <div style="width:40px;height:30%;background:var(--rule)"></div>
     </div>
-    <p style="font-size:28px;margin-top:20px;line-height:1.3">You asked for a new headline <b>5 times</b>.</p>
-    <div style="margin-top:40px;padding:24px;background:#EEEAFF;border-left:6px solid var(--blue)">
+    <p style="font-size:26px;margin-top:14px;line-height:1.3">You asked for a new headline <b>5 times</b>.</p>
+    <div style="margin-top:22px;padding:20px 22px;background:#EEEAFF;border-left:6px solid var(--blue)">
       <p style="font-size:20px;font-weight:600;color:var(--blue)">Try</p>
-      <p style="font-size:26px;line-height:1.3;margin-top:6px">Say who it’s for and paste the 2 you liked.</p>
+      <p style="font-size:24px;line-height:1.3;margin-top:4px">Say who it’s for and paste the 2 you liked.</p>
+    </div>
+    <div style="margin-top:18px;padding:20px 22px;background:#E8F6EE;border-left:6px solid var(--ok)">
+      <p style="font-size:20px;font-weight:600;color:var(--ok)">Found on GitHub</p>
+      <p style="font-size:24px;line-height:1.3;margin-top:4px">A shared skill for poster copy. Set your style once instead of every chat.</p>
     </div>
   </div>
 
@@ -373,7 +345,7 @@ HONEST DETAILS ABOUT THE HORSE
 
   <aside class="notes">SAY: The derby is the glance. The report is something you open when you want — mid-task or at the end. All the data here is made up.
 
-Left: what happened. Messages per chat, a rough token guess, and your own rating of whether each chat was useful. Middle: a pattern, like asking for a new headline five times, plus one suggestion for the prompt based on that conversation. Right: an editable handoff — goal, what's decided, what you tried, what's open, links, and the next step — so you can pick the work up in another tool without starting over.
+Left: what happened. Messages per chat, a rough token guess, and your own rating of whether each chat was useful. Middle: suggestions. It notices a pattern — like asking for a new headline five times — and suggests a better prompt. It can also look on GitHub for skills other people have shared for the same kind of task, like a poster-copy skill, so you set your style up once instead of re-explaining it in every chat. Right: an editable handoff — goal, what's decided, what you tried, what's open, links, and the next step — so you can pick the work up in another tool without starting over.
 
 It doesn't treat a long session as wasted, doesn't score your prompts, and doesn't treat time in a tab as time the AI spent working.
 
@@ -383,6 +355,7 @@ WHERE EACH NUMBER COMES FROM
 • Plan usage left: not readable. Claude shows % bars + reset times in Settings > Usage (support.claude.com/en/articles/11647753, /9797557); no API exposes it. The report would link there.
 • "Was it useful?": entered by the person, one tap per chat.
 • Pattern: simple local check for repeated, near-identical requests in one chat. Neutral wording — repeating can be exploring.
+• Skills from GitHub (idea, NEEDS TESTING): use GitHub's official search API — not scraping — to look for public repos and SKILL.md files that match the task (e.g. "poster copy", "brand voice"). On Nov 8 a repository search for "claude skills" returned results without trouble; the API is rate-limited and code search needs a signed-in token. The AI reads the top few READMEs/SKILL.md files and explains in one line what each does; the person decides. Cautions: shared skills vary in quality and can include scripts — only suggest, never install automatically, and show the source repo. "Saves tokens" is a hypothesis: a skill can save re-explaining context, but I have no measurement, so the slide says "set your style once", not a number. The skill on the slide is made up.
 • Prompt tip + handoff: the person picks a conversation (from the page, or pasted / exported). Only that text goes to a model (Claude Messages API with structured outputs, so the handoff always has the same fields — platform.claude.com/docs/en/build-with-claude/structured-outputs). The tip has to point to the messages it's based on. Draft only; the person edits it. Needs a clear opt-in each time since it's chat content.</aside>
 </section>
 
@@ -390,7 +363,7 @@ WHERE EACH NUMBER COMES FROM
 <section id="compare" data-transition="push">
   <h2 style="margin-top:0">What I could build by Dec 8</h2>
 
-  <div class="card" style="left:112px;top:260px;width:820px;height:420px;padding:38px;border-top:12px solid var(--red)">
+  <div class="card" style="left:112px;top:230px;width:820px;height:490px;padding:38px;border-top:12px solid var(--red)">
     <h3 style="font-size:40px">Show Up</h3>
     <ul class="ticks done" style="margin-top:26px;gap:16px">
       <li style="font-size:28px">A 3-step timer</li>
@@ -401,18 +374,19 @@ WHERE EACH NUMBER COMES FROM
     <p class="small abs" style="left:38px;bottom:34px;color:var(--ink)">Most of the app already works.</p>
   </div>
 
-  <div class="card" style="left:976px;top:260px;width:832px;height:420px;padding:38px;border-top:12px solid var(--blue)">
+  <div class="card" style="left:976px;top:230px;width:832px;height:490px;padding:38px;border-top:12px solid var(--blue)">
     <h3 style="font-size:40px">AI companion</h3>
     <ul class="ticks done" style="margin-top:26px;gap:16px">
       <li style="font-size:28px">A Chrome extension for Claude.ai first</li>
       <li style="font-size:28px">A lane per open chat: working or your turn</li>
       <li style="font-size:28px">Message count and a limit you set</li>
       <li style="font-size:28px">Handoff from a chat you pick</li>
+      <li style="font-size:28px">Maybe: skills it finds on GitHub</li>
     </ul>
     <p class="small abs" style="left:38px;bottom:34px;width:760px;color:var(--ink)"><b style="color:var(--red)">Can’t:</b> show exact plan usage left. Claude’s terms also limit scraping.</p>
   </div>
 
-  <div class="q" style="left:112px;top:740px;width:1696px;padding:30px 34px">
+  <div class="q" style="left:112px;top:770px;width:1696px;padding:30px 34px">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px">
       <p style="font-size:28px;margin:0">Which is the stronger creative-tool project?</p>
       <p style="font-size:28px;margin:0">What should I cut to test something real on Nov 24?</p>
@@ -424,7 +398,7 @@ WHERE EACH NUMBER COMES FROM
 
 Show Up: a three-step timer, a Wall that opens on your new piece, fixes for accounts and AI feedback, and maybe one shared challenge. Most of the app already works, so this is mostly repair and polish.
 
-The AI companion: a Chrome extension for Claude.ai first. A lane for each open chat showing whether it's working or waiting on you, a message count with a limit you set, and a handoff written from a chat you pick. What it can't do: show how much of your plan is left. And Claude's terms limit scraping, so I'd keep it read-only and let people paste a chat in as a backup.
+The AI companion: a Chrome extension for Claude.ai first. A lane for each open chat showing whether it's working or waiting on you, a message count with a limit you set, and a handoff written from a chat you pick. Maybe: it suggests skills other people have shared on GitHub. What it can't do: show how much of your plan is left. And Claude's terms limit scraping, so I'd keep it read-only and let people paste a chat in as a backup.
 
 Three questions for you: which is the stronger creative-tool project, what should I cut to test something real on Nov 24, and does the AI companion fit this class if it's about creative work?
 
