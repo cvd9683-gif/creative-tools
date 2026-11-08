@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final Project Proposal · Cathy Doss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Caveat:wght@500;600&display=swap">
+<style>
+  :root {
+    --paper: #F6F3EC; --ink: #1B1A17; --mid: #6E685D; --rule: #D9D3C5; --white: #FFFDF8;
+    --blue: #3B2CFF; --red: #E5322D; --yellow: #F2B705; --pink: #FF3E9A; --green: #12A150; --teal: #0E8F8A;
+    --ok: #12A150; --test: #C77700; --sample: #3B2CFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #14130f; overflow: hidden; }
+  body { font-family: 'IBM Plex Sans', Arial, sans-serif; color: var(--ink); }
+  #stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; }
+  section { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; visibility: hidden;
+            background: var(--paper); padding: 88px 112px; isolation: isolate; }
+  section.on { visibility: visible; }
+  section.in-push { animation: push .55s cubic-bezier(.2,.7,.2,1) both; }
+  section.in-push-back { animation: pushback .55s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes push { from { transform: translateX(14%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes pushback { from { transform: translateX(-14%); opacity: 0; } to { transform: none; opacity: 1; } }
+  [data-build-in] { transition: opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1); }
+  [data-build-in].hidden { opacity: 0; transform: translateY(24px); }
+
+  /* type */
+  .kicker { font: 500 22px/1 'IBM Plex Mono', monospace; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); }
+  .kicker.su { color: var(--red); }
+  h2 { font-size: 68px; font-weight: 600; line-height: 1.05; letter-spacing: -1.5px; margin-top: 18px; }
+  h3 { font-size: 34px; font-weight: 600; line-height: 1.15; letter-spacing: -.3px; }
+  .lede { font-size: 30px; line-height: 1.35; color: #4A463F; margin-top: 16px; }
+  .small { font-size: 22px; line-height: 1.35; color: var(--mid); }
+  .hand { font-family: 'Caveat', 'Brush Script MT', cursive; font-weight: 600; color: var(--blue); line-height: 1.05; }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  .abs { position: absolute; }
+
+  /* chips: the evidence legend used across the deck */
+  .chip { display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'IBM Plex Mono', monospace; letter-spacing: 1.5px;
+          text-transform: uppercase; padding: 7px 10px 6px; border: 2px solid currentColor; border-radius: 3px; white-space: nowrap; }
+  .chip.ok { color: var(--ok); } .chip.test { color: var(--test); } .chip.sample { color: var(--sample); }
+  .chip.solid { color: #fff; border-color: transparent; }
+  .chip.solid.ok { background: var(--ok); } .chip.solid.test { background: var(--test); } .chip.solid.sample { background: var(--sample); }
+  .chip.red { color: var(--red); }
+
+  /* screenshots pasted up like posters */
+  .shot { position: absolute; border: 3px solid var(--ink); background: #fff; box-shadow: 10px 10px 0 rgba(27,26,23,.18); }
+  .shot img { display: block; width: 100%; height: auto; }
+  .tape { position: absolute; width: 120px; height: 34px; background: rgba(242,183,5,.75); }
+  .cap { position: absolute; font: 500 16px 'IBM Plex Mono', monospace; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mid); }
+
+  /* lists */
+  .finding { display: grid; grid-template-columns: 56px 1fr; gap: 6px 14px; align-items: baseline; }
+  .finding b { font-size: 46px; font-weight: 700; color: var(--red); line-height: 1; }
+  .finding p { font-size: 28px; line-height: 1.25; font-weight: 500; }
+  .ticks { list-style: none; display: grid; gap: 9px; }
+  .ticks li { font-size: 22px; line-height: 1.25; padding-left: 30px; position: relative; }
+  .ticks li::before { position: absolute; left: 0; top: 0; font-weight: 700; }
+  .ticks.done li::before { content: '✓'; color: var(--ok); }
+  .ticks.open li::before { content: '!'; color: var(--red); left: 6px; }
+  .colhead { font: 500 17px 'IBM Plex Mono', monospace; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px;
+             padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+
+  .card { position: absolute; background: var(--white); border: 2.5px solid var(--ink); }
+  .q { position: absolute; background: var(--ink); color: var(--paper); padding: 26px 30px; }
+  .q .mono { font-size: 16px; letter-spacing: 2px; text-transform: uppercase; color: var(--yellow); }
+  .q p { font-size: 30px; line-height: 1.25; font-weight: 500; margin-top: 10px; }
+
+  /* presenter chrome */
+  aside.notes { display: none; }
+  #notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 42vh; overflow: auto; padding: 18px 24px 22px;
+           background: rgba(20,19,15,.95); color: #f6f3ec; font: 17px/1.55 'IBM Plex Sans', Arial, sans-serif; display: none; white-space: pre-line; }
+  #notes.on { display: block; }
+  #notes b { font: 500 12px 'IBM Plex Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: #c9c4ff; display: block; margin-bottom: 6px; }
+  #hud { position: fixed; right: 16px; bottom: 12px; font: 500 12px 'IBM Plex Mono', monospace; color: rgba(246,243,236,.55); letter-spacing: .06em; transition: opacity .4s; pointer-events: none; }
+  #help { position: fixed; left: 16px; bottom: 12px; font: 12px 'IBM Plex Sans', Arial, sans-serif; color: rgba(246,243,236,.55); transition: opacity .4s; pointer-events: none; }
+  body.idle #hud, body.idle #help { opacity: 0; }
+  body.notes-on #help { display: none; }
+  @media print {
+    html, body { overflow: visible; background: #fff; height: auto; }
+    #stage { position: static; transform: none !important; width: 1920px; height: auto; }
+    section { position: relative; visibility: visible; page-break-after: always; }
+    [data-build-in].hidden { opacity: 1; transform: none; }
+    #notes, #hud, #help { display: none !important; }
+  }
+  @page { size: 1920px 1080px; margin: 0; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- ============================================================ 1 -->
+<section id="showup-now" data-transition="push">
+  <p class="kicker su">Idea 1 · Show Up · what exists</p>
+  <h2>Show Up: a practice coach,<br>not a canvas</h2>
+  <p class="lede" style="width:860px">Pick a challenge, get a brief, sprint in <i>your</i> design tool, paste it up. Every piece lands on a wall of NYC wheatpaste.</p>
+
+  <div class="shot" style="left:112px;top:470px;width:880px;transform:rotate(-1.2deg)"><img src="img/showup-sprint.jpg" alt="Show Up sprint screen: a large 19:58 timer, the current stage 'Who is this for?', and a list of eight sprint stages"></div>
+  <div class="tape" style="left:480px;top:452px;transform:rotate(-4deg)"></div>
+  <div class="shot" style="left:640px;top:715px;width:500px;transform:rotate(2deg)"><img src="img/showup-wall.jpg" alt="The Wall: posters wheatpasted on a 3D brick wall"></div>
+  <div class="tape" style="left:840px;top:700px;transform:rotate(3deg);background:rgba(255,62,154,.6)"></div>
+  <p class="cap" style="left:112px;top:1028px">Live app, Nov 8 · sprint + the Wall (example posters)</p>
+
+  <div class="abs" style="left:1200px;top:96px;width:610px">
+    <p class="colhead">What in-class testing showed</p>
+    <div style="display:grid;gap:22px">
+      <div class="finding"><b>1</b><p>People tried to design <i>inside</i> the app</p></div>
+      <div class="finding"><b>2</b><p>The floating timer and the mission flow were unclear</p></div>
+      <div class="finding"><b>3</b><p>Wall navigation, friend mode, and AI feedback broke or confused</p></div>
+    </div>
+  </div>
+
+  <div class="abs" style="left:1200px;top:540px;width:610px;display:grid;grid-template-columns:1fr 1fr;gap:34px">
+    <div>
+      <p class="colhead" style="color:var(--ok);border-color:var(--ok)">Fixed since testing</p>
+      <ul class="ticks done">
+        <li>“Coach, not a canvas” intro</li>
+        <li>“New” → “+ Mission”</li>
+        <li>Wall pans + zooms every way</li>
+        <li>Friend mode times out clearly</li>
+        <li>Critic retries when busy</li>
+      </ul>
+    </div>
+    <div>
+      <p class="colhead" style="color:var(--red);border-color:var(--red)">Still open</p>
+      <ul class="ticks open">
+        <li>8 sprint stages for a 20-min sprint</li>
+        <li>Timer only floats in Chrome</li>
+        <li>Two accounts share one wall</li>
+        <li>Wall help covers its controls</li>
+      </ul>
+    </div>
+  </div>
+  <p class="hand abs" style="left:1210px;top:900px;font-size:46px;width:600px;transform:rotate(-2deg)">it looked too much like the place you make things</p>
+
+  <aside class="notes">SAY: Show Up is the practice coach I built for the midterm. You pick a challenge, get a brief, and run a timed sprint — but the designing happens in Figma, Illustrator, or on paper. When time's up you paste your export onto a wall inspired by wheatpasted posters in NYC, and you can ask for an AI critique if you want one.
+
+In class testing, the big surprise: people treated it like a canvas. They tried to design inside the timer. The floating timer and the "New" mission button were unclear. The Wall was hard to move around, friend mode hung when the camera prompt was ignored, and the AI feedback sometimes failed on the first click.
+
+Some of that is fixed. Some isn't — that's what the final would be about.
+
+EVIDENCE — where each claim comes from
+• Findings: my midterm case study (show-up-midterm.vercel.app) + handwritten notes from rounds 1, 3, 4 + the Oct 27 screen recording.
+• "Fixed" items were checked against the live site on Nov 8 (screenshots on this slide) and its deployed JavaScript:
+  – Today shows "Show Up is a coach, not a canvas" with 3 steps. Nav reads "+ Mission". Sprint screen says "Design in your own tool. This page only keeps time." with Open Figma / Pinterest / Are.na links.
+  – Wall has drag, scroll, shift-scroll, pinch/ctrl-zoom, arrow keys, Fit.
+  – Friend mode: camera request gives up after 12 s; connection has a timeout and shows "Could not reach your friend."
+  – Critique: retries up to 3 times on 429/5xx with backoff. NEEDS TESTING: whether the first-click failure is actually gone — I haven't reproduced it since.
+• "Still open" items:
+  – Live sprint still lists 8 stages including "Commit", which the case study says I planned to drop. (Verified on live site.)
+  – The timer floats over other apps only via Document Picture-in-Picture (the code notes Chrome 116+). Elsewhere it falls back to an in-page widget that can't sit on top of Figma. NEEDS TESTING on Safari/Firefox.
+  – Accounts bleeding: the case study lists it as in progress. In the deployed code, local data isn't scoped per account and gets pushed to whichever account signs in — likely cause, NEEDS TESTING to confirm.
+  – Wall help text overlaps the arrow controls at a 1440×900 window (seen in screenshot).
+  – Paste-up step pre-selects "Quick" AI feedback rather than "Skip" — worth deciding on purpose.
+• I couldn't open the GitHub repo or PR #1 from this session; everything here comes from the live site and the case study.</aside>
+</section>
+
+<!-- ============================================================ 2 -->
+<section id="showup-final" data-transition="push">
+  <p class="kicker su">Idea 1 · Show Up · the final</p>
+  <h2>One clear loop, more play</h2>
+
+  <!-- the loop -->
+  <div class="abs" style="left:112px;top:252px;display:flex;gap:14px;align-items:center">
+    <div style="background:var(--yellow);padding:14px 22px;transform:rotate(-1.5deg)"><h3>Challenge</h3></div>
+    <span style="font-size:36px">→</span>
+    <div style="background:var(--red);color:#fff;padding:14px 22px;transform:rotate(1deg)"><h3>Sprint</h3></div>
+    <span style="font-size:36px">→</span>
+    <div style="background:var(--blue);color:#fff;padding:14px 22px;transform:rotate(-1deg)"><h3>Upload</h3></div>
+    <span style="font-size:36px">→</span>
+    <div style="background:var(--pink);color:#fff;padding:14px 22px;transform:rotate(1.5deg)"><h3>Reflect</h3></div>
+  </div>
+  <p class="small abs" style="left:112px;top:340px;width:1250px">Same loop, one action per step. The timer, Wall and feedback get clearer and more fun to use.</p>
+
+  <!-- before -->
+  <p class="cap" style="left:112px;top:410px;color:var(--red)">Before · the sprint today</p>
+  <div class="shot" style="left:112px;top:446px;width:640px;overflow:hidden;height:378px"><img src="img/showup-sprint.jpg" alt="Today's sprint screen with a long stage list" style="width:640px"></div>
+  <p class="small abs" style="left:112px;top:842px;width:640px">8 stages, 3 buttons, 3 links. It reads like a workspace.</p>
+
+  <!-- after: sketch -->
+  <p class="cap" style="left:800px;top:410px;color:var(--blue)">After · sketch</p>
+  <svg class="abs" style="left:790px;top:440px" width="560" height="420" viewBox="0 0 560 420" aria-label="Sketch of a smaller floating timer ticket">
+    <g fill="none" stroke="#1B1A17" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <!-- ticket timer -->
+      <path d="M20 22 L300 18 L304 300 L22 304 Z" fill="#FFFDF8"/>
+      <path d="M20 22 L300 18 L300 46 L20 50 Z" fill="#E5322D" stroke="#1B1A17"/>
+      <!-- 3 stage dots -->
+      <circle cx="60" cy="228" r="11" fill="#1B1A17"/><circle cx="160" cy="228" r="11" fill="#E5322D"/><circle cx="260" cy="228" r="11"/>
+      <path d="M71 228 H149 M171 228 H249" stroke-dasharray="6 7"/>
+      <!-- single button -->
+      <path d="M44 254 L280 252 L281 288 L45 290 Z" fill="#1B1A17"/>
+      <!-- the wall spot -->
+      <path d="M360 110 L540 106 L544 370 L362 374 Z" stroke-dasharray="10 9"/>
+      <path d="M306 180 C330 170 340 165 352 168" />
+      <path d="M342 158 L354 168 L340 178"/>
+    </g>
+    <text x="36" y="40" font-family="IBM Plex Mono" font-size="14" fill="#fff" letter-spacing="2">DAY 3 · TYPE POSTER</text>
+    <text x="34" y="138" font-family="IBM Plex Sans" font-weight="700" font-size="84" fill="#1B1A17" letter-spacing="-3">14:02</text>
+    <text x="36" y="182" font-family="IBM Plex Sans" font-weight="600" font-size="22" fill="#1B1A17">You’re in Figma now.</text>
+    <g font-family="IBM Plex Mono" font-size="12" fill="#6E685D" letter-spacing="1" text-anchor="middle"><text x="60" y="210">PLAN</text><text x="160" y="210">MAKE</text><text x="260" y="210">WRAP</text></g>
+    <text x="70" y="277" font-family="IBM Plex Sans" font-weight="600" font-size="18" fill="#FFFDF8">Done → paste it up</text>
+    <text x="378" y="250" font-family="Caveat" font-weight="600" font-size="30" fill="#3B2CFF">your spot</text>
+    <text x="378" y="282" font-family="Caveat" font-weight="600" font-size="30" fill="#3B2CFF">is waiting</text>
+  </svg>
+  <p class="small abs" style="left:800px;top:842px;width:560px">3 stages, 1 button. Ends at your blank spot on the Wall.</p>
+  <p class="hand abs" style="left:1060px;top:900px;font-size:34px;width:320px;transform:rotate(-2deg)">sound: a brush swish when it pastes</p>
+
+  <!-- community challenge extension -->
+  <div class="abs" style="left:1420px;top:252px;width:400px">
+    <span class="chip test">Maybe · exploratory</span>
+    <h3 style="margin-top:14px">Community challenges</h3>
+    <p class="small" style="margin-top:8px">Someone posts a challenge, others join, the work is revealed together.</p>
+  </div>
+  <svg class="abs" style="left:1410px;top:470px" width="420" height="330" viewBox="0 0 420 330" aria-label="Sketch: a challenge card with joiners, then a shared reveal wall">
+    <g stroke="#1B1A17" stroke-width="2.5" fill="none" stroke-linejoin="round">
+      <rect x="10" y="10" width="180" height="120" fill="#F2B705"/>
+      <circle cx="34" cy="108" r="11" fill="#FFFDF8"/><circle cx="56" cy="108" r="11" fill="#FFFDF8"/><circle cx="78" cy="108" r="11" fill="#FFFDF8"/><circle cx="100" cy="108" r="11" fill="#FFFDF8"/>
+      <path d="M198 70 C230 70 236 92 250 110" /><path d="M240 104 L251 112 L254 98"/>
+      <rect x="220" y="120" width="190" height="200" fill="#9D9184"/>
+      <rect x="232" y="134" width="50" height="66" fill="#FF3E9A" transform="rotate(-3 257 167)"/>
+      <rect x="292" y="132" width="50" height="66" fill="#5B3FD1" transform="rotate(2 317 165)"/>
+      <rect x="350" y="136" width="50" height="66" fill="#12A150" transform="rotate(-1 375 169)"/>
+      <rect x="236" y="216" width="50" height="66" fill="#E5322D" transform="rotate(2 261 249)"/>
+      <rect x="296" y="218" width="50" height="66" fill="#FFFDF8" transform="rotate(-2 321 251)"/>
+      <rect x="354" y="214" width="50" height="66" fill="#F2B705" transform="rotate(3 379 247)"/>
+    </g>
+    <text x="22" y="40" font-family="IBM Plex Sans" font-weight="700" font-size="20" fill="#1B1A17">Laundromat</text>
+    <text x="22" y="64" font-family="IBM Plex Sans" font-weight="700" font-size="20" fill="#1B1A17">movie night</text>
+    <text x="116" y="113" font-family="IBM Plex Mono" font-size="13" fill="#1B1A17">+4 joined</text>
+    <text x="10" y="170" font-family="Caveat" font-weight="600" font-size="26" fill="#3B2CFF">reveal Friday,</text>
+    <text x="10" y="196" font-family="Caveat" font-weight="600" font-size="26" fill="#3B2CFF">all at once</text>
+  </svg>
+  <p class="small abs" style="left:1420px;top:810px;width:400px">Invite link, no marketplace, no payments.</p>
+
+  <div class="q" style="left:112px;top:900px;width:900px;padding:20px 28px" data-build-in="1">
+    <p class="mono">Test on Nov 24</p>
+    <p style="font-size:28px">After pressing Start, do people leave Show Up to design, without being told twice?</p>
+  </div>
+
+  <aside class="notes">SAY: For the final, I wouldn't add a pile of features. I'd make the one loop — challenge, sprint, upload, reflect — impossible to misread, and make it more playful.
+
+Before: today's sprint has eight stages, three buttons and three outbound links. That's why it reads like a workspace. After: a small ticket-shaped timer with three stages, one button, and no text inputs at all — and the sprint ends by showing you the empty spot on the Wall where your piece will go. Pasting it up plays a brush sound, because the moment of showing up should feel like something.
+
+The same pass covers the three things testing flagged: a timer you understand (and that says honestly when it can't float), a Wall that opens on your newest piece, and feedback that's one tap with a clear failure state.
+
+Maybe, as an extension: community challenges. Someone posts a challenge, others join with a link, and everyone's work is revealed together on a shared wall. In round 4 of testing, someone wrote "SHARE" with a star. No marketplace, no payments.
+
+The question I'd test on Nov 24: after pressing Start, do people leave Show Up to design — without being told twice?
+
+DETAILS / UNCERTAINTIES
+• The "after" is a sketch, not built. Stage names (Plan / Make / Wrap) are placeholders to test.
+• Floating timer: keep Document Picture-in-Picture where it works; where it doesn't, say so plainly ("Keep this tab open — the timer will chime") instead of a widget that looks like it floats.
+• Sound: paste-up swish + end-of-sprint chime. There's already a chime setting in the code.
+• Wall: open on your newest piece, then let you roam. Fix the help text overlapping the controls.
+• Feedback: decide whether the default is Skip; show one clear message if the critic fails, with "try again".
+• Community challenges — what exists: the code already writes a shared challenge record with a member list when you start a "together" mission, and invite links work. What doesn't: nothing reads other people's pieces yet; the Wall only shows your own. Needs: a shared gallery query, Firestore rules so members can read each other's pieces, a reveal time, and fixing the account-scoping bug first.
+• How I'd measure the test question: watch 4–5 people; note whether they switch to Figma/paper within ~1 min of Start, and whether they type or click inside the timer.</aside>
+</section>
+
+<!-- ============================================================ 3 -->
+<section id="ai-widget" data-transition="push">
+  <p class="kicker">Idea 2 · AI usage companion · the live widget</p>
+  <h2>A carnival derby for your open AI chats</h2>
+  <p class="lede" style="width:1500px">Example: making a gig poster with three chats open. One lane per chat, one glance to see which needs you.</p>
+
+  <svg class="abs" style="left:112px;top:330px" width="1320" height="600" viewBox="0 0 1320 600" aria-label="Sketch of the derby widget: three lanes, each with a horse, a water tank and a status light">
+    <defs>
+      <pattern id="stripe" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="16" fill="#E5322D"/><rect x="8" width="8" height="16" fill="#FFFDF8"/></pattern>
+    </defs>
+    <!-- booth -->
+    <rect x="4" y="4" width="1312" height="40" fill="url(#stripe)" stroke="#1B1A17" stroke-width="3"/>
+    <rect x="4" y="44" width="1312" height="552" fill="#FFFDF8" stroke="#1B1A17" stroke-width="3"/>
+    <text x="24" y="86" font-family="IBM Plex Mono" font-size="16" letter-spacing="2" fill="#6E685D">CHAT · TASK</text>
+    <text x="356" y="86" font-family="IBM Plex Mono" font-size="16" letter-spacing="2" fill="#6E685D">STEPS YOU MARKED DONE →</text>
+    <text x="1000" y="120" font-family="IBM Plex Mono" font-size="13" letter-spacing="2" fill="#6E685D">SENT</text>
+    <!-- checkpoint line -->
+    <path d="M960 100 V580" stroke="#1B1A17" stroke-width="3" stroke-dasharray="10 8"/>
+    <rect x="900" y="56" width="120" height="30" fill="#F2B705" stroke="#1B1A17" stroke-width="2"/>
+    <text x="912" y="77" font-family="IBM Plex Mono" font-size="14" fill="#1B1A17">CHECKPOINT</text>
+
+    <!-- lane template: y offsets 110, 270, 430 -->
+    <g id="lane1" transform="translate(0,110)">
+      <rect x="20" y="0" width="1280" height="140" fill="none" stroke="#D9D3C5" stroke-width="2"/>
+      <circle cx="44" cy="40" r="12" fill="#12A150"/>
+      <text x="66" y="47" font-family="IBM Plex Sans" font-weight="700" font-size="24" fill="#1B1A17">Claude</text>
+      <text x="44" y="82" font-family="IBM Plex Sans" font-size="22" fill="#4A463F">headline copy</text>
+      <text x="44" y="118" font-family="IBM Plex Mono" font-size="15" fill="#12A150" letter-spacing="1">READY · ANSWER DONE</text>
+      <path d="M350 100 H940" stroke="#1B1A17" stroke-width="2"/>
+      <g transform="translate(700,40)"><path d="M0 50 C4 30 18 22 34 22 L56 20 L70 4 L76 10 L72 24 L84 34 L76 40 L64 34 L58 48 L62 60 M10 50 L4 62 M30 50 L28 62" fill="#3B2CFF" stroke="#1B1A17" stroke-width="2.5" stroke-linejoin="round"/></g>
+      <rect x="1000" y="22" width="40" height="96" fill="none" stroke="#1B1A17" stroke-width="2.5"/><rect x="1002" y="64" width="36" height="52" fill="#3FB6E0"/>
+      <text x="1052" y="78" font-family="IBM Plex Sans" font-weight="600" font-size="26" fill="#1B1A17">9</text>
+      <rect x="1120" y="30" width="160" height="38" fill="#1B1A17"/><text x="1176" y="56" font-family="IBM Plex Sans" font-weight="600" font-size="18" fill="#FFFDF8">Open</text>
+      <rect x="1120" y="78" width="160" height="38" fill="none" stroke="#1B1A17" stroke-width="2"/><text x="1160" y="104" font-family="IBM Plex Sans" font-weight="600" font-size="18" fill="#1B1A17">Handoff</text>
+    </g>
+    <g transform="translate(0,270)">
+      <rect x="20" y="0" width="1280" height="140" fill="none" stroke="#D9D3C5" stroke-width="2"/>
+      <circle cx="44" cy="40" r="12" fill="none" stroke="#C77700" stroke-width="4" stroke-dasharray="6 5"/>
+      <text x="66" y="47" font-family="IBM Plex Sans" font-weight="700" font-size="24" fill="#1B1A17">ChatGPT</text>
+      <text x="44" y="82" font-family="IBM Plex Sans" font-size="22" fill="#4A463F">color palette ideas</text>
+      <text x="44" y="118" font-family="IBM Plex Mono" font-size="15" fill="#C77700" letter-spacing="1">RUNNING · WRITING…</text>
+      <path d="M350 100 H940" stroke="#1B1A17" stroke-width="2"/>
+      <g transform="translate(520,40)"><path d="M0 50 C4 30 18 22 34 22 L56 20 L70 4 L76 10 L72 24 L84 34 L76 40 L64 34 L58 48 L62 60 M10 50 L4 62 M30 50 L28 62" fill="#FF3E9A" stroke="#1B1A17" stroke-width="2.5" stroke-linejoin="round"/></g>
+      <rect x="1000" y="22" width="40" height="96" fill="none" stroke="#1B1A17" stroke-width="2.5"/><rect x="1002" y="92" width="36" height="24" fill="#3FB6E0"/>
+      <text x="1052" y="78" font-family="IBM Plex Sans" font-weight="600" font-size="26" fill="#1B1A17">4</text>
+      <rect x="1120" y="30" width="160" height="38" fill="#1B1A17"/><text x="1176" y="56" font-family="IBM Plex Sans" font-weight="600" font-size="18" fill="#FFFDF8">Open</text>
+      <rect x="1120" y="78" width="160" height="38" fill="none" stroke="#1B1A17" stroke-width="2"/><text x="1160" y="104" font-family="IBM Plex Sans" font-weight="600" font-size="18" fill="#1B1A17">Handoff</text>
+    </g>
+    <g transform="translate(0,430)">
+      <rect x="20" y="0" width="1280" height="140" fill="#FFF2F1" stroke="#E5322D" stroke-width="3"/>
+      <circle cx="44" cy="40" r="12" fill="#E5322D"/>
+      <text x="66" y="47" font-family="IBM Plex Sans" font-weight="700" font-size="24" fill="#1B1A17">Gemini</text>
+      <text x="44" y="82" font-family="IBM Plex Sans" font-size="22" fill="#4A463F">venue research</text>
+      <text x="44" y="118" font-family="IBM Plex Mono" font-size="15" fill="#E5322D" letter-spacing="1">NEEDS YOU · ANSWER WAITING</text>
+      <path d="M350 100 H940" stroke="#1B1A17" stroke-width="2"/>
+      <g transform="translate(380,40)"><path d="M0 50 C4 30 18 22 34 22 L56 20 L70 4 L76 10 L72 24 L84 34 L76 40 L64 34 L58 48 L62 60 M10 50 L4 62 M30 50 L28 62" fill="#F2B705" stroke="#1B1A17" stroke-width="2.5" stroke-linejoin="round"/></g>
+      <text x="480" y="62" font-family="Caveat" font-weight="600" font-size="30" fill="#E5322D">12 sent, no step marked yet. Check in?</text>
+      <rect x="1000" y="22" width="40" height="96" fill="none" stroke="#1B1A17" stroke-width="2.5"/><rect x="1002" y="28" width="36" height="88" fill="#3FB6E0"/>
+      <text x="1052" y="78" font-family="IBM Plex Sans" font-weight="600" font-size="26" fill="#1B1A17">12</text>
+      <rect x="1120" y="30" width="160" height="38" fill="#1B1A17"/><text x="1176" y="56" font-family="IBM Plex Sans" font-weight="600" font-size="18" fill="#FFFDF8">Open</text>
+      <rect x="1120" y="78" width="160" height="38" fill="none" stroke="#1B1A17" stroke-width="2"/><text x="1160" y="104" font-family="IBM Plex Sans" font-weight="600" font-size="18" fill="#1B1A17">Handoff</text>
+    </g>
+  </svg>
+  <span class="chip sample abs" style="left:112px;top:952px">Sketch · sample chats</span>
+
+  <!-- legend: what each thing means -->
+  <div class="abs" style="left:1480px;top:330px;width:330px;display:grid;gap:26px">
+    <div><p class="colhead">What moves what</p></div>
+    <div>
+      <h3 style="font-size:28px">🐎 Horse</h3>
+      <p class="small" style="color:var(--ink)">A step <b>you</b> mark done toward your checkpoint.</p>
+    </div>
+    <div>
+      <h3 style="font-size:28px">💧 Water</h3>
+      <p class="small" style="color:var(--ink)">Messages you sent this session. Counted, not judged.</p>
+    </div>
+    <div>
+      <h3 style="font-size:28px">● Light</h3>
+      <p class="small" style="color:var(--ink)">Running, ready, or waiting on you, where the page shows it.</p>
+    </div>
+  </div>
+  <div class="q" style="left:1480px;top:790px;width:330px;padding:22px 24px" data-build-in="1">
+    <p class="mono">The twist</p>
+    <p style="font-size:26px">At the carnival, more water = faster horse. Here it never does.</p>
+  </div>
+
+  <aside class="notes">SAY: Idea two is a small companion for when you're juggling several AI chats. Here's an example: I'm making a gig poster. I have Claude writing headline options, ChatGPT suggesting palettes, and Gemini looking up venues.
+
+The look comes from the carnival game where you shoot water at a target and little horses race along parallel tracks. One lane per chat, labeled with the tool and what it's for. The light tells you if a chat is still writing, finished, or waiting on you. Open jumps to that chat; Handoff starts a summary you can carry to another tool.
+
+The important design decision is what the horse means. At the carnival, more water makes your horse go faster — that's exactly the loop I don't want. So here, water is just the messages you've sent: visible, counted, not judged. The horse only moves when you mark a step done toward a checkpoint you chose, like "pick the final headline". If the water keeps rising and the horse doesn't move, the widget gently asks if you want to check in — not that you're doing it wrong.
+
+Sound idea: a soft bell when a chat finishes, so you can stop watching tabs — and no sound for sending.
+
+WHY THE HORSE ISN'T TOKENS, MESSAGES, OR COMPLETION
+• Tokens consumed: not visible for consumer chat plans (see slide 5), and moving forward on tokens rewards using more.
+• Messages exchanged: easy to count, but it's the carnival's water — more prompts = faster horse is the addictive loop.
+• Response completion: a yes/no moment per message, already shown by the light. "Done generating" ≠ "useful".
+• Actual task progress: no tool can measure it from outside. So the person marks it — self-reported, labeled that way.
+→ Chosen meaning for this sketch: steps the person marks done toward their own checkpoint.
+
+WHAT'S OBSERVABLE (details on slide 5)
+• Running / ready: a Chrome extension content script can watch the chat page for the stop button / streaming indicator — NEEDS TESTING, it depends on each site's markup and can break when they redesign.
+• "Needs you" = answer finished and you haven't looked at that tab since. Inferred, not reported by the service.
+• Message count: counted by watching your sends on the page — NEEDS TESTING. Only for sessions where the extension is running.
+• All chats/tasks in this sketch are sample data.
+
+THE DESIGN TENSION I want feedback on: making usage visible could make it more game-like and compulsive. No streaks, no points, no win state for sending. The finish line is the checkpoint you chose.</aside>
+</section>
+
+<!-- ============================================================ 4 -->
+<section id="ai-report" data-transition="push">
+  <p class="kicker">Idea 2 · AI usage companion · the session report</p>
+  <h2>A report you open on purpose</h2>
+  <div class="abs" style="left:1240px;top:100px;display:flex;gap:10px;align-items:center">
+    <span class="chip solid sample">Sample data</span><span class="small">Not real usage</span>
+  </div>
+
+  <!-- column 1: where numbers come from -->
+  <div class="card" style="left:112px;top:260px;width:540px;height:660px;padding:30px">
+    <p class="colhead">This session · 3 chats</p>
+    <div style="display:grid;gap:22px">
+      <div>
+        <span class="chip ok">Measured</span>
+        <p style="font-size:26px;margin-top:10px"><b>25</b> messages sent</p>
+        <div style="display:flex;gap:6px;margin-top:10px;height:22px">
+          <div style="width:36%;background:var(--blue)"></div><div style="width:16%;background:var(--pink)"></div><div style="width:48%;background:var(--yellow)"></div>
+        </div>
+        <p class="small" style="margin-top:6px">Claude 9 · ChatGPT 4 · Gemini 12</p>
+      </div>
+      <div>
+        <span class="chip test">Estimate</span>
+        <p style="font-size:26px;margin-top:10px">≈ 18k tokens of text</p>
+        <p class="small">Guessed from text length, not the provider’s count</p>
+      </div>
+      <div>
+        <span class="chip" style="color:var(--mid)">From the provider</span>
+        <p style="font-size:26px;margin-top:10px">Plan usage: <b>not readable here</b></p>
+        <p class="small">→ opens the service’s own Settings › Usage</p>
+      </div>
+      <div>
+        <span class="chip sample">You said</span>
+        <p style="font-size:24px;margin-top:10px">Claude ✓ useful · Gemini ~ partly · ChatGPT ✗ not yet</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- column 2: pattern + prompt suggestion -->
+  <div class="card" style="left:690px;top:260px;width:540px;height:660px;padding:30px">
+    <p class="colhead">A pattern in “headline copy”</p>
+    <div style="display:flex;gap:8px;align-items:flex-end;height:110px">
+      <div style="width:56px;height:40%;background:var(--rule)"></div>
+      <div style="width:56px;height:55%;background:var(--blue)"></div>
+      <div style="width:56px;height:55%;background:var(--blue)"></div>
+      <div style="width:56px;height:55%;background:var(--blue)"></div>
+      <div style="width:56px;height:55%;background:var(--blue)"></div>
+      <div style="width:56px;height:55%;background:var(--blue)"></div>
+      <div style="width:56px;height:30%;background:var(--rule)"></div>
+    </div>
+    <p style="font-size:26px;margin-top:14px;line-height:1.3">You asked for a new headline <b>5 times</b> with “make it punchier.”</p>
+    <p class="hand" style="font-size:34px;margin-top:8px">exploring, or stuck? only you know</p>
+    <div style="margin-top:22px;padding:20px;background:#EEEAFF;border-left:6px solid var(--blue)">
+      <p class="mono" style="font-size:15px;letter-spacing:2px;color:var(--blue)">TRY NEXT TIME</p>
+      <p style="font-size:24px;line-height:1.3;margin-top:8px">Say who it’s for and paste the 2 headlines you liked.</p>
+      <p class="small" style="margin-top:10px;text-decoration:underline">Show me where (messages 4–8)</p>
+    </div>
+  </div>
+
+  <!-- column 3: handoff -->
+  <div class="card" style="left:1268px;top:260px;width:540px;height:660px;padding:30px;background:#FFFBEA">
+    <p class="colhead">Handoff · editable</p>
+    <div style="display:grid;grid-template-columns:150px 1fr;gap:12px 14px;font-size:22px;line-height:1.3">
+      <b>Goal</b><span>Headline for a Friday gig poster</span>
+      <b>Decided</b><span>Short, all caps, venue name last</span>
+      <b>Tried</b><span>Puns, dates first, 2-line split</span>
+      <b>Still open</b><span>Too long at small sizes?</span>
+      <b>Links</b><span style="text-decoration:underline">Claude chat · Figma frame</span>
+      <b style="color:var(--red)">Next step</b><span style="border-bottom:2px dashed var(--red)">Test the top 2 at poster size in Figma</span>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:34px">
+      <span style="background:var(--ink);color:var(--paper);padding:12px 16px;font-weight:600;font-size:20px">Copy for another tool</span>
+      <span style="border:2px solid var(--ink);padding:10px 16px;font-weight:600;font-size:20px">Edit</span>
+    </div>
+  </div>
+
+  <p class="small abs" style="left:112px;top:950px;width:1700px">Not shown: time in a tab as “AI time” · longer = wasted · scores for prompts.</p>
+
+  <aside class="notes">SAY: The widget is the glance. The report is something you open on purpose — mid-task or at the end. Everything on this slide is sample data.
+
+Left: where each number comes from, labeled. Messages are measured by the extension. Tokens are an estimate from text length — not the provider's count. Plan usage: Claude shows it as progress bars in its own Settings > Usage page, but there's no API for an extension to read it, so the report says so and links there. And then what you said: was each chat useful?
+
+Middle: patterns, framed as questions. "You asked for a new headline five times with 'make it punchier'." That might be healthy exploration or it might be stuck — only you know. The suggestion comes from the selected conversation, and "show me where" jumps to the messages it's based on.
+
+Right: an editable handoff — goal, what's decided, what you tried, what's still open, links, and the exact next step — so you can carry the work into another tool or a fresh chat without starting over.
+
+What it won't do: treat time in a tab as AI working time, call a longer session wasteful, or score your prompts.
+
+HOW EACH PART WOULD WORK — see slide 5 for sources
+• Measured message counts: only for chats where the extension was running, on supported sites.
+• Token estimate: a rough characters→tokens rule (or a tokenizer for one model). Always labeled "≈ estimate". Exact counts only exist where the person uses a developer API, which returns token usage in each response.
+• Provider allowance: Claude Pro/Max shows % progress bars and reset times in Settings > Usage (5-hour session limit + weekly limit), and in-app warnings like "Approaching session limit" (support.claude.com/en/articles/11647753, /9797557, /12466728). ChatGPT reportedly has a similar Settings → Usage page and Gemini notifies when limits refresh (both from search excerpts only — reopen help.openai.com/en/articles/20001625 and support.google.com/gemini/answer/16275805 before citing). No documented API exposes any of these to another app. Scraping that page would hit the same terms issue as below, and gives percentages, not tokens. So: "not readable here" + link. Never show a made-up "remaining tokens".
+• Exact token counts exist only on developer APIs: Anthropic responses include usage (input/output tokens) and anthropic-ratelimit-*-remaining headers (platform.claude.com/docs/en/api/rate-limits); count_tokens is itself "an estimate" (…/build-with-claude/token-counting). The Admin Usage & Cost API is "unavailable for individual accounts" (…/manage-claude/usage-cost-api).
+• Usefulness ratings: entered by the person, 1 tap per chat.
+• Pattern detection: simple and local — e.g. repeated near-identical requests in one chat. Neutral wording.
+• Prompt suggestion + handoff: the person selects a conversation (from the page, or pasted/exported), and only that text is sent to a model (e.g. Claude via the Messages API) with a prompt that must cite message numbers. Output is a draft the person edits. Needs explicit consent each time — this is chat content.
+• Time: I'd only show timestamps the page gives (when you sent, when the answer finished), never "minutes the AI worked".</aside>
+</section>
+
+<!-- ============================================================ 5 -->
+<section id="compare" data-transition="push">
+  <p class="kicker" style="color:var(--ink)">Feasibility · smallest version · feedback</p>
+  <h2>What I could really build by Dec 8</h2>
+
+  <div class="abs" style="left:112px;top:250px;display:flex;gap:12px;align-items:center">
+    <span class="small" style="color:var(--ink)">Nov 17 proposal</span><span class="small">→</span>
+    <span class="small" style="color:var(--ink);font-weight:600">Nov 24 user test</span><span class="small">→</span>
+    <span class="small" style="color:var(--ink)">Dec 8 final</span>
+  </div>
+
+  <!-- Show Up column -->
+  <div class="card" style="left:112px;top:310px;width:820px;height:440px;padding:30px;border-top:12px solid var(--red)">
+    <h3>Show Up, repaired + shared</h3>
+    <p class="small" style="color:var(--ink);margin-top:6px">3-stage ticket timer · Wall opens on your piece · one shared challenge with a reveal</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:22px">
+      <div><p class="colhead" style="font-size:15px">Reuse</p><ul class="ticks done"><li>Briefs + lessons</li><li>Timer engine</li><li>3D Wall</li><li>Accounts + sync</li><li>Critic</li></ul></div>
+      <div><p class="colhead" style="font-size:15px">Repair</p><ul class="ticks open"><li>Account scoping</li><li>Sprint stages</li><li>Non-Chrome timer</li><li>Critic failure state</li></ul></div>
+      <div><p class="colhead" style="font-size:15px">New</p><ul class="ticks" style="list-style:none"><li>+ Shared gallery</li><li>+ Reveal time</li><li>+ Join by link</li></ul></div>
+    </div>
+  </div>
+
+  <!-- AI companion column -->
+  <div class="card" style="left:976px;top:310px;width:832px;height:440px;padding:30px;border-top:12px solid var(--blue)">
+    <h3>Companion, one service first</h3>
+    <p class="small" style="color:var(--ink);margin-top:6px">Chrome side panel for Claude.ai · derby lanes · paste-in fallback · handoff draft</p>
+    <div style="display:grid;gap:11px;margin-top:18px">
+      <div style="display:flex;gap:14px;align-items:baseline"><span class="chip solid ok">Verified</span><span style="font-size:22px">Extensions can read chat pages you allow</span></div>
+      <div style="display:flex;gap:14px;align-items:baseline"><span class="chip solid test">Test</span><span style="font-size:22px">Running / ready + message counts, page by page</span></div>
+      <div style="display:flex;gap:14px;align-items:baseline"><span class="chip solid test">Test</span><span style="font-size:22px">Handoff + prompt tips from a chosen chat</span></div>
+      <div style="display:flex;gap:14px;align-items:baseline"><span class="chip" style="color:var(--red)">Not available</span><span style="font-size:22px">Exact remaining allowance on personal plans</span></div>
+      <div style="display:flex;gap:14px;align-items:baseline"><span class="chip red">Risk</span><span style="font-size:22px">Chat sites’ terms limit automated reading</span></div>
+      <div style="display:flex;gap:14px;align-items:baseline"><span class="chip sample">Sample</span><span style="font-size:22px">Multi-tool demo uses labeled data</span></div>
+    </div>
+  </div>
+
+  <!-- questions -->
+  <div class="q" style="left:112px;top:790px;width:1696px;padding:26px 34px">
+    <p class="mono">For you</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-top:6px">
+      <p style="font-size:27px">Which direction is the stronger creative-tool project?</p>
+      <p style="font-size:27px">What should I cut to have something real to test on Nov 24?</p>
+      <p style="font-size:27px">Does the AI companion fit this class if it’s about creative workflows?</p>
+    </div>
+  </div>
+
+  <aside class="notes">SAY: Here's the smallest credible version of each.
+
+Show Up: most of it exists. The work is repairing what testing exposed — account scoping, the sprint stages, a timer that's honest outside Chrome, a clear failure state for the critic — plus one new thing: a shared challenge where everyone's work is revealed together.
+
+The companion: start with one service, as a Chrome side panel. Technically, an extension can read a chat page you've allowed. Detecting running/ready and counting messages is possible but fragile, so that's what I'd test first. Exact remaining allowance on personal plans isn't available, so I won't fake it. And there's a real risk: the chat services' terms restrict scraping and automated access, so the safe core is a read-only panel plus a paste-in or export fallback — and the multi-tool demo uses clearly labeled sample data.
+
+Three questions for you: which is the stronger creative-tool project, what should I cut to have something real to test on Nov 24, and does the companion fit the class if I frame it around creative workflows?
+
+FEASIBILITY DETAILS (checked Nov 8, 2026). Labels: VERIFIED = I read the official page. EXCERPT = official URL but only a search excerpt was readable from my session (the network blocked Chrome/OpenAI/Google/MDN docs) — reopen before citing. NEEDS TESTING = plausible, must prototype.
+
+AI COMPANION
+1. Browser extension vs desktop app
+• Chrome MV3 content scripts can read and change pages the extension has host permission for (EXCERPT: developer.chrome.com/docs/extensions/develop/concepts/content-scripts). Users see a warning like "Read and change your data on claude.ai" (EXCERPT, wording to recheck: developer.chrome.com/docs/extensions/reference/permissions-list).
+• Side panel: sidePanel permission, Chrome 114+; open() needs a user gesture (EXCERPT: …/reference/api/sidePanel). Badge text via chrome.action, notifications, chrome.storage (EXCERPT).
+• Tabs API gives title/URL only with tabs or host permission (EXCERPT: …/reference/api/tabs).
+• An extension can't see the ChatGPT/Claude desktop apps — no documented route.
+• Desktop app: macOS needs Accessibility and/or Screen Recording permission (EXCERPT: support.apple.com Mac Help); Windows UI Automation can read other apps' UI (EXCERPT: learn.microsoft.com uiauto-clientsoverview). Each app's accessibility tree would need testing. Much heavier, and not web tools — I'd skip it.
+2. Active-chat states + message counts
+• No documented public API for claude.ai/chatgpt.com chat state. "Claude paid plans and the Claude Console are separate products" (VERIFIED: support.claude.com/en/articles/9876003).
+• So it's DOM observation (MutationObserver on the stop button / message list). NEEDS TESTING, and it breaks when sites change markup.
+3. Token / quota / reset info
+• Personal subscriptions: usage % + reset times in the service's own UI only; no API (see slide 4 notes). Claude Code /usage shows plan bars for subscribers computed "from local session history on this machine", so claude.ai use isn't included (VERIFIED: code.claude.com/docs/en/costs).
+• Developer APIs: exact per-response tokens + rate-limit headers (Anthropic VERIFIED; OpenAI x-ratelimit-remaining-tokens and Gemini usageMetadata/countTokens EXCERPT).
+4. One service first: realistic — claude.ai only, ChatGPT/Gemini as "same pattern, later".
+5. Fallback: paste a transcript, use a share link (a snapshot up to the moment you share — EXCERPT support.claude.com/en/articles/10593882), or a data export. Claude: Settings > Privacy > Export data, emailed link expiring after 24 h (VERIFIED: support.claude.com/en/articles/9450526; file format not stated). ChatGPT: Settings > Data controls > Export, link expires after 24 h (EXCERPT: help.openai.com/en/articles/7260999). The "conversations.json" format is not officially confirmed — NEEDS TESTING with my own export.
+6. Chat content access: reading messages requires host permission for that site + clear consent; sending any of it to a model for handoff/tips needs a per-use opt-in. Counting sends and watching state still means the content script runs on the page.
+7. Handoff + prompt feedback: the person selects a chat; that text goes to the Claude Messages API with structured outputs (json_schema) to return the fixed handoff fields (VERIFIED: platform.claude.com/docs/en/build-with-claude/structured-outputs). Tips grounded in Anthropic's prompt-engineering guide (VERIFIED: …/prompt-engineering/overview) and required to cite message numbers. Needs my own API key on a small server, like Show Up's critic.
+8. Terms risk: Anthropic Consumer Terms §3 prohibit "to crawl, scrape, or otherwise harvest data or information from our Services" and accessing them "through automated or non-human means" except via API key or explicit permission (VERIFIED: anthropic.com/legal/consumer-terms). OpenAI's terms prohibit automatically extracting data or Output (EXCERPT). A read-only extension on the page you're viewing is a grey area — this is a question for you, and a reason the paste/export fallback matters.
+
+SHOW UP
+• Reuse: brief + lesson generator, timer engine, Document-PiP widget, three.js Wall, Firebase auth/sync, Vercel critic endpoint with retries, PeerJS friend mode, invite links.
+• Repair: per-account data scoping (local data isn't keyed by account), 8 → 3 sprint stages, honest non-Chrome timer, critic default + failure state, Wall help overlap.
+• New for shared challenges: the code already writes a sharedChallenges record (owner + members) but nothing reads it and the Wall shows only your pieces. Needs: Firestore rules for members to read each other's pieces, a gallery query, reveal time, join-by-link UI. No payments.
+• Risk is low: it's an existing deployed app; the main unknown is whether the redesign actually changes behavior (the Nov 24 test).</aside>
+</section>
+
+</div>
+<div id="notes"><b>Speaker notes</b><span id="notes-text"></span></div>
+<div id="hud"></div>
+<div id="help">→ next · ← back · F full screen · N notes</div>
+
+<script>
+const stage = document.getElementById('stage');
+const slides = [...stage.querySelectorAll(':scope > section')];
+let cur = 0, step = 0;
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  stage.style.transform = `scale(${s}) translate(-50%, -50%)`;
+}
+const builds = slides.map(sl => [...sl.querySelectorAll('[data-build-in]')]
+  .sort((a, b) => (parseInt(a.dataset.buildIn) || 0) - (parseInt(b.dataset.buildIn) || 0)));
+function show(i, dir = 1, atEnd = false) {
+  const prev = slides[cur];
+  cur = Math.max(0, Math.min(slides.length - 1, i));
+  const sl = slides[cur];
+  slides.forEach(s => s.classList.remove('on', 'in-push', 'in-push-back'));
+  sl.classList.add('on');
+  if (prev !== sl) { void sl.offsetWidth; sl.classList.add(dir > 0 ? 'in-push' : 'in-push-back'); }
+  step = atEnd ? builds[cur].length : 0;
+  builds[cur].forEach((el, k) => el.classList.toggle('hidden', k >= step));
+  document.getElementById('hud').textContent = `${cur + 1} / ${slides.length}`;
+  const n = sl.querySelector('aside.notes');
+  document.getElementById('notes-text').textContent = n ? n.textContent : '';
+  history.replaceState(null, '', '#' + (cur + 1));
+}
+function next() {
+  if (step < builds[cur].length) { builds[cur][step].classList.remove('hidden'); step++; return; }
+  if (cur < slides.length - 1) show(cur + 1, 1);
+}
+function back() {
+  if (step > 0) { step--; builds[cur][step].classList.add('hidden'); return; }
+  if (cur > 0) show(cur - 1, -1, true);
+}
+addEventListener('keydown', e => {
+  if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); back(); }
+  else if (e.key === 'Home') show(0, -1);
+  else if (e.key === 'End') show(slides.length - 1, 1);
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
+  else if (e.key === 'n' || e.key === 'N') { document.getElementById('notes').classList.toggle('on'); document.body.classList.toggle('notes-on'); }
+});
+addEventListener('click', e => { if (e.target.closest('a') || e.target.closest('#notes')) return; (e.clientX < innerWidth * 0.25 ? back() : next()); });
+addEventListener('resize', fit);
+let idle; addEventListener('mousemove', () => { document.body.classList.remove('idle'); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add('idle'), 2500); });
+idle = setTimeout(() => document.body.classList.add('idle'), 4000);
+fit();
+show(Math.max(0, (parseInt(location.hash.slice(1)) || 1) - 1));
+</script>
+</body>
+</html>
