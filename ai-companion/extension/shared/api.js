@@ -20,7 +20,7 @@ async function post(path, body, { timeoutMs = 90000 } = {}) {
   } finally { clearTimeout(timer); }
   let j = {};
   try { j = await r.json(); } catch (e) { /* not JSON */ }
-  if (r.status === 404 || j.error === "not_configured") throw new ApiNotConfigured("The handoff service isn't switched on here.");
+  if (r.status === 404 || r.status === 501 || j.error === "not_configured") throw new ApiNotConfigured("The handoff service isn't switched on here.");
   if (!r.ok) throw new Error(j.message || (r.status === 429 || r.status >= 500 ? "The service is busy. Try again in a minute." : "Something went wrong."));
   return j;
 }

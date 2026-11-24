@@ -83,7 +83,10 @@ export function createWidget({ root, store, host, overlay, toastDock, live }) {
       count: store.count(), races, open: ui.open ?? undefined, muted: s.muted, demo: !!host.demo,
       receipt: receiptHTML(), waiting: !s.receipt && s.waiting.length ? s.waiting.map((id) => (store.lane(id) || {}).task || "chat") : null,
     });
-    if (host.hosted) root.querySelectorAll(".stack-empty .row button").forEach((b) => { if (b.textContent.trim() === "Try demo" && host.demo) b.remove(); });
+    if (host.hosted) {
+      const em = root.querySelector(".stack-empty p b");
+      if (em) em.textContent = "Paste a chat to start a lane.";
+    }
     restoreFocus(f);
     host.onRender && host.onRender(s);
   }

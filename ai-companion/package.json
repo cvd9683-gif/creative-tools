@@ -1,0 +1,16 @@
+{
+  "name": "derby",
+  "private": true,
+  "type": "module",
+  "description": "Derby: a carnival-derby tracker for open AI chats. Chrome extension, hosted demo and serverless API.",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "sync-design": "bash scripts/sync-design.sh"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.13.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Derby: paste a chat</title>
+<link rel="stylesheet" href="/extension/shared/tokens.css">
+<link rel="stylesheet" href="/extension/shared/derby.css">
+<link rel="stylesheet" href="/extension/shared/app.css">
+<link rel="stylesheet" href="/web/web.css">
+<style>
+  .paste-page { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 32px; max-width: 1180px; margin: 0 auto; padding: 24px 24px 48px; align-items: start; }
+  .paste-page h1 { margin: 0; font: 800 44px/0.92 var(--font-display); font-variation-settings: 'opsz' 72; text-transform: uppercase; }
+  .paste-page h1 span { display: block; font-size: 20px; letter-spacing: .04em; margin-top: 6px; color: var(--ink-muted); }
+  .paste-col { display: grid; gap: 16px; }
+  .paste-col p { margin: 0; }
+  .paste-col a { color: var(--link); }
+  .paste { display: grid; gap: 12px; }
+  #widget { position: sticky; top: 24px; width: 100%; }
+  @media (max-width: 860px) { .paste-page { grid-template-columns: minmax(0, 1fr); } #widget { position: static; } }
+</style>
+</head>
+<body class="derby">
+<main class="paste-page">
+  <div class="paste-col">
+    <h1>Derby <span>paste a chat</span></h1>
+    <div id="paste"></div>
+    <p class="fine">Derby estimates tokens from text length (about 4 characters a token); it can't see your plan's real usage. When you ask for a handoff or shorter prompts, it sends only that chat, after you check what will be sent. <a href="/web/">Back to the demo</a></p>
+  </div>
+  <div id="widget"></div>
+</main>
+<div id="overlay"></div>
+<div id="toasts" aria-live="polite"></div>
+<div id="live" class="vh" aria-live="polite"></div>
+<script type="module" src="/web/paste.js"></script>
+</body>
+</html>
