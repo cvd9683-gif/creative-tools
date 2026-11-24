@@ -15,3 +15,9 @@ For PRD §11. Live, browsable version: https://claude.ai/artifact/U7enRdGjtrWEd1
 | `sound/` | `sound.md` (the bell spec and mute rules), `bell.js` (Web Audio synth), `bell.wav` (same sound rendered). |
 
 All mockup data is the made-up gig-poster session from PRD §4.
+
+## What's in this repo copy (Nov 24)
+
+In the repo: `tokens.css`, `tokens.json`, `components.md`, `components/derby.js` + `derby.css` + `index.d.ts` (copied from the artifact's `project/components/bundle.*`), `fonts/`, `sound/sound.md`.
+
+Not in the repo yet: `mockups/`, `prototype/`, `assets/` (horse and track SVGs), `sound/bell.js` + `bell.wav`, `build/tokens.py`. The horse and track render inline from `derby.js`, and the bell can be synthesized from `sound/sound.md`, so coding can start without them. Add them here if the design agent exports them.
