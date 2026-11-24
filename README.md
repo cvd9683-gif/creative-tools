@@ -9,7 +9,7 @@ My projects for this class, plus the slides I presented them with.
 | Project | What it is | Links |
 | --- | --- | --- |
 | **Show Up** (midterm) | A daily practice coach for visual design. You pick a mission, get a brief, sprint with a floating timer while you design in Figma or Illustrator, and paste your piece onto a wheatpaste wall. AI critique is optional. | [Live app](https://poster-sprint-studio.vercel.app/) · [Case study](https://show-up-midterm.vercel.app/) · [Code](https://github.com/cvd9683-gif/poster-sprint-studio) |
-| **Final project** | Not chosen yet. The two directions are a focused Show Up iteration or an AI usage companion. I'll pick after the Nov 17 proposal. | *Link goes here once it's built* |
+| **Derby** (final, in progress) | An AI task tracker. One lane per open AI chat: the horse runs while the AI works and reaches the finish when it's your turn. A session report and an editable handoff carry work between tools. | [PRD](ai-companion/PRD.md) · *Live link goes here once it's built* |
 
 ## Presentations
 
