@@ -1,0 +1,44 @@
+/* App-level layout on top of the design system (tokens.css + derby.css). Only things the components don't cover. */
+
+html, body { margin: 0; }
+body.derby { min-height: 100vh; }
+
+/* overlay host for the consent sheet and the handoff editor */
+#overlay:empty { display: none; }
+#overlay { position: fixed; inset: 0; z-index: 30; }
+#overlay .scrim { position: fixed; inset: 0; overflow: auto; padding: 16px; box-sizing: border-box; }
+#overlay .scrim:not(.scrim--center) { padding: 0; }
+#toasts { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 40; max-width: calc(100% - 24px); }
+.toast .btn--quiet { color: inherit; }
+
+/* receipt extras */
+.receipt__err { margin: 0 0 8px; color: var(--red-ink); font-size: 14px; line-height: 20px; }
+.receipt__more { margin: 6px 22px 0; font-size: 13px; color: var(--ink-muted); text-align: center; }
+
+/* handoff editor */
+.sheet.handoff { max-width: 640px; max-height: calc(100vh - 32px); overflow: auto; }
+.handoff__head { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+.handoff__head h2 { font: 750 24px/1 var(--font-display); font-variation-settings: 'opsz' 72; text-transform: uppercase; letter-spacing: .02em; }
+.handoff__fields { display: grid; gap: 12px; }
+.handoff__fields .field__input { width: 100%; box-sizing: border-box; }
+.handoff__status, .handoff__fine { margin: 0; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.handoff__demo { margin: 0; display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--ink-muted); }
+.handoff__err { margin: 0; color: var(--red-ink); }
+
+/* pages: paste-in, settings, onboarding */
+.page { max-width: 720px; margin: 0 auto; padding: 0 16px 48px; display: grid; gap: 20px; }
+.page__head { display: flex; align-items: center; gap: 12px; padding-top: 16px; }
+.page__head .wordmark { margin: 0; }
+.page h2.sign { margin: 0; }
+.page p { margin: 0; }
+.paste__area { width: 100%; min-height: 260px; box-sizing: border-box; font: 400 14px/20px var(--font-mono); padding: 12px; border: var(--border-ink) solid var(--line); border-radius: var(--radius-1); background: var(--paper-raised); color: var(--ink); resize: vertical; }
+.paste__area:focus-visible { outline: var(--border-strong) solid var(--focus); outline-offset: 1px; border-color: var(--ink); }
+.paste__row { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
+.paste__row label { display: grid; gap: 4px; font: 700 13px/16px var(--font-sans); }
+.paste__row input, .paste__row select { height: 36px; padding: 0 10px; border: var(--border-ink) solid var(--line); border-radius: var(--radius-1); background: var(--paper-raised); color: var(--ink); font: 400 15px var(--font-sans); }
+.paste__err { color: var(--red-ink); }
+.found { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.settings { display: grid; gap: 16px; }
+
+/* keep the chat's line breaks in the consent preview */
+.sheet__preview div { white-space: pre-wrap; }

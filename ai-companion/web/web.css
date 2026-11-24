@@ -1,0 +1,27 @@
+/* Hosted demo layout: guide column left, a desk with the widget in its corner right (from design/prototype). */
+.desk-page { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: 100vh; }
+.guide { padding: 24px 20px 32px; border-right: 1.5px solid var(--ink); display: grid; gap: 20px; align-content: start; background: var(--paper); }
+.guide h1 { margin: 0; font: 800 40px/0.92 var(--font-display); font-variation-settings: 'opsz' 72; text-transform: uppercase; }
+.guide h1 span { display: block; font-size: 20px; letter-spacing: .04em; margin-top: 6px; color: var(--ink-muted); }
+.guide h2 { margin: 0 0 8px; font: 750 18px/1 var(--font-display); font-variation-settings: 'opsz' 72; text-transform: uppercase; letter-spacing: .04em; }
+.guide__lead { margin: 0; }
+.guide ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 15px; line-height: 21px; }
+.guide a { color: var(--link); }
+.ctrls { display: grid; gap: 8px; }
+.ctrls .btn { justify-content: flex-start; height: 40px; width: 100%; font-size: 14px; }
+.badgebox { display: flex; gap: 10px; align-items: center; font-size: 14px; color: var(--ink-muted); }
+.fine { margin: 0; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.desk { position: relative; background: var(--paper-sunk); padding: 24px; min-height: 640px; overflow: hidden; }
+.desk__draft { position: absolute; left: 6%; top: 60px; width: min(42%, 380px); aspect-ratio: 3 / 4; background: var(--paper-raised); border: 1.5px solid var(--line); border-radius: 4px; padding: 22px; display: grid; align-content: start; gap: 10px; transform: rotate(-1.5deg); }
+.desk__draft b { font: 800 clamp(28px, 4vw, 46px)/0.9 var(--font-display); font-variation-settings: 'opsz' 72; color: var(--ink); text-transform: uppercase; }
+.desk__draft i { display: block; height: 10px; border-radius: 3px; background: var(--rule); }
+.desk__draft small { font: 500 15px/20px var(--font-hand); color: var(--ink-muted); margin-top: 8px; }
+.desk__label { position: absolute; left: 6%; top: 24px; margin: 0; font: 500 15px/20px var(--font-hand); color: var(--ink-muted); }
+#widget { position: absolute; top: 24px; right: 24px; width: 360px; max-width: calc(100% - 48px); z-index: 2; }
+@media (max-width: 900px) {
+  .desk-page { grid-template-columns: minmax(0, 1fr); }
+  .desk { order: -1; min-height: 0; padding: 16px; }
+  .desk__draft, .desk__label { display: none; }
+  #widget { position: relative; top: 0; right: 0; margin: 0 auto; }
+  .guide { border-right: 0; border-top: 1.5px solid var(--ink); }
+}

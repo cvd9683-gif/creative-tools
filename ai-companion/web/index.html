@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Derby demo</title>
+<meta name="description" content="Derby: a carnival-derby tracker for your open AI chats. Demo with made-up data, plus paste-in.">
+<link rel="stylesheet" href="/extension/shared/tokens.css">
+<link rel="stylesheet" href="/extension/shared/derby.css">
+<link rel="stylesheet" href="/extension/shared/app.css">
+<link rel="stylesheet" href="/web/web.css">
+</head>
+<body class="derby">
+<main class="desk-page">
+  <aside class="guide" aria-label="About this demo">
+    <h1>Derby <span>demo · made-up data</span></h1>
+    <p class="guide__lead">One row per AI chat. The horse runs while the AI works and reaches the finish when it's your turn. End a chat to print its receipt.</p>
+    <section aria-label="Try">
+      <h2>Try</h2>
+      <ol>
+        <li>Hover or tap a row to see what that chat is doing.</li>
+        <li>Wait for a horse to finish. Click anywhere once first so the bell can ring.</li>
+        <li>Press <b>End</b> on a row to print its receipt, then <b>Find shorter prompts</b>.</li>
+        <li><a href="/web/paste.html">Paste one of your own chats</a> to get a real receipt and handoff.</li>
+      </ol>
+    </section>
+    <section class="ctrls" aria-label="Demo controls">
+      <h2>Demo controls</h2>
+      <button type="button" class="btn btn--secondary" id="play">Pause the chats</button>
+      <button type="button" class="btn btn--secondary" id="add">Add a chat</button>
+      <button type="button" class="btn btn--secondary" id="closetab">Close a chat's tab</button>
+      <button type="button" class="btn btn--secondary" id="break">Break detection on a row</button>
+      <button type="button" class="btn btn--secondary" id="endall">End session (receipts for all)</button>
+      <button type="button" class="btn btn--quiet" id="reset">Start over</button>
+    </section>
+    <section aria-label="Toolbar badge">
+      <h2>Toolbar badge</h2>
+      <div class="badgebox"><span id="badge"></span><span id="badge-note"></span></div>
+    </section>
+    <p class="fine">In the Chrome extension, rows come from your open claude.ai tabs. Steps like “Searching the web” stand in for the labels claude.ai shows while it works.</p>
+  </aside>
+  <section class="desk" aria-label="Your screen">
+    <p class="desk__label">your poster, while the chats work</p>
+    <div class="desk__draft" aria-hidden="true"><b>Lanterns up</b><i style="width:80%"></i><i style="width:60%"></i><i style="width:70%"></i><small>Fri Dec 12 · Elsewhere</small></div>
+    <div id="widget"></div>
+  </section>
+</main>
+<div id="overlay"></div>
+<div id="toasts" aria-live="polite"></div>
+<div id="live" class="vh" aria-live="polite"></div>
+<script type="module" src="/web/demo.js"></script>
+</body>
+</html>

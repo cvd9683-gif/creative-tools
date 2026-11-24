@@ -15,6 +15,7 @@ Derby is a working name. The proposal deck called this idea the "AI usage compan
 > - **Design agent:** read §1–§8 and §11. The design system already exists in `ai-companion/design/` (start with its `README.md` and `components.md`). Update it there.
 > - **Coding agent:** read the whole document. Build from §9–§10 using the design system in `ai-companion/design/`, starting from `components/derby.js` and `derby.css`. Put code in `ai-companion/`.
 > - **Both:** don't make up data, capabilities, or research. Anything not covered here is an open question (§13). Ask Cathy rather than guessing.
+> - **Where everything is:** §15 lists every file and folder.
 
 ---
 
@@ -119,7 +120,7 @@ Priority: **P0** = needed for the Dec 8 final, **P1** = if time allows, **P2** =
 
 ### F2. Chat-state detection on claude.ai (P0)
 - A content script on `https://claude.ai/*` watches the page with MutationObserver. It detects working vs. done (for example, the stop button appearing and disappearing), counts messages the user sends, reads the chat title, **reads the last user message**, and **reads any visible status label** during a reply (P1).
-- All page selectors live in **one adapter file** (`adapters/claude.js`) that exposes the same small interface, so ChatGPT and Gemini adapters can be added later.
+- All page selectors live in **one adapter file** (`extension/content/claude.js`) that exposes the same small interface, so ChatGPT and Gemini adapters can be added later.
 - If detection breaks (the selectors stop matching), the row shows **"can't read this chat"** and the card says "Can't read this chat right now, so Derby isn't guessing", instead of showing wrong data.
 - **Acceptance:** on a live claude.ai chat, working, done and your-turn are detected correctly in 9 of 10 tries during testing. Record the results, and how often step labels were readable, in `ai-companion/TESTING.md`.
 
@@ -206,7 +207,7 @@ Mockups exist in `design/mockups/` (`screens.html?s=<id>`) and as a clickable pr
 | `extension/widget/` | The widget (lawn, rows, card, receipt slot). |
 | `extension/pages/` | Receipt (full page view), handoff, paste-in and settings pages. |
 | `web/` | Hosted demo + paste-in build, sharing the same UI modules. |
-| `api/handoff.js`, `api/suggest.js` | Vercel serverless functions, the same pattern as Show Up's `/api/critique`. API keys live in Vercel environment variables, never in the extension. |
+| `api/handoff.js`, `api/suggest.js` | Vercel serverless functions. API keys live in Vercel environment variables, never in the extension. (Cathy's Show Up project uses the same pattern in its `/api/critique`, but its code isn't in this folder; ask her for the repo if you want to copy its setup.) |
 
 **Claude API (handoff and prompt swaps)**
 - Use the official SDK `@anthropic-ai/sdk` with model `claude-opus-5-5`.
@@ -294,3 +295,33 @@ These are qualitative, observed in a short test with 3–5 people.
 - People can read a receipt and say where most tokens went, in their own words.
 - Someone would actually copy a suggested prompt, or can say why not.
 - Someone can produce and copy a handoff they'd actually use, in under 2 minutes.
+
+## 15. Where everything is
+
+Paths are relative to `ai-companion/` (inside the `creative-tools-proposal` repo) unless they start with `../`.
+
+| Path | What it is | Who uses it |
+| --- | --- | --- |
+| `PRD.md` | This document. The source of truth. | Both |
+| `CLAUDE.md` | Short working rules and build order for the coding agent. Claude Code reads it automatically. | Coding agent |
+| `TESTING.md` | Doesn't exist yet. The coding agent creates it in step 1 (adapter spike) and keeps it updated. | Coding agent |
+| `design/README.md` | Index of the design system. | Both |
+| `design/components.md` | Spec for every component: anatomy, states, sizes, accessible name and role, behavior. | Both |
+| `design/tokens.css` | Design tokens as CSS custom properties, light and dark. Use as is. | Coding agent |
+| `design/tokens.json` | The same tokens as data; `design/build/tokens.py` regenerates `tokens.css` from it. | Design agent |
+| `design/fonts/` | Four self-hosted woff2 fonts (SIL OFL). Copy into the extension. | Coding agent |
+| `design/components/derby.js` | Reference renderers for every component (classic script, `window.Derby`, returns HTML strings). Port to ES modules; keep class names and markup. | Coding agent |
+| `design/components/derby.css` | Component styles. Use as is. | Coding agent |
+| `design/components/index.d.ts` | Props for each renderer, as documentation. | Coding agent |
+| `design/prototype/index.html` | Clickable prototype (one self-contained file). Open in Chrome. The reference for behavior: hover/click cards, End + Undo, tab close → waiting receipt, End session, receipt consent → prompt swap, horse timing. Its simulation script (bottom of the file) is a good starting point for demo mode (F11). Also online: https://claude.ai/artifact/S4rznV2PnrPZt9GVu1msrB (Cathy's account). | Both |
+| `design/mockups/` | Static screens for §8: `screens.html?s=<id>` (add `&theme=dark`) and PNGs at 360 / 1280 px. | Both |
+| `design/mockups/_v1/` | **Outdated** first-draft panel and report screens. Ignore. | Neither |
+| `design/assets/horse/` | Horse SVGs: 4 silks × still + 4 gallop frames + a strip. (The live widget draws horses inline via `derby.js`; these are for docs, decks and Figma.) | Both |
+| `design/assets/track/` | Track pieces: lane, gate, finish posts, turf tile. | Both |
+| `design/sound/sound.md` | Bell spec and mute rules. | Both |
+| `design/sound/bell.js` | Web Audio bell (ES module). `bell.wav` is the same sound rendered. | Coding agent |
+| `design/build/` | Python scripts that generate tokens and horse art. Only for changing the design. | Design agent |
+| `../final-proposal/index.html` | The proposal deck (slides 3–5 and their speaker notes hold the original research and sources). | Both |
+| Design System artifact "Derby" | The same design system, browsable on claude.ai (Cathy's account). Agents should use the files above instead. | Cathy |
+
+Code goes in `extension/`, `web/` and `api/` (§9), all created by the coding agent.
