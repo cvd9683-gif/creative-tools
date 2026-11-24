@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Derby: paste a chat</title>
+<link rel="stylesheet" href="../shared/tokens.css">
+<link rel="stylesheet" href="../shared/derby.css">
+<link rel="stylesheet" href="../shared/app.css">
+</head>
+<body class="derby">
+<div class="awning awning--thin" aria-hidden="true"></div>
+<main class="page">
+  <header class="page__head"><h1 class="wordmark">Derby</h1></header>
+  <h2 class="sign">Paste a chat</h2>
+  <p>Use this for ChatGPT, Gemini, or any chat Derby can't read. The new row shows up in the Derby panel; end it there for its receipt and handoff.</p>
+  <div id="paste"></div>
+</main>
+<div id="toasts" aria-live="polite"></div>
+<script type="module" src="paste.js"></script>
+</body>
+</html>

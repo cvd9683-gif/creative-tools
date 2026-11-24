@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Derby settings</title>
+<link rel="stylesheet" href="../shared/tokens.css">
+<link rel="stylesheet" href="../shared/derby.css">
+<link rel="stylesheet" href="../shared/app.css">
+</head>
+<body class="derby">
+<div class="awning awning--thin" aria-hidden="true"></div>
+<main class="page">
+  <header class="page__head"><h1 class="wordmark">Derby</h1></header>
+  <h2 class="sign">Settings</h2>
+  <section class="settings" aria-labelledby="sig-t">
+    <h3 id="sig-t" class="heading">Signals</h3>
+    <div id="bell"></div>
+    <div><button type="button" class="btn btn--secondary" id="play">Play the bell</button></div>
+    <div id="badge"></div>
+    <p class="small">Motion follows your computer's “reduce motion” setting: when it's on, horses appear at their spot instead of galloping.</p>
+  </section>
+  <section class="settings" aria-labelledby="api-t">
+    <h3 id="api-t" class="heading">Handoff service</h3>
+    <p class="small">Handoffs and shorter-prompt suggestions use Derby's own service, which calls the Claude API. Chat text is sent only after you check it and press Send.</p>
+    <div class="paste__row"><label>Service address<input id="api" type="url" placeholder="https://your-derby.vercel.app" size="36"></label><button type="button" class="btn btn--secondary" id="saveapi">Save</button></div>
+  </section>
+  <section class="settings" aria-labelledby="data-t">
+    <h3 id="data-t" class="heading">Your data</h3>
+    <p class="small">Derby keeps your rows, receipts and the chat text it read in this browser only. Clearing removes all of it.</p>
+    <div><button type="button" class="btn btn--secondary btn--danger" id="clear">Clear all data</button></div>
+  </section>
+</main>
+<div id="toasts" aria-live="polite"></div>
+<script type="module" src="settings.js"></script>
+</body>
+</html>
