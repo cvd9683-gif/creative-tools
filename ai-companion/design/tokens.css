@@ -1,0 +1,196 @@
+/* Derby design tokens. Generated from tokens.json (build/tokens.py). Edit tokens.json, not this file.
+   Light = "Daylight booth". Dark = "Night carnival", applied by prefers-color-scheme
+   unless the page sets data-theme="light" or "dark" on <html>. */
+
+@font-face { font-family: "Big Shoulders"; src: url("fonts/BigShoulders-Variable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Atkinson Hyperlegible Next"; src: url("fonts/AtkinsonHyperlegibleNext-Variable.woff2") format("woff2"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Atkinson Hyperlegible Mono"; src: url("fonts/AtkinsonHyperlegibleMono-Medium.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Shantell Sans"; src: url("fonts/ShantellSans-Medium.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --paper: #f6f3ec;
+  --paper-raised: #fffdf8;
+  --paper-sunk: #ebe5d6;
+  --ink: #1b1a17;
+  --ink-muted: #5c564b;
+  --rule: #d9d3c5;
+  --line: #857d6f;
+  --awning: #e5322d;
+  --awning-white: #fffdf8;
+  --red-ink: #b31f1a;
+  --on-red-ink: #fffdf8;
+  --turf: #3d8738;
+  --turf-stripe: #4a9645;
+  --turf-rail: #2a6527;
+  --turf-lip: #7cc96b;
+  --turf-riser: #2c6f29;
+  --sky: #e4ece3;
+  --hill: #b6d39c;
+  --bulb: #f2b705;
+  --on-bulb: #1b1a17;
+  --bulb-tint: #fbedbd;
+  --focus: #3b2cff;
+  --link: #3b2cff;
+  --silk-claude: #c3341f;
+  --on-silk-claude: #fffdf8;
+  --silk-chatgpt: #3b2cff;
+  --on-silk-chatgpt: #fffdf8;
+  --silk-gemini: #f2b705;
+  --on-silk-gemini: #1b1a17;
+  --silk-imported: #c41d78;
+  --on-silk-imported: #fffdf8;
+  --horse-coat: #a8612f;
+  --horse-coat-far: #7d4521;
+  --prov-counted: #1b1a17;
+  --prov-estimate: #8a5300;
+  --prov-said: #3b2cff;
+  --prov-na: #5c564b;
+  --scrim: #1b1a1766;
+  --shadow-press: 0 2px 0 #1b1a17;
+  --shadow-sheet: 0 16px 40px rgba(27,26,23,0.22);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #16140f;
+    --paper-raised: #221f18;
+    --paper-sunk: #0d0c09;
+    --ink: #f3eee2;
+    --ink-muted: #b3ab99;
+    --rule: #3a352b;
+    --line: #857d6f;
+    --awning: #ff5a4e;
+    --awning-white: #ede6d6;
+    --red-ink: #ff8a7f;
+    --on-red-ink: #1b1a17;
+    --turf: #1f4a20;
+    --turf-stripe: #265627;
+    --turf-rail: #12301299;
+    --turf-lip: #3f8a3a;
+    --turf-riser: #10300f;
+    --sky: #121a1c;
+    --hill: #1f3b24;
+    --bulb: #f2b705;
+    --on-bulb: #1b1a17;
+    --bulb-tint: #3b300c;
+    --focus: #a39bff;
+    --link: #a39bff;
+    --silk-claude: #ff7a63;
+    --on-silk-claude: #1b1a17;
+    --silk-chatgpt: #9b93ff;
+    --on-silk-chatgpt: #1b1a17;
+    --silk-gemini: #f2b705;
+    --on-silk-gemini: #1b1a17;
+    --silk-imported: #ff6fb5;
+    --on-silk-imported: #1b1a17;
+    --horse-coat: #b56b35;
+    --horse-coat-far: #86491f;
+    --prov-counted: #f3eee2;
+    --prov-estimate: #f0a640;
+    --prov-said: #a39bff;
+    --prov-na: #b3ab99;
+    --scrim: #000000a6;
+    --shadow-press: 0 2px 0 #000000;
+    --shadow-sheet: 0 16px 40px rgba(0,0,0,0.6);
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #16140f;
+  --paper-raised: #221f18;
+  --paper-sunk: #0d0c09;
+  --ink: #f3eee2;
+  --ink-muted: #b3ab99;
+  --rule: #3a352b;
+  --line: #857d6f;
+  --awning: #ff5a4e;
+  --awning-white: #ede6d6;
+  --red-ink: #ff8a7f;
+  --on-red-ink: #1b1a17;
+  --turf: #1f4a20;
+  --turf-stripe: #265627;
+  --turf-rail: #12301299;
+  --turf-lip: #3f8a3a;
+  --turf-riser: #10300f;
+  --sky: #121a1c;
+  --hill: #1f3b24;
+  --bulb: #f2b705;
+  --on-bulb: #1b1a17;
+  --bulb-tint: #3b300c;
+  --focus: #a39bff;
+  --link: #a39bff;
+  --silk-claude: #ff7a63;
+  --on-silk-claude: #1b1a17;
+  --silk-chatgpt: #9b93ff;
+  --on-silk-chatgpt: #1b1a17;
+  --silk-gemini: #f2b705;
+  --on-silk-gemini: #1b1a17;
+  --silk-imported: #ff6fb5;
+  --on-silk-imported: #1b1a17;
+  --horse-coat: #b56b35;
+  --horse-coat-far: #86491f;
+  --prov-counted: #f3eee2;
+  --prov-estimate: #f0a640;
+  --prov-said: #a39bff;
+  --prov-na: #b3ab99;
+  --scrim: #000000a6;
+  --shadow-press: 0 2px 0 #000000;
+  --shadow-sheet: 0 16px 40px rgba(0,0,0,0.6);
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --radius-0: 0px;
+  --radius-1: 4px;
+  --radius-2: 8px;
+  --radius-3: 14px;
+  --radius-pill: 999px;
+  --border-hair: 1px;
+  --border-ink: 1.5px;
+  --border-strong: 2.5px;
+  --panel-min: 320px;
+  --panel-mock: 360px;
+  --lane-height: 112px;
+  --track-height: 40px;
+  --horse-width: 60px;
+  --tap-min: 32px;
+  --report-max: 1120px;
+  --dur-gallop: 520ms;
+  --dur-run-in: 700ms;
+  --dur-stripe: 1600ms;
+  --dur-quick: 140ms;
+  --dur-sheet: 220ms;
+  --ease-run: cubic-bezier(0.3, 0, 0.2, 1);
+  --ease-ui: cubic-bezier(0.2, 0, 0, 1);
+  --ease-linear: linear;
+  --font-display: "Big Shoulders", "Arial Narrow", sans-serif;
+  --font-sans: "Atkinson Hyperlegible Next", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+  --font-hand: "Shantell Sans", "Comic Neue", cursive;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-gallop: 0ms; --dur-run-in: 0ms; --dur-stripe: 0ms; --dur-quick: 0ms; --dur-sheet: 0ms; }
+}
+
+/* Type styles */
+.marquee { font-family: var(--font-display); font-size: 44px; line-height: 0.92; font-weight: 800; letter-spacing: 0.01em; text-transform: uppercase; font-variation-settings: 'opsz' 72; }
+.sign { font-family: var(--font-display); font-size: 26px; line-height: 1; font-weight: 750; letter-spacing: 0.02em; text-transform: uppercase; font-variation-settings: 'opsz' 72; }
+.post-number { font-family: var(--font-display); font-size: 22px; line-height: 1; font-weight: 800; font-variation-settings: 'opsz' 72; }
+.heading { font-family: var(--font-sans); font-size: 17px; line-height: 22px; font-weight: 700; }
+.body { font-family: var(--font-sans); font-size: 15px; line-height: 22px; font-weight: 400; }
+.lane-title { font-family: var(--font-sans); font-size: 14px; line-height: 18px; font-weight: 700; }
+.label { font-family: var(--font-sans); font-size: 13px; line-height: 16px; font-weight: 700; }
+.small { font-family: var(--font-sans); font-size: 13px; line-height: 18px; font-weight: 400; }
+.count { font-family: var(--font-mono); font-size: 13px; line-height: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.tag { font-family: var(--font-mono); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.note { font-family: var(--font-hand); font-size: 15px; line-height: 20px; font-weight: 500; }

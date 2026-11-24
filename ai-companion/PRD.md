@@ -1,268 +1,296 @@
 # PRD: Derby, an AI task tracker
 
-Cathy Doss · NYU ITP · Web Tools for Creative Work · Final project · Draft 1, Nov 24, 2026
+Cathy Doss · NYU ITP · Web Tools for Creative Work · Final project · Draft 2, Nov 24, 2026
 
 Derby is a working name. The proposal deck called this idea the "AI usage companion": [`../final-proposal/`](../final-proposal/index.html), slides 3–5.
 
+> **What changed since Draft 1 (Nov 24)**
+> - The live view is a small **widget**: one stepped lawn where each chat is a row, not a tall side panel of boxed lanes.
+> - Hovering or clicking a row shows **the prompt it's working on and the steps it's on**. No tokens while you work.
+> - The report is replaced by a **receipt** you get when you end a chat: tokens, one "you wrote → could be" prompt swap, a useful rating, a handoff button.
+> - The **message limit and check-in are gone.**
+> - Skills from GitHub (old F9) is cut for this version.
+
 > **Who reads this**
-> - **Design agent:** read §1–§8 and §11, then build the design system described in §11. Put everything you make in `ai-companion/design/`.
-> - **Coding agent:** read the whole document. Build from §9–§10 using the design system in `ai-companion/design/`. Put code in `ai-companion/`.
+> - **Design agent:** read §1–§8 and §11. The design system already exists in `ai-companion/design/` (start with its `README.md` and `components.md`). Update it there.
+> - **Coding agent:** read the whole document. Build from §9–§10 using the design system in `ai-companion/design/`, starting from `components/derby.js` and `derby.css`. Put code in `ai-companion/`.
 > - **Both:** don't make up data, capabilities, or research. Anything not covered here is an open question (§13). Ask Cathy rather than guessing.
 
 ---
 
 ## 1. One line
 
-A small carnival-derby tracker for your open AI chats. Each chat gets a lane. The horse runs while the AI is working and reaches the finish when it's your turn. A report you open when you want shows what happened and helps you hand the work to another tool.
+A small carnival-derby widget for your open AI chats. Each chat gets a row on one lawn. The horse runs while the AI is working and reaches the finish when it's your turn. When you end a chat, Derby prints a receipt: where the tokens went, and a shorter prompt you could try next time.
 
 ## 2. Problem
 
-Creative work now often runs across several AI chats at once. For a gig poster, one chat might be writing headlines, another suggesting palettes, and another researching venues. People lose track of:
+Creative work now often runs across several AI chats at once. For a gig poster, one chat might be writing headlines, another suggesting palettes, and another researching venues. Each answer takes a while, and **the wait is where people get lost**: they switch to something else, keep checking tabs, or forget a finished answer is sitting there.
+
+People lose track of:
 
 - **which chat is done and waiting on them**, so they keep checking tabs or forget a finished answer.
-- **how much they've used.** Personal plans hide exact limits, so people only find out when they hit one.
-- **whether a chat is actually helping**, or whether they're asking the same thing over and over.
+- **what each chat is doing right now**: which prompt it's on and what step it's at, so they can judge whether to wait or switch.
 - **where they left off** when they switch to another tool or start a fresh chat.
+- **afterwards, how a chat went**: where the tokens went, whether it helped, and whether a clearer prompt would have saved rounds.
 
-There's also a critical angle. Making AI use visible should help people decide what to do next: check a chat, improve a prompt, keep going, stop, or hand off. It must not turn AI use into a game you play more. Derby doesn't assume AI use is bad, and it never calls a prompt "useless."
+There's also a critical angle. Making AI use visible should help people decide what to do next: check a chat, keep working elsewhere, improve a prompt, or hand off. It must not turn AI use into a game you play more. Derby doesn't assume AI use is bad, and it never calls a prompt "useless" or "wasted".
 
 ## 3. Goals and non-goals
 
 **Goals**
 1. One glance tells you which chat needs you.
-2. Usage is visible and labeled honestly: counted, estimated, or something you entered.
-3. You set your own limit and get a gentle warning when you reach it.
+2. Hover or click tells you what a chat is doing: the prompt it's working on and the steps it has shown.
+3. Ending a chat gives a short receipt: tokens (labeled as estimates), one prompt you could try next time, a useful rating, and a handoff.
 4. A handoff you can edit and copy, so work moves between tools without starting over.
 5. It feels authored and playful, a small carnival booth, and calm rather than addictive.
 
 **Non-goals (do not build)**
 - No points, streaks, badges, leaderboards, or any reward for sending messages.
+- No message limits, quotas or warnings about "a lot of messages".
+- No token numbers while you work. Tokens appear only on the receipt, always as estimates.
 - No made-up "tokens remaining" or plan quota. Personal plans don't expose it (§10).
-- Time spent in a tab is never shown as time the AI spent working.
-- A long session or many prompts is never labeled as wasted.
+- No percentages, "almost done" guesses or time numbers for AI work. The only use of time is the working horse's position (F1), which shows how long a reply has been running, never how close it is to done. Time spent in a tab is never shown as time the AI spent working.
+- A long chat or many prompts is never labeled as wasted.
 - Derby never sends prompts or clicks anything inside a chat site. It only reads.
 - No desktop app, and no live ChatGPT or Gemini tracking in this version.
-- Shared skills are never installed automatically.
+- No skill search or installs.
 - No accounts, payments, or teams.
 
 ## 4. Who it's for
 
 - **Primary:** students and creative practitioners (designers, writers, artists) who keep 2–5 AI chats open while working on one project. That includes Cathy and her classmates.
-- **Main scenario (used across all designs):** making a gig poster with three chats open. Claude is writing headline copy, ChatGPT is suggesting color palettes, and Gemini is doing venue research. All data in mockups and demo mode is made up and labeled that way.
+- **Main scenario (used across all designs):** making a gig poster with three chats open. Claude is writing headline copy, ChatGPT is suggesting color palettes, and Gemini is doing venue research. All data in mockups, the prototype and demo mode is made up and labeled that way. (In the build, ChatGPT and Gemini chats arrive through paste-in, §7 F10.)
 
 ## 5. Experience principles
 
 These describe how it should feel, and they apply to every screen.
 
-1. **A glance, not a dashboard.** The side panel answers one question: who needs me? Everything else lives in the report.
-2. **The horse tells you when to look; it rewards nothing.** There's no win state, and nothing celebrates sending.
-3. **Every number shows where it came from:** Counted, ≈ Estimate, You said, or Not available. Never hide uncertainty.
-4. **Sound is part of the interface.** Use one soft carnival bell when a horse finishes, so people can stop watching tabs. There is no sound for sending, and sound can be muted.
-5. **Authored, not empty.** Carnival-booth craft: stripes, paper, ink, hand-drawn horses. Quiet enough to sit next to real work.
-6. **Plain words.** "Your turn", "Working…", "Idle". No jargon on screen.
+1. **A glance, not a dashboard.** The widget answers one question: who needs me? Hover answers the next: what is it doing? Everything else waits for the receipt.
+2. **The horse tells you when to look; it rewards nothing.** There's no win state, and nothing celebrates sending. While working, its position shows how long the reply has been running, never progress: it slows down and can't reach the finish until the reply is actually done.
+3. **Numbers come at the end, and every number shows where it came from:** Counted, ≈ Estimate, You said, or Not available. Never hide uncertainty.
+4. **Sound is part of the interface.** One soft carnival bell when a horse finishes, so people can stop watching tabs. No sound for sending. It can be muted.
+5. **Authored, not empty.** Carnival-booth craft: an awning, a painted backdrop, a stepped green lawn, hand-drawn horses. Quiet enough to sit next to real work.
+6. **Plain words.** "Your turn", "Working…", "Idle", "Searching the web". No jargon on screen.
 
 ## 6. Concepts and glossary
 
 | Term | Meaning |
 | --- | --- |
-| **Lane** | One tracked chat. It shows the service, a task label (auto-filled from the chat title, editable), its state, and the message count. |
+| **Widget** | The live view: an awning, the wordmark, "N sent this session", and the lawn. About 360 px wide; three chats take about 230 px of height. |
+| **Lawn** | All chats on one stepped lawn seen from the front. Back rows are higher and smaller; front rows lower and bigger. Horses overlap the row behind. |
+| **Row** | One tracked chat. A placard shows its number and task label (auto-filled from the chat title, editable). New chats rise in as a row; closed chats sink away. |
 | **Horse at the gate** | **Idle**: nothing is running in that chat. |
-| **Horse running** | **Working…**: the AI is generating. The horse's position is an animation that means "still going". It is *not* real progress, because no site reports how far along a response is. |
-| **Horse at the finish** | **Your turn**: the answer finished and you haven't opened that chat since. The lane highlights and the bell rings. |
-| **Session** | A stretch of work the user starts and ends. It holds lanes, counts, and a limit. |
-| **Limit** | A message count the *user* sets for the session, for example 30. Shown as a bar. Reaching it shows a gentle check-in, not a block. |
-| **Report** | Opened on purpose, mid-session or at the end. It has three parts: This session, Suggestions, Handoff. |
+| **Horse running** | **Working…**: the AI is generating. The horse gallops and creeps right the longer the reply runs (time since you sent the prompt), slowing down so it never reaches the finish on its own. Its position means "how long so far", *not* progress: no site reports how far along a response is. |
+| **Horse at the finish** | **Your turn**: the answer finished and you haven't opened that chat since. Bulb lit, "Your turn" pennant, bell rings. |
+| **Card** | Opens on hover, focus or click on a row: the prompt it's working on (or your last prompt), the steps it has shown, and Open / Handoff / End + receipt. No numbers. |
+| **Steps** | The status labels the chat page itself shows during a reply (for example "Thinking", "Searching the web"), in order, with the current one highlighted. If the page shows none, "Writing the reply". |
+| **Session** | A stretch of work the user starts and ends. It holds rows and counts. |
+| **End** | Ends one chat's row: the ticket button past each row's finish, or "End + receipt" in its card. Closing the tab ends it too, with the receipt waiting to print. |
+| **Receipt** | Printed when you end a chat (or for each chat when you end the session). Tokens (≈ Estimate), Try next time (one prompt swap), Was it useful? (You said), Make a handoff. |
+| **Prompt swap** | "You wrote" (the person's real prompts, quoted with message numbers) → "Could be" (one rewritten prompt) + an estimated token saving. Needs consent, because it sends the chat text. |
 | **Handoff** | Editable fields: Goal, Decided, Tried, Still open, Links, Next step. Copies as Markdown. |
-| **Suggestion** | A prompt tip based on one conversation the user picked. It must cite the message numbers it's based on. |
-| **Skill (maybe)** | A public skill or prompt file found on GitHub that matches the task. Shown with its source; the user decides whether to use it. |
 | **Provenance label** | The tag on every number: `Counted`, `≈ Estimate`, `You said`, `Not available`. |
 
 ## 7. Features and requirements
 
 Priority: **P0** = needed for the Dec 8 final, **P1** = if time allows, **P2** = maybe.
 
-### F1. Derby panel (P0)
-Chrome side panel, about 320–480 px wide.
-- One lane per tracked chat. Each lane has the service name, task label, state text, a horse on a track, a message count, an **Open** button and a **Handoff** button.
-- A session bar at the top: "This session: N messages", plus the user's limit marker.
-- Empty state: "Open a Claude chat to start a lane." Also show a "Try demo" link.
-- A lane disappears when its tab closes, but its data stays in the session.
+### F1. Derby widget (P0)
+- Surface: the Chrome side panel, with the widget pinned at its top (about 360 px wide, 320–480 works). A floating corner window is P1, see F13.
+- Head: awning, wordmark, bell (mute) and settings buttons, "N sent this session" + `Counted`.
+- The lawn: one row per tracked chat, in the order chats were opened. Rows never reorder when state changes.
+- Each row: placard (number on silk dot + task label), horse by state, finish post with bulb. Your-turn rows add the lit bulb, a yellow placard and a "Your turn" pennant.
+- New row: rises into place (~420 ms). Closed tab: the row sinks away (~320 ms), its data stays in the session, and its receipt waits in the slot as a "Receipt ready" stub instead of printing over your work.
+- **Working horse position:** measured from when the reply started (the moment Derby sees it switch to working). Position = start + 82% of the run × (1 − e^(−seconds/50)): about two-thirds of the way at 50 s, about 90% at 2 min, never the finish. When the reply finishes, the horse runs the rest of the way (~700 ms). Reduced motion: it jumps between positions instead of gliding.
+- Hover, keyboard focus or click opens the card (F1a). Click pins it; Esc closes.
+- **End per row:** each row has an **End** ticket in the run-out past its finish line, shown on hover/focus and always when it's your turn. End sinks the row and prints that chat's receipt (F6). A toast offers **Undo** for 6 s.
+- Empty state: the backdrop and one bare row, "Open a Claude chat to start a lane." Also "Try demo" and "Paste a chat".
 - **Acceptance:**
-  - With 3 claude.ai tabs open, 3 lanes show.
-  - Starting a message makes that lane show "Working…" within 2 s.
-  - When the answer finishes, the lane shows "Your turn" within 2 s.
+  - With 3 claude.ai tabs open, 3 rows show.
+  - Starting a message makes that row show "Working…" within 2 s.
+  - When the answer finishes, the row shows "Your turn" within 2 s.
+
+### F1a. Row card (P0)
+- Head: service, full task label, state.
+- "Working on" (while working) or "Your last prompt": the last user message in that chat, quoted, with its message number. Up to 3 lines.
+- "Steps" (P1 if detection is unreliable): the status labels the page showed during this reply, done ones checked, the current one bold. Done: "Reply ready. It's your turn." Idle: "Waiting for your next prompt."
+- Actions: **Open** (primary when it's your turn), **Handoff**, **End + receipt**.
+- Never shows tokens, time numbers or percentages. While working it says, in one muted line: "The further the horse, the longer it has been working. It can't tell how close the reply is to done."
 
 ### F2. Chat-state detection on claude.ai (P0)
-- A content script on `https://claude.ai/*` watches the page with MutationObserver. It detects working vs. done (for example, the stop button appearing and disappearing) and counts messages the user sends.
+- A content script on `https://claude.ai/*` watches the page with MutationObserver. It detects working vs. done (for example, the stop button appearing and disappearing), counts messages the user sends, reads the chat title, **reads the last user message**, and **reads any visible status label** during a reply (P1).
 - All page selectors live in **one adapter file** (`adapters/claude.js`) that exposes the same small interface, so ChatGPT and Gemini adapters can be added later.
-- If detection breaks (the selectors stop matching), the lane says **"Can't read this chat right now"** instead of showing wrong data.
-- **Acceptance:** on a live claude.ai chat, working, done and your-turn are detected correctly in 9 of 10 tries during testing. Record the results in `ai-companion/TESTING.md`.
+- If detection breaks (the selectors stop matching), the row shows **"can't read this chat"** and the card says "Can't read this chat right now, so Derby isn't guessing", instead of showing wrong data.
+- **Acceptance:** on a live claude.ai chat, working, done and your-turn are detected correctly in 9 of 10 tries during testing. Record the results, and how often step labels were readable, in `ai-companion/TESTING.md`.
 
 ### F3. Your-turn signal and sound (P0)
-- The lane highlights, the toolbar badge shows how many chats are waiting (≤4 characters), and one bell plays.
-- Settings: sound on/off (default on) and badge on/off. Respect `prefers-reduced-motion`: if it's set, the horse jumps to its position instead of galloping.
+- The row lights up, the toolbar badge shows how many chats are waiting (≤4 characters), and one bell plays (spec: `design/sound/sound.md`).
+- Settings: sound on/off (default on) and badge on/off. Respect `prefers-reduced-motion`: if it's set, horses appear at their spot instead of galloping, and rows appear/disappear without rising or sinking.
 
-### F4. Session and limit (P0)
-- Start or end a session. The limit is optional and the user sets it.
-- At the limit, a check-in message: "You've hit the 30 you set. Keep going, or open the report?" Buttons: **Keep going**, **Open report**. Never block anything.
+### F4. Session (P0)
+- A session starts with the first tracked chat. Each chat ends on its own (End on its row, or closing its tab).
+- **End session** (in the card menu and settings) ends every row at once and prints one receipt per chat, one after another.
+- No limit, no check-in.
 
 ### F5. Open chat (P0)
 - **Open** focuses that tab and window. Opening also clears "Your turn".
 
-### F6. Session report (P0, with patterns at P1)
-A full page inside the extension.
-- **This session:**
-  - Messages per chat (`Counted`).
-  - Rough tokens (`≈ Estimate`, from text length, about 4 characters per token, always labeled).
-  - Plan usage (`Not available`), with a link to the service's own usage page (Claude: Settings › Usage).
-  - "Was it useful?" per chat, rated ✓ / ~ / ✗ (`You said`).
-- **Suggestions (P1):** detect repeated, nearly identical requests in one chat, for example "You asked for a new headline 5 times." The wording stays neutral, because repeating can be exploring.
+### F6. Receipt (P0; the prompt swap is P1)
+Printed from the slot at the bottom of the widget when you press **End** on a row, **End + receipt** in its card, or **Print** on a waiting stub (after a tab closes), or for each chat when you end the session. Short on purpose:
+- **Head:** "Receipt", service + task, date and clock times.
+- **Tokens** (`≈ Estimate`, from text length, about 4 characters per token): your prompts, the replies, a bar, the total, one plain sentence ("Most of it is Claude's replies.").
+- **Try next time:** before consent, one line explaining that it sends this chat's text, and a **Find shorter prompts** button. After: one prompt swap (two at most) (F8).
+- **Was this chat useful?** ✓ / ~ / ✗ (`You said`).
+- **Make a handoff**, **Done**, and the line "≈ is a guess from text length (about 4 characters a token)."
 - **Acceptance:**
   - Every number has a provenance label.
-  - No time-based "AI time" appears anywhere.
+  - No time numbers for AI work appear anywhere (clock times like "started 2:10 PM" are fine).
+  - Works on the hosted demo and on imported (pasted) chats.
 
 ### F7. Handoff (P0)
-- The user picks a chat. Derby gathers that chat's text, but only after a consent step that shows what will be sent.
+- The user picks a chat (from its card or its receipt). Derby gathers that chat's text, but only after a consent step that shows what will be sent.
 - That text goes to the serverless endpoint `/api/handoff`, which returns the fixed fields (§6). The user edits them, then **Copy as Markdown**.
 - **Acceptance:**
   - Every field can be edited.
   - Copy produces clean Markdown.
   - If the request fails, the screen says so plainly and shows a "Try again" button.
 
-### F8. Prompt suggestion (P1)
-- From the selected chat, at most one or two tips. Each one cites message numbers, and a "Show me where" control scrolls to or highlights those messages.
-
-### F9. Skills from GitHub (P2, maybe)
-- The serverless function uses **GitHub's official search API** (never scraping) to find public skill or prompt repos matching the task label.
-- It summarizes the top 3 in one line each and shows the source repo. Suggest only; never install.
-- Treat token savings as a guess to test. Don't claim numbers.
+### F8. Prompt swap (P1)
+- After consent, `/api/suggest` reads the chosen chat and returns at most two swaps. Each swap: the cited user prompts (real text, real message numbers), one rewritten prompt, and a one-line reason.
+- The **estimated saving** is computed locally, not by the model: the text length of the replies the rewrite would likely have skipped (for example, rounds of "another set"), at about 4 characters a token. Always labeled `≈ Estimate`. If there's no sensible estimate, show the swap without a number.
+- **Copy prompt** copies the rewrite. Wording stays neutral, because repeating can be exploring.
 
 ### F10. Paste-in / import fallback (P0)
-- A page where the user pastes a conversation (or later, a share link or export file). It creates an "imported" lane, and the report and handoff work on it.
+- A page where the user pastes a conversation (or later, a share link or export file). It creates an "imported" row, and the receipt and handoff work on it.
 - This is how Derby works without live tracking, and it's the safer route given the terms issue in §10.
 
 ### F11. Demo mode (P0)
 - A built-in sample session (the gig poster scenario) with a visible "Made-up data" banner. Needed for the presentation and for user testing.
-- The same UI also runs as a plain web page (no extension) that only does demo and paste-in, so it can be hosted for people who don't install the extension.
+- The same UI also runs as a plain web page (no extension) that only does demo and paste-in, so it can be hosted for people who don't install the extension. The interactive prototype (`design/prototype/`) is the reference for how the demo should behave.
 
 ### F12. Privacy and consent (P0)
-- Data stays in `chrome.storage.local` by default.
-- Chat text leaves the browser only when the user asks for a handoff, suggestion, or skill search, after a consent screen.
+- Data stays in `chrome.storage.local` by default. The last prompt and step labels are read and kept locally; they are never sent anywhere on their own.
+- Chat text leaves the browser only when the user asks for a handoff or prompt swap, after a consent screen.
 - "Clear all data" is in settings.
 - Install onboarding explains in plain words that Derby reads claude.ai pages you open, why it does, and what it never does.
 
+### F13. Corner window (P1)
+- A **Pop out** control opens the widget as a small always-on-top window in the corner of the screen, using Document Picture-in-Picture (the same API as Show Up's timer). Chrome only; elsewhere, the side panel stays the surface. Needs testing from an extension page (§10).
+
 ## 8. Screens to design
 
-1. Onboarding and permission explanation (1–2 screens)
-2. Side panel: empty state
-3. Side panel: active session with 3 lanes in different states (idle, working, your turn), plus a 6-lane overflow
-4. Side panel: limit reached (check-in)
-5. Side panel: "Can't read this chat" error lane
-6. Report: This session, Suggestions, Handoff (wide layout, plus a side-panel-width version)
+Mockups exist in `design/mockups/` (`screens.html?s=<id>`) and as a clickable prototype in `design/prototype/`.
+
+1. Onboarding and permission explanation (2 screens)
+2. Widget: empty state
+3. Widget: 3 chats (idle, working, your turn) and 6 chats; a row rising in and sinking out
+4. Widget: row card while working (prompt + steps) and when done
+5. Widget: "can't read this chat" row and its card
+6. Receipt: before consent (Find shorter prompts) and after (one prompt swap)
 7. Handoff editor with consent step, loading, error, and done (copied) states
 8. Paste-in / import page
-9. Settings (sound, badge, limit default, clear data)
+9. Settings (sound, badge, motion, clear data)
 10. Demo banner, plus the hosted web version of demo and paste-in
 
 ## 9. Technical approach (for the coding agent)
 
-**Stack:** plain HTML, CSS and JavaScript (ES modules), no framework, to match Cathy's other work. No build step unless one is clearly needed. Use the design tokens from `ai-companion/design/tokens.css`.
+**Stack:** plain HTML, CSS and JavaScript (ES modules), no framework, to match Cathy's other work. No build step unless one is clearly needed. Use the design tokens from `ai-companion/design/tokens.css` and port the renderers in `design/components/derby.js` (same class names and markup).
 
 **Pieces**
 
 | Piece | What it does |
 | --- | --- |
-| `extension/manifest.json` | Manifest V3. Permissions: `sidePanel`, `storage`, `tabs`, `notifications` (optional). Host permissions: `https://claude.ai/*` only. |
-| `extension/content/claude.js` | Adapter: MutationObserver and selectors. Emits `{chatId, title, state, userMessageCount}` messages. |
+| `extension/manifest.json` | Manifest V3. Permissions: `sidePanel`, `storage`, `tabs`, `offscreen` (for the bell when the panel is closed). Host permissions: `https://claude.ai/*` only. |
+| `extension/content/claude.js` | Adapter: MutationObserver and selectors. Emits `{chatId, title, state, userMessageCount, lastPrompt, lastPromptIndex, steps[]}` messages. |
 | `extension/background.js` | Service worker. Owns session state in `chrome.storage.local` (MV3 workers restart, so storage is the source of truth). Sets the badge and plays the bell through the side panel or an offscreen document. |
-| `extension/panel/` | Side panel UI (the derby). |
-| `extension/report/` | Report, handoff, paste-in and settings pages. |
+| `extension/widget/` | The widget (lawn, rows, card, receipt slot). |
+| `extension/pages/` | Receipt (full page view), handoff, paste-in and settings pages. |
 | `web/` | Hosted demo + paste-in build, sharing the same UI modules. |
-| `api/handoff.js`, `api/suggest.js`, `api/skills.js` | Vercel serverless functions, the same pattern as Show Up's `/api/critique`. API keys live in Vercel environment variables, never in the extension. |
+| `api/handoff.js`, `api/suggest.js` | Vercel serverless functions, the same pattern as Show Up's `/api/critique`. API keys live in Vercel environment variables, never in the extension. |
 
-**Claude API (handoff and suggestions)**
+**Claude API (handoff and prompt swaps)**
 - Use the official SDK `@anthropic-ai/sdk` with model `claude-opus-5-5`.
-- Use **structured outputs** (`output_config: { format: { type: "json_schema", schema } }`, or the SDK's `messages.parse()`) so the handoff always returns the six fields.
+- Use **structured outputs** (`output_config: { format: { type: "json_schema", schema } }`, or the SDK's `messages.parse()`) so the handoff always returns the six fields and suggest always returns `{swaps: [{cite: number[], was: string[], try: string, why: string}]}`.
 - Thinking is adaptive by default on this model. Set `output_config.effort` explicitly (`medium` is a reasonable start).
 - Check `stop_reason` before reading content. Handle `"refusal"`, and include the server-side `fallbacks` option the skill recommends.
 - The coding agent should load the `claude-api` skill before writing this code and follow it over this summary.
 - Prompt rules:
   - Only use the given transcript.
-  - Cite message numbers.
+  - Quote the user's prompts exactly and cite message numbers.
   - Leave a field empty rather than invent.
   - Neutral tone, no judgment about how much the person used AI.
-
-**GitHub skills (P2):** call GitHub's REST search API from `api/skills.js` with a token stored server-side. It's rate-limited, so cache results per query.
+  - The model does not estimate tokens; Derby does (F8).
 
 **Data model (stored locally)**
 ```
-Session { id, startedAt, endedAt?, limit?, lanes: Lane[] }
+Session { id, startedAt, endedAt?, lanes: Lane[] }
 Lane    { id, service: "claude"|"imported", chatUrl?, taskLabel, state: "idle"|"working"|"your_turn"|"unreadable",
-          userMessages: number, estTokens: number, rating?: "yes"|"partly"|"no", lastSeenAt? }
+          userMessages: number, promptChars: number, replyChars: number,
+          lastPrompt?: string, lastPromptIndex?: number, steps: { label: string, done: boolean }[],
+          rating?: "yes"|"partly"|"no", lastSeenAt?, closedAt? }
+Receipt { laneId, createdAt, promptTokensEst, replyTokensEst, totalEst, swaps?: Swap[] }
+Swap    { cite: number[], was: string[], try: string, why: string, savedTokensEst?: number }
 Handoff { laneId, goal, decided, tried, stillOpen, links[], nextStep, createdAt }
 ```
 
-## 10. Feasibility and risks (checked Nov 8, 2026)
+## 10. Feasibility and risks (checked Nov 8, 2026; updated Nov 24)
 
 | Item | Status |
 | --- | --- |
 | An extension can read pages it has host permission for, and can use a side panel, badge and storage | Verified (Chrome extension docs) |
 | Working/done and message counts from claude.ai | **Needs testing.** Depends on the page markup and can break without warning |
+| Reading the last user message from claude.ai | **Needs testing.** Same risk as above |
+| Reading status labels during a reply ("Thinking", "Searching the web") | **Needs testing.** Only possible when the page shows them; they may change or be absent |
+| Document Picture-in-Picture opened from an extension page (F13) | **Needs testing.** Works on web pages in Chrome (Show Up's timer) |
 | An API for consumer chat state or remaining plan usage | **Not available.** Claude shows plan usage only as % bars in Settings › Usage |
-| Exact token counts | Only on developer APIs, not personal plans |
-| Structured outputs for the handoff | Verified (Anthropic docs) |
-| GitHub search API reachable | Verified Nov 8 (repository search for "claude skills" returned results) |
+| Exact token counts | Only on developer APIs, not personal plans. Receipt tokens are estimates from text length |
+| Structured outputs for handoff and swaps | Verified (Anthropic docs) |
 | **Terms risk** | Anthropic's consumer terms prohibit scraping and automated access to Claude except via API or with explicit permission. Derby must stay read-only, never automate the site, and keep paste-in (F10) as a full fallback. Cathy is raising this with her professor |
 
 Sources and full notes are in the speaker notes of [`../final-proposal/index.html`](../final-proposal/index.html), slides 3–5.
 
-## 11. Design system brief (for the design agent)
+## 11. Design system (for the design agent)
 
-**Deliver to `ai-companion/design/`:**
-1. `tokens.css`: CSS custom properties for color, type, spacing, radius, borders, shadows and motion, with a dark-mode set under `@media (prefers-color-scheme: dark)`. Also `tokens.json` with the same values.
-2. `components.md`: a spec for each component, covering its states, sizes, and accessible name and role.
-3. Mockups of every screen in §8, at side-panel width (360 px) and report width (1280 px). Use Figma or HTML; export PNGs into `design/mockups/`.
-4. Horse artwork as SVG: one horse in 4 lane colors, with gallop frames (3–4) plus a still pose. The finish line and track go in `design/assets/`.
-5. A sound spec: the bell (length, character, volume), and the mute behavior. Suggest a royalty-free source or describe it so it can be synthesized with the Web Audio API.
+The system exists in `ai-companion/design/` and as a Claude Design System artifact ("Derby"). Keep both in step.
 
-**Components needed:** Lane, Horse, Track + finish line, Session bar with limit marker, State label, Provenance tag (Counted, ≈ Estimate, You said, Not available), Button (primary, secondary, quiet), Badge, Check-in banner, Card (report), Editable field (handoff), Consent sheet, Toast, Empty state, Error lane, Made-up-data banner, Toggle.
-
-**Direction**
-- **Mood:** a carnival game booth, translated into a calm tool. Use the red-and-white stripe awning sparingly, warm paper, ink lines, hand-drawn horses, chunky readable type.
-- The proposal deck's look is a starting point, not a requirement:
-  - paper `#F6F3EC`, ink `#1B1A17`, red `#E5322D`, blue `#3B2CFF`, yellow `#F2B705`, pink `#FF3E9A`
-  - IBM Plex Sans / Mono, with Caveat for hand notes
-- **Lane colors:** one per service, plus "imported". They must work in light and dark modes and pass WCAG AA against the lane background.
-- **States never rely on color alone.** Each state needs text plus a shape or position difference: horse position, outline style, icon.
-- **Motion:** the gallop loops softly while working, then makes one short run to the finish. No bouncing, confetti, or celebration. Provide a reduced-motion variant.
-- **Density:** the side panel must handle 6 lanes without scrolling at 900 px tall.
+- `tokens.css` / `tokens.json` (light "Daylight booth", dark "Night carnival"), `components.md`, `components/derby.css` + `derby.js`, `mockups/`, `prototype/`, `assets/` (horse in 4 silks: still + 4 gallop frames; track pieces), `sound/` (bell spec + Web Audio synth).
+- **Components:** RaceStack (widget), Lawn, RaceCard, Receipt, PromptSwap, Horse, Track, StateLabel, ProvenanceTag, Button, Badge, Card, EditableField, ConsentSheet, Toast, EmptyState, ErrorLane, DemoBanner, Toggle. Lane is the v1 roomy lane, kept for wide layouts only.
+- **Direction:** a carnival game booth translated into a calm tool. The arcade derby's stepped green lawn, seen from the front, with depth. Red-and-white awning used sparingly, warm paper, ink lines, hand-drawn horses. Fonts: Big Shoulders, Atkinson Hyperlegible Next and Mono, Shantell Sans for things the person said.
+- **States never rely on color alone:** word + icon + horse position + placard/pennant.
+- **Motion:** gallop loops softly while working, one short run to the finish, rows rise and sink. No bouncing, confetti, or celebration. Reduced-motion variant for all of it.
 - **Tone of copy:** short, warm, neutral. Never shaming ("You've sent a lot!") or hype ("Great job!").
 
 ## 12. Milestones
 
 | Date | Milestone |
 | --- | --- |
-| Nov 24 | PRD done (this doc). Design agent starts. |
-| Nov 27 | Design system v1: tokens, components, panel + report mockups |
-| Dec 1 | P0 working on live claude.ai: lanes, states, counts, limit, bell |
-| Dec 3 | Report, handoff (with API), paste-in, demo mode |
+| Nov 24 | PRD Draft 2, design system v3, clickable prototype. |
+| Nov 27 | Coding starts from the design system; adapter spike on live claude.ai (states, last prompt, step labels). |
+| Dec 1 | P0 working on live claude.ai: rows, states, counts, card, bell |
+| Dec 3 | Receipt, handoff (with API), paste-in, demo mode |
 | Dec 5 | Quick test with 3–5 classmates; fix the top issues; write `TESTING.md` |
 | Dec 8 | Final presentation |
 
-The coding agent should ship P0 end to end before touching P1 or P2.
+The coding agent should ship P0 end to end before touching P1.
 
 ## 13. Open questions
 
 1. Is a read-only extension on claude.ai acceptable for a class project given the terms, or should the final lean on paste-in and demo? (Ask the professor.)
-2. Should a lane track one chat, or one *task* that may span several chats?
+2. Should a row track one chat, or one *task* that may span several chats?
 3. Should "Your turn" clear when you open the tab, or only when you send the next message?
-4. Is the limit only a message count, or should it also allow a time-based "check in after 45 min" (shown as clock time, never as AI time)?
-5. Is the extension the main deliverable for Dec 8, or the hosted demo + paste-in version?
+4. Is the extension the main deliverable for Dec 8, or the hosted demo + paste-in version?
+5. Side panel, or the floating corner window (F13), as the main surface?
+6. One receipt per chat (current design), or also one combined receipt for the whole session?
+7. If step labels can't be read reliably, is "Working on: <your prompt>" enough on its own?
 
 ## 14. Success measures for testing
 
 These are qualitative, observed in a short test with 3–5 people.
 - Within 10 seconds, people can say which chat needs them.
 - People can explain what the horse means without being told.
-- Nobody reads the panel as a score to increase.
+- Hovering a row, people can say what that chat is working on.
+- Nobody reads the widget as a score to increase.
+- Nobody reads a far-right horse as "almost done"; people can say it means "it's been a while".
+- People can read a receipt and say where most tokens went, in their own words.
+- Someone would actually copy a suggested prompt, or can say why not.
 - Someone can produce and copy a handoff they'd actually use, in under 2 minutes.
