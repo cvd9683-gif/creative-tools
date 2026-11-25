@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Derby</title>
+<link rel="stylesheet" href="/extension/shared/tokens.css">
+<link rel="stylesheet" href="/extension/shared/derby.css">
+<link rel="stylesheet" href="/extension/shared/app.css">
+<style>
+  body.derby { padding: 12px; box-sizing: border-box; }
+  #widget { max-width: 480px; margin: 0 auto; }
+  .panel-foot { max-width: 480px; margin: 12px auto 0; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .hub-note { max-width: 480px; margin: 12px auto 0; color: var(--ink-muted, inherit); font-size: 13px; line-height: 19px; text-align: center; }
+</style>
+</head>
+<body class="derby">
+<div id="widget"></div>
+<div class="panel-foot" id="foot"></div>
+<p class="hub-note" id="note">Chats from Chrome, Claude Code and desktop apps show up here. Click once anywhere so the bell can ring.</p>
+<div id="overlay"></div>
+<div id="toasts" aria-live="polite"></div>
+<div id="live" class="vh" aria-live="polite"></div>
+<script type="module" src="/hub/page/hub.js"></script>
+</body>
+</html>

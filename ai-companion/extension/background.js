@@ -1,6 +1,7 @@
 /* Derby service worker. Owns the session and saves it to chrome.storage.local (MV3 workers restart, so storage is the
    source of truth). Sets the toolbar badge, rings the bell when the panel is closed, and ends rows when tabs close. */
 import { Session } from "./shared/session.js";
+import { hubPost } from "./shared/hub.js";
 
 let session = null;
 let panelPorts = 0;
@@ -58,6 +59,8 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
       session.s.lanes.filter((l) => l.tabId === tabId && l.key !== msg.key).forEach((l) => session.end(l.id, { tabClosed: true }));
       const u = Object.assign({ service: "claude" }, msg.update, { tabId }) // each site reader sends its own service;
       const lane = session.updateChat(msg.key, u);
+      // also send it to the Derby hub, if it's running, so browser chats share one lawn with Claude Code and desktop apps
+      hubPost("/api/chat", { key: msg.key, update: u, surface: "browser" });
       // looking at the tab counts as seeing the reply
       if (lane && u.tabFocused && lane.state === "your_turn") session.seen(lane.id);
       await save();
@@ -82,6 +85,17 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
       }
       return reply({ ok: true });
     }
+    if (msg.type === "openTab") {
+      // from the panel while it shows the hub: the lane ids are the hub's, so open by tab or address
+      try {
+        const tab = await chrome.tabs.get(msg.tabId);
+        await chrome.tabs.update(tab.id, { active: true });
+        await chrome.windows.update(tab.windowId, { focused: true });
+      } catch (e) {
+        if (msg.chatUrl && /^https:\/\/(claude\.ai|chatgpt\.com|grok\.com)\//.test(msg.chatUrl)) await chrome.tabs.create({ url: msg.chatUrl });
+      }
+      return reply({ ok: true });
+    }
     if (msg.type === "transcript") {
       // fresh text from the open tab; falls back to the copy Derby kept
       const lane = session.lane(msg.laneId);
@@ -102,6 +116,7 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
   const lanes = session.s.lanes.filter((l) => l.tabId === tabId);
   if (!lanes.length) return;
   lanes.forEach((l) => session.end(l.id, { tabClosed: true }));
+  hubPost("/api/closed", { keys: lanes.map((l) => l.key) });
   await save();
 });
 

@@ -11,6 +11,8 @@ Final project for Web Tools for Creative Work, NYU ITP, Fall 2026, by Cathy Doss
 | Hosted demo (made-up data) | Works. Live session simulation, hover cards, End/Undo, receipts, prompt swaps, handoff |
 | Paste-in | Works. Your own pasted chat → row, receipt, handoff (needs the API for handoff and swaps) |
 | API (`/api/handoff`, `/api/suggest`) | Written and tested against a fake Claude server. Not yet run with a real key |
+| Hub (one lawn for everything) | Works. Runs on your computer and collects browser chats and Claude Code sessions. Tested with a real Claude Code run. See [`hub/README.md`](hub/README.md) |
+| Desktop apps (Claude, ChatGPT) | Experiment. Check script in [`desktop/`](desktop/README.md), not yet run |
 | Chrome extension | Tracks Claude, ChatGPT and Grok chats in Chrome. Runs end to end on fake copies of each site. **Selectors not yet checked on the real sites.** See [`TESTING.md`](TESTING.md) |
 
 ## Run it locally

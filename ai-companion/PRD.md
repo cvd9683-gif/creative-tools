@@ -53,7 +53,7 @@ There's also a critical angle. Making AI use visible should help people decide w
 - No percentages, "almost done" guesses or time numbers for AI work. The only use of time is the working horse's position (F1), which shows how long a reply has been running, never how close it is to done. Time spent in a tab is never shown as time the AI spent working.
 - A long chat or many prompts is never labeled as wasted.
 - Derby never sends prompts or clicks anything inside a chat site. It only reads.
-- No desktop app, and no Gemini live tracking in this version. *(Nov 25, Cathy: live tracking now covers ChatGPT and Grok in Chrome, alongside Claude. Tracking the Claude and ChatGPT desktop apps is an open question, §13 Q8.)*
+- No desktop app, and no Gemini live tracking in this version. *(Nov 25, Cathy: live tracking now covers ChatGPT and Grok in Chrome, alongside Claude. Claude Code sessions in the terminal are tracked too, through its official hooks and a local hub (`hub/`) that puts every source on one lawn. Tracking the Claude and ChatGPT desktop apps is an open question, §13 Q8.)*
 - No skill search or installs.
 - No accounts, payments, or teams.
 

@@ -46,6 +46,13 @@ The page readers run on **guessed** selectors, one file per site in `extension/c
   This proves the pipeline (content script → service worker → storage → panel), not the selectors.
 - **Not tested at all:** the live claude.ai markup, the real Claude API (no key in that session), and Vercel deployment.
 
+## 2b. Hub and Claude Code (Nov 25)
+
+- `npm test` adds 5 hub tests (24 total): Claude Code prompt → working with a step → your turn → session end; permission prompt → your turn → working again; browser chats forwarded; other origins refused; the hook stays silent with no hub.
+- **Real Claude Code run** (CLI 2.1.332, `claude -p` with Derby's hooks): the hub got the prompt, the step "Running a command", the reply, and the session end (row ended, receipt waiting).
+- Extension + hub in Chromium with fake site pages: three browser chats and two Claude Code sessions on one lawn, both on the hub page and in the side panel.
+- **Still to check on your Mac:** an interactive Claude Code session (not `-p`), and how it feels with the hub page as a small window next to your work.
+
 ## 3. Class test (Dec 5)
 
 Follow PRD §14. Record what people said and did, not scores.
