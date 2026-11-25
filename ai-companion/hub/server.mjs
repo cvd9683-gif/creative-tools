@@ -31,8 +31,10 @@ function save() {
     catch (e) { console.error("[derby] couldn't save:", e.message); }
   }, 300);
 }
+// what the hub has heard from each source, for the status line on the Derby page (no chat text)
+const sources = { browser: null, claudeCode: null };
 const clients = new Set();
-const snapshot = () => JSON.stringify({ state: session.s, count: session.count });
+const snapshot = () => JSON.stringify({ state: session.s, count: session.count, sources });
 function broadcast() {
   const data = "data: " + snapshot() + "\n\n";
   for (const res of clients) res.write(data);
@@ -147,9 +149,16 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST") {
       if (!(req.headers["content-type"] || "").startsWith("application/json")) return json(res, 415, { error: "send JSON" });
       const b = await body(req);
-      if (url.pathname === "/api/claude-code") return json(res, 200, claudeCode(b));
+      if (url.pathname === "/api/claude-code") { sources.claudeCode = { at: Date.now(), event: b.hook_event_name }; const r = claudeCode(b); broadcast(); return json(res, 200, r); }
+      if (url.pathname === "/api/hello") {
+        const f = b.found || {};
+        sources.browser = { at: Date.now(), site: String(b.site || ""), host: String(b.host || ""), onChat: !!b.onChat, found: { users: +f.users || 0, replies: +f.replies || 0, working: !!f.working } };
+        broadcast();
+        return json(res, 200, { ok: true });
+      }
       if (url.pathname === "/api/chat") {
         if (typeof b.key !== "string" || !b.update) return json(res, 400, { error: "need key and update" });
+        sources.browser = Object.assign({}, sources.browser, { at: Date.now(), lastChat: Date.now() });
         const u = Object.assign({}, b.update);
         const lane = session.updateChat(b.key, u);
         if (lane && b.surface) lane.surface = b.surface;

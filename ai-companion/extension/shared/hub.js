@@ -18,7 +18,8 @@ export function hubPost(path, body, base = HUB) {
 /** A widget store backed by the hub. Live updates come from the hub's event stream when possible, else polling. */
 export function hubStore({ base = HUB, onChange, stream = true } = {}) {
   const view = new Session(emptyState());
-  const set = (d) => { if (d && d.state) { view.s = d.state; onChange && onChange(); } };
+  let sources = {};
+  const set = (d) => { if (d && d.state) { view.s = d.state; sources = d.sources || {}; onChange && onChange(); } };
   let es = null, timer = null, alive = true;
   const poll = async () => {
     try { const r = await fetch(base + "/api/state", { signal: AbortSignal.timeout(1500) }); set(await r.json()); } catch (e) { /* hub went away */ }
@@ -30,7 +31,7 @@ export function hubStore({ base = HUB, onChange, stream = true } = {}) {
     es.onerror = () => { if (es && es.readyState === 2) { es = null; poll(); } };
   } else poll();
   return {
-    state: () => view.s, count: () => view.count, lane: (id) => view.lane(id),
+    state: () => view.s, count: () => view.count, lane: (id) => view.lane(id), sources: () => sources,
     do: async (action, ...args) => set(await hubPost("/api/do", { action, args }, base)),
     close: () => { alive = false; clearTimeout(timer); if (es) es.close(); },
   };

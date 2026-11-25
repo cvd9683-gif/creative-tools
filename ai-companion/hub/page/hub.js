@@ -36,7 +36,24 @@ const host = {
 };
 widget = createWidget({ root: $("#widget"), overlay: $("#overlay"), toastDock: $("#toasts"), live: $("#live"), store, host });
 
+const NAME = { claude: "Claude", chatgpt: "ChatGPT", grok: "Grok" };
+const ago = (t) => { const s = Math.round((Date.now() - t) / 1000); return s < 60 ? "just now" : s < 3600 ? Math.round(s / 60) + " min ago" : "over an hour ago"; };
+/* Status line: what the hub has heard from each source, so a missing row can be explained. */
+function status() {
+  const { browser: b, claudeCode: c } = live.sources();
+  let br;
+  if (!b) br = "Browser: no word from the Derby extension yet. Is it installed? Reload your chat tab after installing.";
+  else if (b.site && !b.onChat && !b.found.users && !b.found.replies) br = `Browser: the extension is on ${NAME[b.site] || b.host} (${ago(b.at)}). Open a chat there and send a message.`;
+  else if (b.site && !b.found.users && !b.found.replies) br = `Browser: the extension is on ${NAME[b.site] || b.host} (${ago(b.at)}) but can't find your messages on that page. Derby's guess at that site's page is wrong.`;
+  else if (b.site) br = `Browser: reading ${NAME[b.site] || b.host}, ${b.found.users} of your messages found (${ago(b.at)}).`;
+  else br = `Browser: extension connected (${ago(b.at)}).`;
+  const cc = c ? `Claude Code: last heard ${ago(c.at)}.` : "Claude Code: no word yet. Did you run the hook installer and start a new Claude Code session?";
+  $("#note").textContent = br + " " + cc;
+}
+setInterval(() => mode === "live" && status(), 5000);
+
 function foot() {
+  if (mode === "live") status();
   const has = mode === "live" && store.state().lanes.length;
   $("#foot").innerHTML = has ? Derby.Button({ label: "End session", variant: "quiet", attrs: ' data-act="endall"' }) : "";
 }

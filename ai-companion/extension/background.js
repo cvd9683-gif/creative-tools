@@ -66,6 +66,10 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
       await save();
       return reply({ ok: true });
     }
+    if (msg.type === "hello" && sender.tab) {
+      hubPost("/api/hello", { site: msg.site, host: msg.host, onChat: msg.onChat, found: msg.found });
+      return reply({ ok: true });
+    }
     if (msg.type === "do") {
       const fn = session[msg.action];
       if (typeof fn !== "function") return reply({ ok: false });

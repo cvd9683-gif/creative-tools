@@ -25,16 +25,16 @@
   let steps = [];
 
   function read() {
-    if (!isChat()) return null;
     const u = first(SEL.user), r = first(SEL.reply), w = first(SEL.working);
     const users = outermost(u.els), replies = outermost(r.els);
     const working = w.els.length > 0;
     const title = document.title.replace(SITE.titleSuffix, "").trim() || SITE.name + " chat";
 
     if (!users.length && !replies.length) {
-      // a new chat can be empty for a moment; after that, say we can't read it
-      return Date.now() - loadedAt > 6000 ? { state: "unreadable", title } : null;
+      // a new chat can be empty for a moment; after that, say we can't read it. Other pages (home, settings) are skipped.
+      return isChat() && Date.now() - loadedAt > 6000 ? { state: "unreadable", title } : null;
     }
+    // messages found: it's a chat even if the address looks unfamiliar
 
     // pair each prompt with the reply that follows it, in page order
     const all = [...users.map((el) => ({ el, user: true })), ...replies.map((el) => ({ el, user: false }))]
@@ -89,7 +89,17 @@
   addEventListener("focus", () => send(true));
   // chat sites are single-page apps: watch for moving to another chat
   let path = location.pathname;
-  setInterval(() => { if (location.pathname !== path) { path = location.pathname; lastSig = ""; steps = []; send(true); } }, 1000);
+  setInterval(() => { if (location.pathname !== path) { path = location.pathname; lastSig = ""; steps = []; send(true); hello(); } }, 1000);
+
+  // Status for the Derby window: which site this is and how many messages Derby can find. Counts only, no text.
+  function hello() {
+    setTimeout(() => {
+      const c = { users: outermost(first(SEL.user).els).length, replies: outermost(first(SEL.reply).els).length, working: first(SEL.working).els.length > 0 };
+      try { chrome.runtime.sendMessage({ type: "hello", site: SITE.service, host: location.host, onChat: isChat(), found: c }); } catch (e) { /* extension reloaded */ }
+    }, 3000);
+  }
+  hello();
+  console.info(`[Derby] watching this ${SITE.name} tab (read-only). Details: localStorage.derbyDebug = "1", then reload.`);
 
   // the panel asks for the latest text right before a handoff or prompt swap
   chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
