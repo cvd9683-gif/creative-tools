@@ -1,7 +1,7 @@
 /* Derby service worker. Owns the session and saves it to chrome.storage.local (MV3 workers restart, so storage is the
    source of truth). Sets the toolbar badge, rings the bell when the panel is closed, and ends rows when tabs close. */
 import { Session } from "./shared/session.js";
-import { hubPost } from "./shared/hub.js";
+import { hubPost, hubUp, HUB } from "./shared/hub.js";
 
 let session = null;
 let panelPorts = 0;
@@ -129,3 +129,18 @@ chrome.runtime.onInstalled.addListener((d) => {
   if (d.reason === "install") chrome.tabs.create({ url: chrome.runtime.getURL("pages/onboarding.html") });
 });
 chrome.runtime.onStartup.addListener(() => chrome.sidePanel?.setPanelBehavior({ openPanelOnActionClick: true }));
+
+/* Browsers without a side panel (Arc): clicking the toolbar icon opens Derby in its own small window instead,
+   or brings that window forward if it's already open. */
+let derbyWindowId = null;
+chrome.action.onClicked.addListener(async () => {
+  if (chrome.sidePanel) return; // Chrome opens the side panel itself
+  if (derbyWindowId != null) {
+    try { await chrome.windows.update(derbyWindowId, { focused: true }); return; } catch (e) { derbyWindowId = null; }
+  }
+  // with the hub running, show its lawn (every source, plus the status line); otherwise the extension's own
+  const url = (await hubUp()) ? HUB + "/" : chrome.runtime.getURL("widget/panel.html");
+  const w = await chrome.windows.create({ url, type: "popup", width: 420, height: 640 });
+  derbyWindowId = w.id;
+});
+chrome.windows.onRemoved.addListener((id) => { if (id === derbyWindowId) derbyWindowId = null; });
