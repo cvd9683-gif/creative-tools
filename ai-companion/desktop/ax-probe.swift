@@ -2,7 +2,7 @@
 //
 //     swift ai-companion/desktop/ax-probe.swift
 //
-// Open the Claude and/or ChatGPT (or Grok) desktop app first, with a chat on screen. The first run asks for
+// Open the Claude and/or ChatGPT (or Grok) desktop app first, with a chat on screen, and a ChatGPT chat in your browser. The first run asks for
 // Accessibility permission for your Terminal app: allow it in System Settings → Privacy & Security →
 // Accessibility, then run the script again.
 //
@@ -16,7 +16,9 @@ import AppKit
 import ApplicationServices
 import Foundation
 
-let targets = ["Claude", "ChatGPT", "Grok"]
+// AI apps, plus browsers: if Accessibility can read ChatGPT inside Arc or Chrome, one Mac app could track
+// browser chats too, with no extension.
+let targets = ["Claude", "ChatGPT", "Grok", "Arc", "Google Chrome", "Safari"]
 let maxNodes = 6000
 let maxDepth = 60
 
@@ -50,8 +52,10 @@ if apps.isEmpty { print("None of \(targets.joined(separator: ", ")) is running. 
 for app in apps {
     let name = app.localizedName ?? "?"
     let root = AXUIElementCreateApplication(app.processIdentifier)
-    // Electron/Chromium apps (the Claude app) hide their page from Accessibility unless asked.
+    // Electron/Chromium apps (the Claude app, Arc, Chrome) hide their page from Accessibility unless asked.
+    // Electron listens for AXManualAccessibility; Chrome-based browsers for AXEnhancedUserInterface.
     let manual = AXUIElementSetAttributeValue(root, "AXManualAccessibility" as CFString, kCFBooleanTrue)
+    _ = AXUIElementSetAttributeValue(root, "AXEnhancedUserInterface" as CFString, kCFBooleanTrue)
     Thread.sleep(forTimeInterval: 1.5)
 
     var nodes = 0, textNodes = 0, longText = 0
