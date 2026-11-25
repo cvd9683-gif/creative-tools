@@ -121,7 +121,7 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
 });
 
 chrome.runtime.onInstalled.addListener((d) => {
-  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+  chrome.sidePanel?.setPanelBehavior({ openPanelOnActionClick: true }); // Arc and some Chromium browsers have no side panel
   if (d.reason === "install") chrome.tabs.create({ url: chrome.runtime.getURL("pages/onboarding.html") });
 });
-chrome.runtime.onStartup.addListener(() => chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }));
+chrome.runtime.onStartup.addListener(() => chrome.sidePanel?.setPanelBehavior({ openPanelOnActionClick: true }));
