@@ -38,6 +38,8 @@
   --on-silk-chatgpt: #fffdf8;
   --silk-gemini: #f2b705;
   --on-silk-gemini: #1b1a17;
+  --silk-grok: #1b1a17;
+  --on-silk-grok: #fffdf8;
   --silk-imported: #c41d78;
   --on-silk-imported: #fffdf8;
   --horse-coat: #a8612f;
@@ -83,6 +85,8 @@
     --on-silk-chatgpt: #1b1a17;
     --silk-gemini: #f2b705;
     --on-silk-gemini: #1b1a17;
+    --silk-grok: #f3eee2;
+    --on-silk-grok: #1b1a17;
     --silk-imported: #ff6fb5;
     --on-silk-imported: #1b1a17;
     --horse-coat: #b56b35;
@@ -128,6 +132,8 @@
   --on-silk-chatgpt: #1b1a17;
   --silk-gemini: #f2b705;
   --on-silk-gemini: #1b1a17;
+  --silk-grok: #f3eee2;
+  --on-silk-grok: #1b1a17;
   --silk-imported: #ff6fb5;
   --on-silk-imported: #1b1a17;
   --horse-coat: #b56b35;

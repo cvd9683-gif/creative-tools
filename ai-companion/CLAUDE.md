@@ -13,8 +13,8 @@
   - percentages or time numbers for AI work
 
   Every number carries a provenance tag: Counted, ≈ Estimate, You said, or Not available.
-- Derby only reads claude.ai. It never clicks, types or sends anything there. Chat text leaves the browser only after the consent sheet.
-- All claude.ai markup knowledge lives in `extension/content/claude.js` (`SEL`). Keep it that way.
+- Derby only reads claude.ai, chatgpt.com and grok.com. It never clicks, types or sends anything there. Chat text leaves the browser only after the consent sheet.
+- All knowledge of a site's markup lives in `extension/content/sites/<site>.js` (`SEL`). `content/core.js` is site-agnostic. Keep it that way.
 - Demo data is made up and must sit under the DemoBanner.
 - Run `npm test` before committing.
 
@@ -23,7 +23,7 @@
 | Path | What |
 | --- | --- |
 | `extension/shared/` | Code shared by the extension and the hosted site: `model.js` (pure helpers), `session.js` (state + actions), `widget.js` (UI controller), `demo.js`, `paste.js`, `api.js`, `bell.js` |
-| `extension/` | Chrome MV3: `manifest.json`, `background.js` (owns the session), `content/claude.js` (adapter), `widget/panel.*` (side panel), `pages/` (paste, settings, onboarding), `offscreen.*` (bell) |
+| `extension/` | Chrome MV3: `manifest.json`, `background.js` (owns the session), `content/core.js` + `content/sites/*.js` (page readers), `widget/panel.*` (side panel), `pages/` (paste, settings, onboarding), `offscreen.*` (bell) |
 | `web/` | Hosted demo (`index.html`) and paste-in (`paste.html`). Imports from `/extension/shared/` |
 | `api/` | Vercel functions: `handoff.js`, `suggest.js`, shared `_lib.js`. Needs `ANTHROPIC_API_KEY` |
 | `tests/` | `node --test` |
@@ -31,7 +31,7 @@
 
 ## Build order (PRD §12)
 
-1. Adapter spike on live claude.ai. Needs Cathy's Chrome; see `TESTING.md`.
+1. Adapter spike on live claude.ai, chatgpt.com and grok.com. Needs Cathy's Chrome; see `TESTING.md`.
 2. P0 end to end. The code is in place but the adapter isn't verified.
 3. Deploy (README) and point the extension at it in Settings.
 4. P1 only after P0 is verified: step labels, corner window (F13).

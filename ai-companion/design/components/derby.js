@@ -112,7 +112,7 @@
       (t ? '<span class="badge" aria-hidden="true">' + esc(t) + '</span>' : "") + '</span>';
   }
 
-  var SERVICE = { claude: "Claude", chatgpt: "ChatGPT", gemini: "Gemini", imported: "Imported" };
+  var SERVICE = { claude: "Claude", chatgpt: "ChatGPT", gemini: "Gemini", grok: "Grok", imported: "Imported" };
   /** Lane({n, service, task, state, sent, note}) */
   function Lane(o) {
     var svc = SERVICE[o.service] || o.service;
@@ -167,7 +167,7 @@
   function EmptyState(o) {
     o = o || {};
     return '<section class="empty" aria-labelledby="empty-t">' + Track({ state: "idle", empty: true }) +
-      '<h2 class="empty__title" id="empty-t">' + (o.hosted ? "Paste a chat to start a lane." : "Open a Claude chat to start a lane.") + '</h2>' +
+      '<h2 class="empty__title" id="empty-t">' + (o.hosted ? "Paste a chat to start a lane." : "Open a Claude, ChatGPT or Grok chat to start a lane.") + '</h2>' +
       '<p class="empty__note">Each chat gets its own lane. The horse runs while the AI works.</p>' +
       '<div style="display:flex;gap:8px;flex-wrap:wrap">' + Button({ label: "Try demo", variant: "secondary" }) + Button({ label: "Paste a chat", variant: "quiet", icon: "paste" }) + '</div></section>';
   }
@@ -305,7 +305,7 @@
   function RaceStack(o) {
     var races = o.races || [];
     var list = races.length ? Lawn({ races: races, open: o.open })
-      : '<div class="stack-empty">' + Lawn({ races: [{ n: "", service: "imported", task: "", state: "idle", empty: true }] }) + '<p><b>Open a Claude chat to start a lane.</b> Each chat gets a row on the lawn.</p><div class="row">' + Button({ label: "Try demo" }) + Button({ label: "Paste a chat", variant: "quiet", icon: "paste" }) + '</div></div>';
+      : '<div class="stack-empty">' + Lawn({ races: [{ n: "", service: "imported", task: "", state: "idle", empty: true }] }) + '<p><b>Open a Claude, ChatGPT or Grok chat to start a lane.</b> Each chat gets a row on the lawn.</p><div class="row">' + Button({ label: "Try demo" }) + Button({ label: "Paste a chat", variant: "quiet", icon: "paste" }) + '</div></div>';
     return '<div class="widget-wrap"><section class="widget" aria-label="Derby">' + (o.demo ? DemoBanner({}) : "") + '<div class="awning awning--thin" aria-hidden="true"></div>' +
       '<header class="widget__head"><h1 class="wordmark wordmark--sm">Derby</h1>' +
       Button({ variant: "icon", icon: o.muted ? "bellOff" : "bell", label: o.muted ? "Bell is off. Turn on" : "Bell is on. Mute" }) + Button({ variant: "icon", icon: "gear", label: "Settings" }) + '</header>' +

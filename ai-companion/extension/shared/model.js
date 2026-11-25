@@ -16,7 +16,7 @@ export function fmtTokens(n, { approx = true } = {}) {
 export const clock = (d) => new Date(d).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 export const day = (d) => new Date(d).toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
 
-export const SERVICE_NAME = { claude: "Claude", chatgpt: "ChatGPT", gemini: "Gemini", imported: "Imported" };
+export const SERVICE_NAME = { claude: "Claude", chatgpt: "ChatGPT", gemini: "Gemini", grok: "Grok", imported: "Imported" };
 
 /** Character totals for a lane's turns. */
 export function charTotals(turns = []) {
@@ -66,7 +66,7 @@ export function toRace(lane, i, { now = Date.now(), drift = 1.6 } = {}) {
 
 /* ---------- Paste-in (F10) ---------- */
 
-const SPEAKER = /^\s*(?:\*\*)?(you|me|user|human|prompt|claude|chatgpt|gpt|gemini|assistant|ai|answer|reply)(?:\*\*)?\s*[:：]\s?/i;
+const SPEAKER = /^\s*(?:\*\*)?(you|me|user|human|prompt|claude|chatgpt|gpt|gemini|grok|assistant|ai|answer|reply)(?:\*\*)?\s*[:：]\s?/i;
 const isUser = (w) => /^(you|me|user|human|prompt)$/i.test(w);
 
 /** Splits a pasted conversation into turns. Each message must start with a speaker, e.g. "You:" / "Claude:".
@@ -79,7 +79,7 @@ export function parseTranscript(text) {
     const m = line.match(SPEAKER);
     if (m) {
       const who = m[1];
-      if (!isUser(who) && !service) service = /claude/i.test(who) ? "claude" : /chatgpt|gpt/i.test(who) ? "chatgpt" : /gemini/i.test(who) ? "gemini" : null;
+      if (!isUser(who) && !service) service = /claude/i.test(who) ? "claude" : /chatgpt|gpt/i.test(who) ? "chatgpt" : /gemini/i.test(who) ? "gemini" : /grok/i.test(who) ? "grok" : null;
       msgs.push({ user: isUser(who), text: line.slice(m[0].length) });
     } else if (msgs.length) {
       msgs[msgs.length - 1].text += "\n" + line;

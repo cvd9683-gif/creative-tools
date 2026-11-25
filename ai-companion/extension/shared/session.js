@@ -39,7 +39,7 @@ export class Session {
     return lane;
   }
 
-  /** From the claude.ai adapter. Finds the lane by chat key (URL path) or creates one. */
+  /** From a site reader (content/core.js). Finds the lane by chat key (host + path) or creates one. */
   updateChat(key, u) {
     let lane = this.s.lanes.find((l) => l.key === key);
     if (!lane) {

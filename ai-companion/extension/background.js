@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
       const tabId = sender.tab.id;
       // this tab moved on to another chat: its old row ends (receipt waits in the slot)
       session.s.lanes.filter((l) => l.tabId === tabId && l.key !== msg.key).forEach((l) => session.end(l.id, { tabClosed: true }));
-      const u = Object.assign({ service: "claude" }, msg.update, { tabId });
+      const u = Object.assign({ service: "claude" }, msg.update, { tabId }) // each site reader sends its own service;
       const lane = session.updateChat(msg.key, u);
       // looking at the tab counts as seeing the reply
       if (lane && u.tabFocused && lane.state === "your_turn") session.seen(lane.id);

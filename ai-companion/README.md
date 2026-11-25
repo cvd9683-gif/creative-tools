@@ -11,7 +11,7 @@ Final project for Web Tools for Creative Work, NYU ITP, Fall 2026, by Cathy Doss
 | Hosted demo (made-up data) | Works. Live session simulation, hover cards, End/Undo, receipts, prompt swaps, handoff |
 | Paste-in | Works. Your own pasted chat → row, receipt, handoff (needs the API for handoff and swaps) |
 | API (`/api/handoff`, `/api/suggest`) | Written and tested against a fake Claude server. Not yet run with a real key |
-| Chrome extension | Loads and runs end to end on a fake claude.ai page. **claude.ai selectors not yet checked on the real site.** See [`TESTING.md`](TESTING.md) |
+| Chrome extension | Tracks Claude, ChatGPT and Grok chats in Chrome. Runs end to end on fake copies of each site. **Selectors not yet checked on the real sites.** See [`TESTING.md`](TESTING.md) |
 
 ## Run it locally
 
@@ -45,5 +45,5 @@ The functions are public. Anyone with the address could spend API credit. For a 
 - No points, streaks or limits.
 - No "tokens left".
 - No percentages or time numbers for AI work.
-- It never types or clicks on claude.ai.
+- It never types or clicks on any chat site.
 - Chat text leaves the browser only after you see exactly what will be sent and press Send.

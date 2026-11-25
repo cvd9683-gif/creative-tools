@@ -53,7 +53,7 @@ There's also a critical angle. Making AI use visible should help people decide w
 - No percentages, "almost done" guesses or time numbers for AI work. The only use of time is the working horse's position (F1), which shows how long a reply has been running, never how close it is to done. Time spent in a tab is never shown as time the AI spent working.
 - A long chat or many prompts is never labeled as wasted.
 - Derby never sends prompts or clicks anything inside a chat site. It only reads.
-- No desktop app, and no live ChatGPT or Gemini tracking in this version.
+- No desktop app, and no Gemini live tracking in this version. *(Nov 25, Cathy: live tracking now covers ChatGPT and Grok in Chrome, alongside Claude. Tracking the Claude and ChatGPT desktop apps is an open question, §13 Q8.)*
 - No skill search or installs.
 - No accounts, payments, or teams.
 
@@ -118,11 +118,11 @@ Priority: **P0** = needed for the Dec 8 final, **P1** = if time allows, **P2** =
 - Actions: **Open** (primary when it's your turn), **Handoff**, **End + receipt**.
 - Never shows tokens, time numbers or percentages. While working it says, in one muted line: "The further the horse, the longer it has been working. It can't tell how close the reply is to done."
 
-### F2. Chat-state detection on claude.ai (P0)
-- A content script on `https://claude.ai/*` watches the page with MutationObserver. It detects working vs. done (for example, the stop button appearing and disappearing), counts messages the user sends, reads the chat title, **reads the last user message**, and **reads any visible status label** during a reply (P1).
-- All page selectors live in **one adapter file** (`extension/content/claude.js`) that exposes the same small interface, so ChatGPT and Gemini adapters can be added later.
+### F2. Chat-state detection on claude.ai, chatgpt.com and grok.com (P0)
+- A content script on `https://claude.ai/*`, `https://chatgpt.com/*` and `https://grok.com/*` watches the page with MutationObserver. It detects working vs. done (for example, the stop button appearing and disappearing), counts messages the user sends, reads the chat title, **reads the last user message**, and **reads any visible status label** during a reply (P1).
+- Each site's selectors live in **one small file** (`extension/content/sites/<site>.js`); the shared reader is `extension/content/core.js`. Adding a site means adding one file.
 - If detection breaks (the selectors stop matching), the row shows **"can't read this chat"** and the card says "Can't read this chat right now, so Derby isn't guessing", instead of showing wrong data.
-- **Acceptance:** on a live claude.ai chat, working, done and your-turn are detected correctly in 9 of 10 tries during testing. Record the results, and how often step labels were readable, in `ai-companion/TESTING.md`.
+- **Acceptance:** on a live chat on each site, working, done and your-turn are detected correctly in 9 of 10 tries during testing. Record the results, and how often step labels were readable, in `ai-companion/TESTING.md`.
 
 ### F3. Your-turn signal and sound (P0)
 - The row lights up, the toolbar badge shows how many chats are waiting (≤4 characters), and one bell plays (spec: `design/sound/sound.md`).
@@ -201,8 +201,8 @@ Mockups exist in `design/mockups/` (`screens.html?s=<id>`) and as a clickable pr
 
 | Piece | What it does |
 | --- | --- |
-| `extension/manifest.json` | Manifest V3. Permissions: `sidePanel`, `storage`, `tabs`, `offscreen` (for the bell when the panel is closed). Host permissions: `https://claude.ai/*` only. |
-| `extension/content/claude.js` | Adapter: MutationObserver and selectors. Emits `{chatId, title, state, userMessageCount, lastPrompt, lastPromptIndex, steps[]}` messages. |
+| `extension/manifest.json` | Manifest V3. Permissions: `sidePanel`, `storage`, `tabs`, `offscreen` (for the bell when the panel is closed). Host permissions: `https://claude.ai/*`, `https://chatgpt.com/*`, `https://grok.com/*`. (`tabs` was dropped: it isn't needed and adds a browsing-history warning.) |
+| `extension/content/core.js` + `sites/*.js` | Shared reader (MutationObserver) + one selector file per site. Emits `{chatId, title, state, userMessageCount, lastPrompt, lastPromptIndex, steps[]}` messages. |
 | `extension/background.js` | Service worker. Owns session state in `chrome.storage.local` (MV3 workers restart, so storage is the source of truth). Sets the badge and plays the bell through the side panel or an offscreen document. |
 | `extension/widget/` | The widget (lawn, rows, card, receipt slot). |
 | `extension/pages/` | Receipt (full page view), handoff, paste-in and settings pages. |
@@ -283,6 +283,7 @@ The coding agent should ship P0 end to end before touching P1.
 5. Side panel, or the floating corner window (F13), as the main surface?
 6. One receipt per chat (current design), or also one combined receipt for the whole session?
 7. If step labels can't be read reliably, is "Working on: <your prompt>" enough on its own?
+8. Should Derby track the Claude and ChatGPT **desktop apps**? A Chrome extension can't see them. The only route found is a separate Mac helper that reads the app windows through macOS Accessibility (needs testing; nothing is built).
 
 ## 14. Success measures for testing
 

@@ -16,7 +16,7 @@ export function mountPaste(el, { onAdd, task: initialTask = "" } = {}) {
     '<textarea id="paste-text" class="paste__area" placeholder="' + esc(EXAMPLE) + '"></textarea>' +
     '<div class="paste__row">' +
     '<label>Task name<input id="paste-task" value="' + esc(initialTask) + '" placeholder="e.g. headline copy" maxlength="60"></label>' +
-    '<label>From<select id="paste-svc"><option value="">Guess from the paste</option><option value="claude">Claude</option><option value="chatgpt">ChatGPT</option><option value="gemini">Gemini</option><option value="imported">Other</option></select></label>' +
+    '<label>From<select id="paste-svc"><option value="">Guess from the paste</option><option value="claude">Claude</option><option value="chatgpt">ChatGPT</option><option value="gemini">Gemini</option><option value="grok">Grok</option><option value="imported">Other</option></select></label>' +
     '</div>' +
     '<p class="paste__found small" role="status" aria-live="polite"></p>' +
     '<div class="paste__row">' + Derby.Button({ label: "Add lane", variant: "primary", size: "md", icon: "paste" }) + '</div>' +

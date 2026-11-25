@@ -54,6 +54,7 @@
 [data-service="claude"]   { --silk: var(--silk-claude);   --on-silk: var(--on-silk-claude); }
 [data-service="chatgpt"]  { --silk: var(--silk-chatgpt);  --on-silk: var(--on-silk-chatgpt); }
 [data-service="gemini"]   { --silk: var(--silk-gemini);   --on-silk: var(--on-silk-gemini); }
+[data-service="grok"]     { --silk: var(--silk-grok);     --on-silk: var(--on-silk-grok); }
 [data-service="imported"] { --silk: var(--silk-imported); --on-silk: var(--on-silk-imported); }
 
 /* ---------- Track + finish line ---------- */
