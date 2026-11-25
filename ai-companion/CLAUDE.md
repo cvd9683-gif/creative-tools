@@ -26,7 +26,7 @@
 | `extension/shared/` | Code shared by the extension and the hosted site: `model.js` (pure helpers), `session.js` (state + actions), `widget.js` (UI controller), `demo.js`, `paste.js`, `api.js`, `bell.js` |
 | `extension/` | Chrome MV3: `manifest.json`, `background.js` (owns the session), `content/core.js` + `content/sites/*.js` (page readers), `widget/panel.*` (side panel), `pages/` (paste, settings, onboarding), `offscreen.*` (bell) |
 | `hub/` | Local hub (`server.mjs`, Node, no dependencies): one session fed by the extension, Claude Code hooks (`claude-code-hook.mjs`) and later the desktop helper. Serves its own page from `hub/page/`. Binds 127.0.0.1 only |
-| `desktop/` | Desktop-app experiment (macOS Accessibility). `ax-probe.swift` is the go/no-go check |
+| `desktop/` | **Derby for Mac** (Nov 25: Derby becomes a Mac app at the top of the screen). Start with `HANDOFF.md`. `ax-probe.swift` is the Accessibility go/no-go check. Inspiration: `design/inspo/` |
 | `web/` | Hosted demo (`index.html`) and paste-in (`paste.html`). Imports from `/extension/shared/` |
 | `api/` | Vercel functions: `handoff.js`, `suggest.js`, shared `_lib.js`. Needs `ANTHROPIC_API_KEY` |
 | `tests/` | `node --test` |
